@@ -1,0 +1,95 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    height: 3rem;
+}
+
+header button {
+    width: 200px;
+    height: 35px;
+    border-radius: 20px;
+}
+
+.headerRight button {
+    margin: 0 1rem;
+}
+
+.mainSectionContainer {
+    max-width: 1000px;
+    margin: auto;
+}
+
+h1 span {
+    color: #42B97C;
+}
+.instructions h3{
+   color: #38A9E2;
+}
+
+.mainSectionContainer {
+    display: flex;
+    margin-top: 5rem;
+    justify-content: space-between;
+}
+
+.searchBox form input {
+    width: 350px; /* Same width for both inputs */
+    height: 50px;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    box-sizing: border-box;
+}
+
+.searchBox button {
+    width: 150px;
+    height: 40px;
+}
+
+.searchBox input,
+.searchBox button {
+    margin: 0.5rem;
+    border-radius: 20px;
+}
+
+.searchBoxContainer {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.instructions {
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+h2, h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.instructionsContainer {
+    display: flex;
+    gap: 10rem;
+    justify-content: center;
+}
+
+.instructions p {
+    text-align: center;
+}
+
+footer {
+    background: linear-gradient(to right, #42B97C, #38A9E2);
+    padding: 1rem;
+    text-align: center;
+}
+
+
