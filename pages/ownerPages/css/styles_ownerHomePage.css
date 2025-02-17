@@ -58,6 +58,7 @@ main {
     background: #e0e0e0;
     padding: 20px;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 .listing {
@@ -67,9 +68,11 @@ main {
     padding: 15px;
     border-radius: 5px;
     width: 100%;
+    margin: 1rem 0rem;
+    box-sizing: border-box;
 }
 
-.image {
+.image,img {
     width: 80px;
     height: 80px;
     background: #808080;
@@ -77,6 +80,7 @@ main {
     justify-content: center;
     align-items: center;
     margin-right: 15px;
+    box-sizing: border-box;
 }
 
 .details {
