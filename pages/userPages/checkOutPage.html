@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="../../index.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Checkout</h1>
+        <div class="parking-info">
+            <div class="image-placeholder" aria-label="Parking spot image"></div>
+            <div>
+                <h2>Parking spot name</h2>
+                <p>Parking spot location</p>
+                <p>Owned by: Owner name</p>
+            </div>
+            <div class="price">Parking spot price per hour</div>
+        </div>
+
+        <div class="form-container">
+            <h2>Add new car information</h2>
+            <form>
+                <label for="license">License Plate:</label>
+                <input type="text" id="license" placeholder="Plate Number" required>
+
+                <label for="color">Color:</label>
+                <input type="text" id="color" placeholder="Color" required>
+
+                <label for="country">Country:</label>
+                <input type="text" id="country" placeholder="Country" required>
+
+                <label for="province">Province:</label>
+                <input type="text" id="province" placeholder="Province" required>
+            </form>
+
+            <h2>Saved car</h2>
+            <label class="saved-car">
+                <input type="radio" name="saved-car" aria-label="Saved car details">
+                Saved License Plate <br>
+                Saved Color <br>
+                Saved Country <br>
+                Saved Province
+            </label>
+
+            <p><strong>Parking Date:</strong> <input type="date" value="2025-06-28" readonly></p>
+            <p><strong>Parking Time:</strong> <input type="text" value="2:30pm - 4:30pm" readonly></p>
+            <p><strong>Parking Duration:</strong> 2 hours</p>
+            <p><strong>Total:</strong> total price</p>
+
+            <div class="buttons">
+                <button type="reset">Reset</button>
+                <button type="submit">Confirm</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
