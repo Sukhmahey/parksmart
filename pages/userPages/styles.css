@@ -1,0 +1,69 @@
+/* Search Results page */
+/* Always set the map height explicitly to define the size of the div */
+gmp-map {
+  height: 100%;
+  width: 60%;
+  min-width: 550px;
+}
+
+/* Optional: Makes the sample page fill the window */
+html,
+body {
+  height: 100%;
+  margin: 32px;
+  padding: 0;
+}
+
+.mapOuterContainer {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 100px);
+  justify-content: space-between;
+}
+
+/* Sidebar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  background-color: #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 320px;
+  margin-right: 20px;
+  overflow-y: auto;
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+/* Parking Spot Cards */
+.parking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.parking-spot {
+  display: flex;
+  align-items: center;
+  background: #ccc;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.spot-image {
+  width: 80px;
+  height: 80px;
+  background: gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.spot-info h3 {
+  margin-bottom: 5px;
+}
