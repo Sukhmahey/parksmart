@@ -1,7 +1,12 @@
-const { addUser, getUsers, updateUser, deleteUser } = require("./crud");
+import {
+  addUser,
+  getUsers,
+  updateUser,
+  deleteUser,
+  getParkingSpaces,
+} from "./crud.js";
 
 async function main() {
-
   const userId = await addUser(
     "vipul juneja",
     "viipul@email.com",

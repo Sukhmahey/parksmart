@@ -1,9 +1,16 @@
-const db = require("./firebase");
-
+import db from "./firebase.js";
+import {
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+} from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
 async function addUser(name, email, password_hash, role) {
-  const userRef = db.collection("users").doc();
-  await userRef.set({
+  const userRef = doc(collection(db, "users"));
+  await setDoc(userRef, {
     user_id: userRef.id,
     name,
     email,
@@ -15,8 +22,8 @@ async function addUser(name, email, password_hash, role) {
 }
 
 async function addParkingSpace(owner_id, title, address, price_per_hour) {
-  const parkingRef = db.collection("parking_spaces").doc();
-  await parkingRef.set({
+  const parkingRef = doc(collection(db, "parking_spaces"));
+  await setDoc(parkingRef, {
     space_id: parkingRef.id,
     owner_id,
     title,
@@ -35,8 +42,8 @@ async function addBooking(
   end_time,
   total_price
 ) {
-  const bookingRef = db.collection("bookings").doc();
-  await bookingRef.set({
+  const bookingRef = doc(collection(db, "bookings"));
+  await setDoc(bookingRef, {
     booking_id: bookingRef.id,
     user_id,
     space_id,
@@ -51,34 +58,39 @@ async function addBooking(
 
 // READ: Get Data from Firestore
 async function getUsers() {
-  const snapshot = await db.collection("users").get();
+  const snapshot = await getDocs(collection(db, "users"));
   snapshot.forEach((doc) => {
     console.log(doc.id, "=>", doc.data());
   });
 }
 
 async function getParkingSpaces() {
-  const snapshot = await db.collection("parking_spaces").get();
+  const snapshot = await getDocs(collection(db, "parking_spaces"));
+  const dataObj = [];
   snapshot.forEach((doc) => {
     console.log(doc.id, "=>", doc.data());
+    dataObj.push(doc.data());
   });
+
+  return dataObj;
 }
 
 // UPDATE: Modify an Existing Document
 async function updateUser(user_id, newData) {
-  const userRef = db.collection("users").doc(user_id);
-  await userRef.update(newData);
+  const userRef = doc(db, "users", user_id);
+  await updateDoc(userRef, newData);
   console.log("User updated:", user_id);
 }
 
 // DELETE: Remove Data
 async function deleteUser(user_id) {
-  await db.collection("users").doc(user_id).delete();
+  const userRef = doc(db, "users", user_id);
+  await deleteDoc(userRef);
   console.log("User deleted:", user_id);
 }
 
 // Export functions for use
-module.exports = {
+export {
   addUser,
   addParkingSpace,
   addBooking,
