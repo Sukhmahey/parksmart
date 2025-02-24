@@ -9,19 +9,25 @@
 </head>
 
 <body>
+    <header>
+        <div class="logoContainer">
+            <img src="Assets/ParkSmartLogo.png" alt="ParkSmart Logo">
+        </div>
+    </header>
     <div class="heroText">
-        <h2>Welcome to ParkSmart</h2>
-        <h3>Parking made easy, wherever you go</h3>
+        <h2>Park with Ease, Anytime, Anywhere.</h2>
     </div>
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form id="signUpForm">
-                <h1>Create Account</h1>
-                <input type="text" id="signupName" placeholder="Name" required />
-                <input type="email" id="signupEmail" placeholder="Email" required />
-                <input type="password" id="signupPassword" placeholder="Password" required />
+                <input type="text" id="signupName"placeholder="Name" required>
+                <input type="email" id="signupEmail" placeholder="Email"  required>
+                <input type="password" id="signupPassword" placeholder="Password" required>
+                <label for="isSpaceOwner">Do you want to list a parking space?</label>
+                <input type="checkbox" id="isSpaceOwner">
                 <button type="submit">Sign Up</button>
-            </form>
+              </form>
+              
         </div>
         <div class="form-container sign-in-container">
             <form id="signInForm">
@@ -50,7 +56,8 @@
     <footer>
         <p>&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
     </footer>
-    <script type="module" src="../userPages/loginPage.js"></script>
+    <script type="module" src="../../crud.js"></script>
+    <script src="loginPage.js"></script>
 </body>
 
 </html>

@@ -5,6 +5,27 @@
 	box-sizing: border-box;
 }
 
+/* header {
+    display: flex;
+    justify-content: flex-start; 
+    align-items: center; 
+    width: 100%; 
+    padding: 0 1rem; 
+}
+*/
+
+ .logoContainer img {
+    display: block; 
+    max-width: 100%;
+	width: 14rem;
+} 
+
+
+.heroText h2 {
+	margin-top: 2rem;
+font-size: 1.5rem;
+}
+
 body {
 	background: #f6f5f7;
 	display: flex;

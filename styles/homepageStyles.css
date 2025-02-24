@@ -19,6 +19,36 @@ header button {
 
 .headerRight button {
     margin: 0 1rem;
+    background-color: #176F9C;
+    color: white;
+    border: none;
+}
+.headerRight{
+    display: flex;
+}
+.profileIcon{
+width: 2rem;
+height: 2rem;
+}
+
+
+.searchInputContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 15px; /* Adjust based on your preference */
+    pointer-events: none; 
+}
+.searchIcon  img {
+    width: 30px;
+}
+
+.searchInputContainer input {
+    padding-left: 30px; /* Add some padding to the left so the text doesn’t overlap the icon */
 }
 
 .mainSectionContainer {
@@ -47,8 +77,11 @@ h1 span {
 }
 
 .searchBox button {
-    width: 150px;
+    width: 250px;
     height: 40px;
+    background-color: #38A9E2;
+    color: white;
+    border: none;
 }
 
 .searchBox input,
@@ -66,9 +99,10 @@ h1 span {
 
 .instructions {
     max-width: 1200px;
-    margin: auto;
-    margin-top: 3rem;
-    margin-bottom: 2rem;
+    margin: 7rem auto ;
+}
+.instructionsImage{
+    border-radius: 10px;
 }
 
 h2, h3 {

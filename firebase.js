@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 
 const app = initializeApp({
   apiKey: "AIzaSyB6Um_zSlHKQ9JuAEC5U2K3Bx4BCzLbbHc",
@@ -12,4 +13,5 @@ const app = initializeApp({
 
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
+export const auth = getAuth(app);
 export default db;
