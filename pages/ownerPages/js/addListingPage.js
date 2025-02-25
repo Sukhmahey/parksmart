@@ -28,16 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
     inputField.addEventListener("input", () => {
         const query = inputField.value.trim();
 
-        if (query.length > 2) {  // Fetch suggestions only if 3+ characters are typed
+        if (query.length > 2) {  
             fetchAutocompleteResults(query);
         } else {
-            suggestionsList.innerHTML = ""; // Clear suggestions if input is empty
+            suggestionsList.innerHTML = ""; 
         }
     });
 });
 
 function fetchAutocompleteResults(query) {
-    const apiKey = "d79219fb6dcc45159636535b526e950f"; // Replace with your key
+    const apiKey = "d79219fb6dcc45159636535b526e950f"; 
     const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&apiKey=${apiKey}`;
 
     fetch(url)
@@ -46,16 +46,15 @@ function fetchAutocompleteResults(query) {
         .catch(error => console.error("Error fetching autocomplete results:", error));
 }
 
-// Replace with your actual Geoapify API key
+
 document.addEventListener("DOMContentLoaded", () => {
     const inputField = document.getElementById("autocomplete");
     const suggestionsList = document.getElementById("suggestions");
-    const apiKey = "d79219fb6dcc45159636535b526e950f"; // Replace with your Geoapify API key
-
+    const apiKey = "d79219fb6dcc45159636535b526e950f"; 
     inputField.addEventListener("input", async () => {
         const query = inputField.value.trim();
         if (query.length < 3) {
-            suggestionsList.innerHTML = ""; // Clear suggestions
+            suggestionsList.innerHTML = ""; 
             suggestionsList.style.display = "none";
             return;
         }
@@ -100,15 +99,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Image Handler
-const MAX_IMAGE_SIZE = 700000;
+
 
 const handleImage = async () => {
     const preview = document.getElementById('preview');
     if (!preview.src.startsWith('data:image')) return null;
-    if (preview.src.length > MAX_IMAGE_SIZE) {
-        alert('Image too large. Please use a smaller image.');
-        return null;
-    }
+    
     return preview.src;
 };
 
