@@ -21,30 +21,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Initialize Geoapify Autocomplete
-document.addEventListener("DOMContentLoaded", () => {
-    const inputField = document.getElementById("autocomplete");
-    const suggestionsList = document.getElementById("suggestions");
-
-    inputField.addEventListener("input", () => {
-        const query = inputField.value.trim();
-
-        if (query.length > 2) {  
-            fetchAutocompleteResults(query);
-        } else {
-            suggestionsList.innerHTML = ""; 
-        }
-    });
-});
-
-function fetchAutocompleteResults(query) {
-    const apiKey = "d79219fb6dcc45159636535b526e950f"; 
-    const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&apiKey=${apiKey}`;
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => displaySuggestions(data))
-        .catch(error => console.error("Error fetching autocomplete results:", error));
-}
 
 
 document.addEventListener("DOMContentLoaded", () => {
