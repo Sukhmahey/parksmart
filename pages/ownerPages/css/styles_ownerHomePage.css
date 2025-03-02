@@ -99,9 +99,14 @@ main {
     padding: 10px 15px;
 }
 
-.add-listing {
-    width: 30%;
-    max-width: 1200px;
+.add-listing-a
+{
+    width: 10vw;
+    margin: 0 auto;
+
+}
+.add-listing 
+{
     margin-top: 20px;
     background: #333;
     padding: 15px;

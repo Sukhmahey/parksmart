@@ -1,61 +1,47 @@
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+// import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+import { db, auth, addParkingSpace } from "./././crud.js";
 const video = document.getElementById("cameraFeed");
 const canvas = document.getElementById("canvas");
 const preview = document.getElementById("preview");
 
 
 
-const firebaseConfig = {
-    apiKey: "AIzaSyCLkQlLAXrx78VjhP3S6w6zLhCPmXNyMtQ",
-    authDomain: "parksmartowner.firebaseapp.com",
-    projectId: "parksmartowner",
-    storageBucket: "parksmartowner.appspot.com",
-    messagingSenderId: "571166769031",
-    appId: "1:571166769031:web:394821c17335e9afca1d22",
-    measurementId: "G-2WDLX03JLW"
-};
+// const firebaseConfig = {
+//     apiKey: "AIzaSyCLkQlLAXrx78VjhP3S6w6zLhCPmXNyMtQ",
+//     authDomain: "parksmartowner.firebaseapp.com",
+//     projectId: "parksmartowner",
+//     storageBucket: "parksmartowner.appspot.com",
+//     messagingSenderId: "571166769031",
+//     appId: "1:571166769031:web:394821c17335e9afca1d22",
+//     measurementId: "G-2WDLX03JLW"
+// };
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp({
+    apiKey: "AIzaSyB6Um_zSlHKQ9JuAEC5U2K3Bx4BCzLbbHc",
+    authDomain: "team5init.firebaseapp.com",
+    projectId: "team5init",
+    storageBucket: "team5init.firebasestorage.app",
+    messagingSenderId: "121552966763",
+    appId: "1:121552966763:web:924eb937415da173b04d2e",
+  });
+
+// const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Initialize Geoapify Autocomplete
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const inputField = document.getElementById("autocomplete");
     const suggestionsList = document.getElementById("suggestions");
-
-    inputField.addEventListener("input", () => {
-        const query = inputField.value.trim();
-
-        if (query.length > 2) {  // Fetch suggestions only if 3+ characters are typed
-            fetchAutocompleteResults(query);
-        } else {
-            suggestionsList.innerHTML = ""; // Clear suggestions if input is empty
-        }
-    });
-});
-
-function fetchAutocompleteResults(query) {
-    const apiKey = "d79219fb6dcc45159636535b526e950f"; // Replace with your key
-    const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&apiKey=${apiKey}`;
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => displaySuggestions(data))
-        .catch(error => console.error("Error fetching autocomplete results:", error));
-}
-
-// Replace with your actual Geoapify API key
-document.addEventListener("DOMContentLoaded", () => {
-    const inputField = document.getElementById("autocomplete");
-    const suggestionsList = document.getElementById("suggestions");
-    const apiKey = "d79219fb6dcc45159636535b526e950f"; // Replace with your Geoapify API key
-
+    const apiKey = "d79219fb6dcc45159636535b526e950f"; 
     inputField.addEventListener("input", async () => {
         const query = inputField.value.trim();
         if (query.length < 3) {
-            suggestionsList.innerHTML = ""; // Clear suggestions
+            suggestionsList.innerHTML = ""; 
             suggestionsList.style.display = "none";
             return;
         }
@@ -100,15 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Image Handler
-const MAX_IMAGE_SIZE = 700000;
+
 
 const handleImage = async () => {
     const preview = document.getElementById('preview');
     if (!preview.src.startsWith('data:image')) return null;
-    if (preview.src.length > MAX_IMAGE_SIZE) {
-        alert('Image too large. Please use a smaller image.');
-        return null;
-    }
+    
     return preview.src;
 };
 
@@ -157,6 +140,49 @@ async function handleCameraCapture() {
     }
 }
 // Form Submission Handler
+// const handleFormSubmission = async (e) => {
+//     e.preventDefault();
+    
+//     const formData = {
+//         name: document.getElementById('name').value.trim(),
+//         location: document.getElementById('autocomplete').value.trim(),
+//         price: document.getElementById('price').value.trim(),
+//         isAvailable: document.querySelector('.switch input').checked,
+//         image: await handleImage()
+//     };
+
+//     if (!formData.name || !formData.location || !formData.price) {
+//         return alert('Please fill in all required fields');
+//     }
+//     if (isNaN(formData.price)) {
+//         return alert('Please enter a valid price');
+//     }
+
+//     try {
+//         await addDoc(collection(db, "OwnerListings"), {
+//             Listing_name: formData.name,
+//             Street_name: formData.location,
+//             availability: formData.isAvailable,
+//             image: formData.image || "https://loremflickr.com/640/480",
+//             // image: "https://loremflickr.com/640/480",
+//             ownerid: 4,
+//             price: parseFloat(formData.price),
+//             timestamp: new Date()
+//         });
+
+//         document.getElementById('name').value = '';
+//         document.getElementById('autocomplete').value = '';
+//         document.getElementById('price').value = '';
+//         document.getElementById('fileInput').value = '';
+//         document.getElementById('preview').style.display = 'none';
+
+//         alert('Listing added successfully!');
+//     } catch (error) {
+//         console.error('Submission error:', error);
+//         alert(`Error saving listing: ${error.message}`);
+//     }
+// };
+
 const handleFormSubmission = async (e) => {
     e.preventDefault();
     
@@ -165,9 +191,10 @@ const handleFormSubmission = async (e) => {
         location: document.getElementById('autocomplete').value.trim(),
         price: document.getElementById('price').value.trim(),
         isAvailable: document.querySelector('.switch input').checked,
-        image: await handleImage()
+        image: await handleImage() 
     };
 
+    // Validation 
     if (!formData.name || !formData.location || !formData.price) {
         return alert('Please fill in all required fields');
     }
@@ -176,29 +203,29 @@ const handleFormSubmission = async (e) => {
     }
 
     try {
-        await addDoc(collection(db, "OwnerListings"), {
-            Listing_name: formData.name,
-            Street_name: formData.location,
-            availability: formData.isAvailable,
-            image: formData.image || "https://loremflickr.com/640/480",
-            // image: "https://loremflickr.com/640/480",
-            ownerid: 4,
-            price: parseFloat(formData.price),
-            timestamp: new Date()
-        });
+        const ownerId = auth.currentUser?.uid;
+        if (!ownerId) throw new Error("User not authenticated!");
 
+        // addParkingSpace function from crud.js
+        await addParkingSpace(
+            ownerId,
+            formData.name,
+            formData.location,
+            parseFloat(formData.price)
+        );
+
+        // Reset form 
         document.getElementById('name').value = '';
         document.getElementById('autocomplete').value = '';
         document.getElementById('price').value = '';
-        document.getElementById('fileInput').value = '';
         document.getElementById('preview').style.display = 'none';
-
-        alert('Listing added successfully!');
+        alert('Parking space added successfully!');
     } catch (error) {
         console.error('Submission error:', error);
         alert(`Error saving listing: ${error.message}`);
     }
 };
+
 
 // Event Listeners
 if (document.getElementById('fileInput')) {
