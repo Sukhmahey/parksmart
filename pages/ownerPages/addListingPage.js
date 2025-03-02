@@ -1,13 +1,15 @@
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+// import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 import { addParkingSpace } from "../../crud.js";
 const video = document.getElementById("cameraFeed");
 const canvas = document.getElementById("canvas");
 const preview = document.getElementById("preview");
+let longitudeValue;
+let latitudeValue;
 
-
+const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 // const firebaseConfig = {
 //     apiKey: "AIzaSyCLkQlLAXrx78VjhP3S6w6zLhCPmXNyMtQ",
@@ -19,17 +21,17 @@ const preview = document.getElementById("preview");
 //     measurementId: "G-2WDLX03JLW"
 // };
 
-const app = initializeApp({
-    apiKey: "AIzaSyB6Um_zSlHKQ9JuAEC5U2K3Bx4BCzLbbHc",
-    authDomain: "team5init.firebaseapp.com",
-    projectId: "team5init",
-    storageBucket: "team5init.firebasestorage.app",
-    messagingSenderId: "121552966763",
-    appId: "1:121552966763:web:924eb937415da173b04d2e",
-  });
+// const app = initializeApp({
+//     apiKey: "AIzaSyB6Um_zSlHKQ9JuAEC5U2K3Bx4BCzLbbHc",
+//     authDomain: "team5init.firebaseapp.com",
+//     projectId: "team5init",
+//     storageBucket: "team5init.firebasestorage.app",
+//     messagingSenderId: "121552966763",
+//     appId: "1:121552966763:web:924eb937415da173b04d2e",
+//   });
 
 // const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// const db = getFirestore(app);
 
 // Initialize Geoapify Autocomplete
 document.addEventListener("DOMContentLoaded", () => {
@@ -82,6 +84,97 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+function convertTo12HourFormat(time24) {
+    const [hours, minutes] = time24.split(':');
+    const parsedHours = parseInt(hours);
+    const ampm = parsedHours >= 12 ? 'PM' : 'AM';
+    const hours12 = parsedHours % 12 || 12; 
+    
+    return `${hours12}:${minutes}${ampm}`;
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById('availabilityContainer');
+    
+    daysOfWeek.forEach(day => {
+        const div = document.createElement('div');
+        div.className = 'day-row';
+        div.innerHTML = `
+            <label class="day-checkbox">
+                <input type="checkbox" class="day-checkbox" data-day="${day}">
+                ${day.charAt(0).toUpperCase() + day.slice(1)}
+            </label>
+            <div class="time-inputs">
+                <input type="time" data-day="${day}-start" min="00:00" max="05:00" step="3600">
+                <span>to</span>
+                <input type="time" data-day="${day}-end" min="00:00" max="05:00" step="3600">
+            </div>
+        `;
+        container.appendChild(div);
+    });
+});
+
+// Validation function
+function validateAvailability() {
+    const errorElement = document.getElementById('availabilityError');
+    errorElement.style.display = 'none';
+    let isValid = true;
+
+    const availability = {};
+    
+    document.querySelectorAll('.day-checkbox input[type="checkbox"]').forEach(checkbox => {
+        const day = checkbox.dataset.day;
+        // const startTime = document.querySelector(`[data-day="${day}-start"]`).value;
+        // const endTime = document.querySelector(`[data-day="${day}-end"]`).value;
+        const startInput = document.querySelector(`[data-day="${day}-start"]`);
+        const endInput = document.querySelector(`[data-day="${day}-end"]`);
+
+        // if (checkbox.checked) {
+        //     if (!startTime || !endTime) {
+        //         errorElement.textContent = `Please fill times for ${day}`;
+        //         errorElement.style.display = 'block';
+        //         isValid = false;
+        //     }
+
+        //     if (startTime >= endTime) {
+        //         errorElement.textContent = `End time must be after start time on ${day}`;
+        //         errorElement.style.display = 'block';
+        //         isValid = false;
+        //     }
+
+        //     availability[day] = `${startTime} - ${endTime}`;
+        // }
+
+        if (checkbox.checked) {
+            const startTime = startInput.value;
+            const endTime = endInput.value;
+
+            // Validate required times
+            if (!startTime || !endTime) {
+                errorElement.textContent = `Please set times for ${day}`;
+                errorElement.style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate time order
+            if (startTime >= endTime) {
+                errorElement.textContent = `End time must be after start time on ${day}`;
+                errorElement.style.display = 'block';
+                isValid = false;
+            }
+
+            // Convert to AM/PM format
+            if (isValid) {
+                availability[day] = 
+                    `${convertTo12HourFormat(startTime)} - ${convertTo12HourFormat(endTime)}`;
+            }
+        }
+
+    });
+
+    return isValid ? availability : false;
+}
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -116,7 +209,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 suggestion.classList.add("suggestion-item");
                 suggestion.textContent = feature.properties.formatted;
                 suggestion.addEventListener("click", () => {
+                    
                     inputField.value = feature.properties.formatted;
+                    longitudeValue = feature.properties.lon;
+                    latitudeValue = feature.properties.lat;
                     suggestionsList.innerHTML = ""; // Hide suggestions
                     suggestionsList.style.display = "none";
                 });
@@ -235,13 +331,28 @@ async function handleCameraCapture() {
 
 const handleFormSubmission = async (e) => {
     e.preventDefault();
+    console.log("Values")
+    console.log(longitudeValue);
+    console.log(latitudeValue);
+    // Validate availability
+    const availability = validateAvailability();
+    if (!availability) return;
+
+    // Collect features
+    const features = Array.from(document.querySelectorAll('input[name="features"]:checked'))
+                        .map(cb => cb.value);
+
     
     const formData = {
         name: document.getElementById('name').value.trim(),
         location: document.getElementById('autocomplete').value.trim(),
         price: document.getElementById('price').value.trim(),
-        isAvailable: document.querySelector('.switch input').checked,
-        image: await handleImage() 
+        // image: await handleImage(),
+        image: "https://loremflickr.com/640/480",
+        longitude: longitudeValue,
+        latitude: latitudeValue,
+        availability: availability,
+        features: features
     };
 
     // Validation 
@@ -257,12 +368,19 @@ const handleFormSubmission = async (e) => {
         // if (!ownerId) throw new Error("User not authenticated!");
 
         const ownerId = 4;
-        // addParkingSpace function from crud.js
+        // addParkingSpace function from crud.
+        // owner_id, title, address, price_per_hour,image,longitude,latitude
         await addParkingSpace(
             ownerId,
             formData.name,
             formData.location,
-            parseFloat(formData.price)
+            parseFloat(formData.price),
+            formData.image || "https://loremflickr.com/640/480",
+            formData.longitude,
+            formData.latitude,
+            formData.availability,
+            formData.features
+
         );
 
         // Reset form 
