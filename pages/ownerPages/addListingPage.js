@@ -34,55 +34,58 @@ const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'sat
 // const db = getFirestore(app);
 
 // Initialize Geoapify Autocomplete
-document.addEventListener("DOMContentLoaded", () => {
-    const inputField = document.getElementById("autocomplete");
-    const suggestionsList = document.getElementById("suggestions");
-    const apiKey = "d79219fb6dcc45159636535b526e950f"; 
-    inputField.addEventListener("input", async () => {
-        const query = inputField.value.trim();
-        if (query.length < 3) {
-            suggestionsList.innerHTML = ""; 
-            suggestionsList.style.display = "none";
-            return;
-        }
 
-        try {
-            const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&apiKey=${apiKey}`);
-            const data = await response.json();
-            displaySuggestions(data);
-        } catch (error) {
-            console.error("Error fetching autocomplete results:", error);
-        }
-    });
-    function displaySuggestions(data) {
-        suggestionsList.innerHTML = ""; // Clear old suggestions
+// document.addEventListener("DOMContentLoaded", () => {
 
-        if (data.features && data.features.length > 0) {
-            suggestionsList.style.display = "block"; // Show suggestions
 
-            data.features.forEach(feature => {
-                const suggestion = document.createElement("div");
-                suggestion.classList.add("suggestion-item");
-                suggestion.textContent = feature.properties.formatted;
-                suggestion.addEventListener("click", () => {
-                    inputField.value = feature.properties.formatted;
-                    suggestionsList.innerHTML = ""; // Hide suggestions
-                    suggestionsList.style.display = "none";
-                });
-                suggestionsList.appendChild(suggestion);
-            });
-        } else {
-            suggestionsList.style.display = "none"; // Hide if no results
-        }
-    }
+//     const inputField = document.getElementById("autocomplete");
+//     const suggestionsList = document.getElementById("suggestions");
+//     const apiKey = "d79219fb6dcc45159636535b526e950f"; 
+//     inputField.addEventListener("input", async () => {
+//         const query = inputField.value.trim();
+//         if (query.length < 3) {
+//             suggestionsList.innerHTML = ""; 
+//             suggestionsList.style.display = "none";
+//             return;
+//         }
 
-    // Close suggestions when clicking outside
-    document.addEventListener("click", (event) => {
-        if (!inputField.contains(event.target) && !suggestionsList.contains(event.target)) {
-            suggestionsList.style.display = "none";
-        }
-    });
-});
+//         try {
+//             const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&apiKey=${apiKey}`);
+//             const data = await response.json();
+//             displaySuggestions(data);
+//         } catch (error) {
+//             console.error("Error fetching autocomplete results:", error);
+//         }
+//     });
+//     function displaySuggestions(data) {
+//         suggestionsList.innerHTML = ""; // Clear old suggestions
+
+//         if (data.features && data.features.length > 0) {
+//             suggestionsList.style.display = "block"; // Show suggestions
+
+//             data.features.forEach(feature => {
+//                 const suggestion = document.createElement("div");
+//                 suggestion.classList.add("suggestion-item");
+//                 suggestion.textContent = feature.properties.formatted;
+//                 suggestion.addEventListener("click", () => {
+//                     inputField.value = feature.properties.formatted;
+//                     suggestionsList.innerHTML = ""; // Hide suggestions
+//                     suggestionsList.style.display = "none";
+//                 });
+//                 suggestionsList.appendChild(suggestion);
+//             });
+//         } else {
+//             suggestionsList.style.display = "none"; // Hide if no results
+//         }
+//     }
+
+//     // Close suggestions when clicking outside
+//     document.addEventListener("click", (event) => {
+//         if (!inputField.contains(event.target) && !suggestionsList.contains(event.target)) {
+//             suggestionsList.style.display = "none";
+//         }
+//     });
+// });
 
 function convertTo12HourFormat(time24) {
     const [hours, minutes] = time24.split(':');
@@ -92,10 +95,21 @@ function convertTo12HourFormat(time24) {
     
     return `${hours12}:${minutes}${ampm}`;
 }
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    const container = document.getElementById('availabilityContainer');
+let availableNow;
+document.getElementById("availabilityToggle").addEventListener("change", function() {
+    const statusText = document.getElementById("availabilityStatus");
+    const isAvailable = this.checked;
+    availableNow = isAvailable;
+    statusText.textContent = isAvailable ? "Available" : "Not Available";
+    console.log("Availability:", isAvailable);
+    isAvailable ? calender() : calendercontainer.innerHTML='';
+    });
+    
+    
+    const calendercontainer = document.getElementById('availabilityContainer');
+function calender()
+{
+    
     
     daysOfWeek.forEach(day => {
         const div = document.createElement('div');
@@ -111,9 +125,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 <input type="time" data-day="${day}-end" min="00:00" max="05:00" step="3600">
             </div>
         `;
-        container.appendChild(div);
+        calendercontainer.appendChild(div);
     });
-});
+}
+
+// document.addEventListener("DOMContentLoaded", () => {
+
+    
+//     const container = document.getElementById('availabilityContainer');
+    
+//     daysOfWeek.forEach(day => {
+//         const div = document.createElement('div');
+//         div.className = 'day-row';
+//         div.innerHTML = `
+//             <label class="day-checkbox">
+//                 <input type="checkbox" class="day-checkbox" data-day="${day}">
+//                 ${day.charAt(0).toUpperCase() + day.slice(1)}
+//             </label>
+//             <div class="time-inputs">
+//                 <input type="time" data-day="${day}-start" min="00:00" max="05:00" step="3600">
+//                 <span>to</span>
+//                 <input type="time" data-day="${day}-end" min="00:00" max="05:00" step="3600">
+//             </div>
+//         `;
+//         container.appendChild(div);
+//     });
+// });
 
 // Validation function
 function validateAvailability() {
@@ -351,6 +388,7 @@ const handleFormSubmission = async (e) => {
         image: "https://loremflickr.com/640/480",
         longitude: longitudeValue,
         latitude: latitudeValue,
+        isAvailable: availableNow,
         availability: availability,
         features: features
     };
@@ -378,6 +416,7 @@ const handleFormSubmission = async (e) => {
             formData.image || "https://loremflickr.com/640/480",
             formData.longitude,
             formData.latitude,
+            formData.isAvailable,
             formData.availability,
             formData.features
 
