@@ -1,8 +1,8 @@
 
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-// import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import { db, auth, addParkingSpace } from "./././crud.js";
+import { addParkingSpace } from "../../crud.js";
 const video = document.getElementById("cameraFeed");
 const canvas = document.getElementById("canvas");
 const preview = document.getElementById("preview");
@@ -32,6 +32,56 @@ const app = initializeApp({
 const db = getFirestore(app);
 
 // Initialize Geoapify Autocomplete
+document.addEventListener("DOMContentLoaded", () => {
+    const inputField = document.getElementById("autocomplete");
+    const suggestionsList = document.getElementById("suggestions");
+    const apiKey = "d79219fb6dcc45159636535b526e950f"; 
+    inputField.addEventListener("input", async () => {
+        const query = inputField.value.trim();
+        if (query.length < 3) {
+            suggestionsList.innerHTML = ""; 
+            suggestionsList.style.display = "none";
+            return;
+        }
+
+        try {
+            const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&apiKey=${apiKey}`);
+            const data = await response.json();
+            displaySuggestions(data);
+        } catch (error) {
+            console.error("Error fetching autocomplete results:", error);
+        }
+    });
+    function displaySuggestions(data) {
+        suggestionsList.innerHTML = ""; // Clear old suggestions
+
+        if (data.features && data.features.length > 0) {
+            suggestionsList.style.display = "block"; // Show suggestions
+
+            data.features.forEach(feature => {
+                const suggestion = document.createElement("div");
+                suggestion.classList.add("suggestion-item");
+                suggestion.textContent = feature.properties.formatted;
+                suggestion.addEventListener("click", () => {
+                    inputField.value = feature.properties.formatted;
+                    suggestionsList.innerHTML = ""; // Hide suggestions
+                    suggestionsList.style.display = "none";
+                });
+                suggestionsList.appendChild(suggestion);
+            });
+        } else {
+            suggestionsList.style.display = "none"; // Hide if no results
+        }
+    }
+
+    // Close suggestions when clicking outside
+    document.addEventListener("click", (event) => {
+        if (!inputField.contains(event.target) && !suggestionsList.contains(event.target)) {
+            suggestionsList.style.display = "none";
+        }
+    });
+});
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -203,9 +253,10 @@ const handleFormSubmission = async (e) => {
     }
 
     try {
-        const ownerId = auth.currentUser?.uid;
-        if (!ownerId) throw new Error("User not authenticated!");
+        // const ownerId = auth.currentUser?.uid;
+        // if (!ownerId) throw new Error("User not authenticated!");
 
+        const ownerId = 4;
         // addParkingSpace function from crud.js
         await addParkingSpace(
             ownerId,
