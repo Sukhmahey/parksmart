@@ -1,6 +1,7 @@
 import { getParkingSpaces,deleteParkingSpace } from "../../crud.js";
 
 const listingarea = document.getElementById("listingarea");
+
 // const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 const currentUser = 4;
 
@@ -80,6 +81,7 @@ const currentUser = 4;
 async function populateListings() {
   try {
     // Get parking spaces
+    listingarea.innerHTML = "";
     const parkingSpaces = await getParkingSpaces();
     
     
@@ -125,6 +127,8 @@ async function populateListings() {
 
       edit.addEventListener("click", () => {
         console.log("Edit button clicked for:", space.space_id);
+        // open html file for editing
+        window.location.href = `edit-listing.html?id=${space.space_id}`;
       });
 
       //delete button
@@ -136,6 +140,7 @@ async function populateListings() {
       deleteOne.addEventListener("click", () => {
         console.log("delete button clicked for:", space.space_id);
         deleteParkingSpace(space.space_id);
+
         populateListings();
 
       });
