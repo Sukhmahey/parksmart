@@ -1,0 +1,68 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+h1{
+margin-top: 3rem;
+margin-left: 10rem;
+margin-bottom: 2rem;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    height: 3rem;
+}
+
+header a {
+    width: 200px;
+    height: 35px;
+    border-radius: 20px;
+}
+
+.headerRight a {
+    margin: 0 1rem;
+    background-color: #176F9C;
+    color: white;
+    border: none;
+    padding: 0.5rem 0;
+    text-decoration: none;
+    text-align: center;
+}
+.headerRight{
+    display: flex;
+}
+.profileIcon{
+width: 2rem;
+height: 2rem;
+}
+
+
+.bookingCard{
+ display: flex;
+ flex-direction: row;
+ gap: 2rem;
+ background-color: lightgrey;
+ max-width: 1000px;
+ margin: auto;
+ padding: 1rem;
+}
+.bookingContainer{
+    width: 1200px;
+background-color: grey;;
+    margin: auto;
+    padding: 1rem;
+}
+
+
+
+
+footer {
+    background: linear-gradient(to right, #42B97C, #38A9E2);
+    padding: 1rem;
+    text-align: center;
+    margin-top: 5rem;
+}
+
+
