@@ -1,6 +1,4 @@
 
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-// import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 import { addParkingSpace } from "../../crud.js";
 const video = document.getElementById("cameraFeed");
@@ -11,81 +9,7 @@ let latitudeValue;
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-// const firebaseConfig = {
-//     apiKey: "AIzaSyCLkQlLAXrx78VjhP3S6w6zLhCPmXNyMtQ",
-//     authDomain: "parksmartowner.firebaseapp.com",
-//     projectId: "parksmartowner",
-//     storageBucket: "parksmartowner.appspot.com",
-//     messagingSenderId: "571166769031",
-//     appId: "1:571166769031:web:394821c17335e9afca1d22",
-//     measurementId: "G-2WDLX03JLW"
-// };
 
-// const app = initializeApp({
-//     apiKey: "AIzaSyB6Um_zSlHKQ9JuAEC5U2K3Bx4BCzLbbHc",
-//     authDomain: "team5init.firebaseapp.com",
-//     projectId: "team5init",
-//     storageBucket: "team5init.firebasestorage.app",
-//     messagingSenderId: "121552966763",
-//     appId: "1:121552966763:web:924eb937415da173b04d2e",
-//   });
-
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-
-// Initialize Geoapify Autocomplete
-
-// document.addEventListener("DOMContentLoaded", () => {
-
-
-//     const inputField = document.getElementById("autocomplete");
-//     const suggestionsList = document.getElementById("suggestions");
-//     const apiKey = "d79219fb6dcc45159636535b526e950f"; 
-//     inputField.addEventListener("input", async () => {
-//         const query = inputField.value.trim();
-//         if (query.length < 3) {
-//             suggestionsList.innerHTML = ""; 
-//             suggestionsList.style.display = "none";
-//             return;
-//         }
-
-//         try {
-//             const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&apiKey=${apiKey}`);
-//             const data = await response.json();
-//             displaySuggestions(data);
-//         } catch (error) {
-//             console.error("Error fetching autocomplete results:", error);
-//         }
-//     });
-//     function displaySuggestions(data) {
-//         suggestionsList.innerHTML = ""; // Clear old suggestions
-
-//         if (data.features && data.features.length > 0) {
-//             suggestionsList.style.display = "block"; // Show suggestions
-
-//             data.features.forEach(feature => {
-//                 const suggestion = document.createElement("div");
-//                 suggestion.classList.add("suggestion-item");
-//                 suggestion.textContent = feature.properties.formatted;
-//                 suggestion.addEventListener("click", () => {
-//                     inputField.value = feature.properties.formatted;
-//                     suggestionsList.innerHTML = ""; // Hide suggestions
-//                     suggestionsList.style.display = "none";
-//                 });
-//                 suggestionsList.appendChild(suggestion);
-//             });
-//         } else {
-//             suggestionsList.style.display = "none"; // Hide if no results
-//         }
-//     }
-
-//     // Close suggestions when clicking outside
-//     document.addEventListener("click", (event) => {
-//         if (!inputField.contains(event.target) && !suggestionsList.contains(event.target)) {
-//             suggestionsList.style.display = "none";
-//         }
-//     });
-// });
 
 function convertTo12HourFormat(time24) {
     const [hours, minutes] = time24.split(':');
@@ -129,28 +53,7 @@ function calender()
     });
 }
 
-// document.addEventListener("DOMContentLoaded", () => {
 
-    
-//     const container = document.getElementById('availabilityContainer');
-    
-//     daysOfWeek.forEach(day => {
-//         const div = document.createElement('div');
-//         div.className = 'day-row';
-//         div.innerHTML = `
-//             <label class="day-checkbox">
-//                 <input type="checkbox" class="day-checkbox" data-day="${day}">
-//                 ${day.charAt(0).toUpperCase() + day.slice(1)}
-//             </label>
-//             <div class="time-inputs">
-//                 <input type="time" data-day="${day}-start" min="00:00" max="05:00" step="3600">
-//                 <span>to</span>
-//                 <input type="time" data-day="${day}-end" min="00:00" max="05:00" step="3600">
-//             </div>
-//         `;
-//         container.appendChild(div);
-//     });
-// });
 
 // Validation function
 function validateAvailability() {
@@ -162,26 +65,11 @@ function validateAvailability() {
     
     document.querySelectorAll('.day-checkbox input[type="checkbox"]').forEach(checkbox => {
         const day = checkbox.dataset.day;
-        // const startTime = document.querySelector(`[data-day="${day}-start"]`).value;
-        // const endTime = document.querySelector(`[data-day="${day}-end"]`).value;
+        
         const startInput = document.querySelector(`[data-day="${day}-start"]`);
         const endInput = document.querySelector(`[data-day="${day}-end"]`);
 
-        // if (checkbox.checked) {
-        //     if (!startTime || !endTime) {
-        //         errorElement.textContent = `Please fill times for ${day}`;
-        //         errorElement.style.display = 'block';
-        //         isValid = false;
-        //     }
-
-        //     if (startTime >= endTime) {
-        //         errorElement.textContent = `End time must be after start time on ${day}`;
-        //         errorElement.style.display = 'block';
-        //         isValid = false;
-        //     }
-
-        //     availability[day] = `${startTime} - ${endTime}`;
-        // }
+        
 
         if (checkbox.checked) {
             const startTime = startInput.value;
@@ -322,49 +210,6 @@ async function handleCameraCapture() {
         if (stream) stream.getTracks().forEach(track => track.stop());
     }
 }
-// Form Submission Handler
-// const handleFormSubmission = async (e) => {
-//     e.preventDefault();
-    
-//     const formData = {
-//         name: document.getElementById('name').value.trim(),
-//         location: document.getElementById('autocomplete').value.trim(),
-//         price: document.getElementById('price').value.trim(),
-//         isAvailable: document.querySelector('.switch input').checked,
-//         image: await handleImage()
-//     };
-
-//     if (!formData.name || !formData.location || !formData.price) {
-//         return alert('Please fill in all required fields');
-//     }
-//     if (isNaN(formData.price)) {
-//         return alert('Please enter a valid price');
-//     }
-
-//     try {
-//         await addDoc(collection(db, "OwnerListings"), {
-//             Listing_name: formData.name,
-//             Street_name: formData.location,
-//             availability: formData.isAvailable,
-//             image: formData.image || "https://loremflickr.com/640/480",
-//             // image: "https://loremflickr.com/640/480",
-//             ownerid: 4,
-//             price: parseFloat(formData.price),
-//             timestamp: new Date()
-//         });
-
-//         document.getElementById('name').value = '';
-//         document.getElementById('autocomplete').value = '';
-//         document.getElementById('price').value = '';
-//         document.getElementById('fileInput').value = '';
-//         document.getElementById('preview').style.display = 'none';
-
-//         alert('Listing added successfully!');
-//     } catch (error) {
-//         console.error('Submission error:', error);
-//         alert(`Error saving listing: ${error.message}`);
-//     }
-// };
 
 const handleFormSubmission = async (e) => {
     e.preventDefault();
@@ -402,12 +247,9 @@ const handleFormSubmission = async (e) => {
     }
 
     try {
-        // const ownerId = auth.currentUser?.uid;
-        // if (!ownerId) throw new Error("User not authenticated!");
-
+       
         const ownerId = 4;
         // addParkingSpace function from crud.
-        // owner_id, title, address, price_per_hour,image,longitude,latitude
         await addParkingSpace(
             ownerId,
             formData.name,
