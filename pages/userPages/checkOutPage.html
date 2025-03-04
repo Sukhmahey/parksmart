@@ -35,33 +35,39 @@
 
                 <label for="province">Province:</label>
                 <input type="text" id="province" placeholder="Province" required>
+
+                <h2>Saved car</h2>
+                <label class="saved-car">
+                    <input type="radio" name="saved-car" aria-label="Saved car details">
+                    Saved License Plate <br>
+                    Saved Color <br>
+                    Saved Country <br>
+                    Saved Province
+                </label>
+
+                <p><strong>Parking Date:</strong>
+                    <input type="date" id="parkingDate">
+                </p>
+                
+                <p><strong>Parking Time:</strong>
+                    <input type="time" id="startTime"> to
+                    <input type="time" id="endTime">
+                </p>
+                
+                <p><strong>Parking Duration:</strong> <span id="duration">0</span> hours</p>
+                
+                <p><strong>Total:</strong> $<span id="totalPrice">0.00</span></p>
+
+                <div class="buttons">
+                    <button type="reset">Reset</button>
+                    <button type="submit">Confirm</button>
+                </div>
             </form>
-
-            <h2>Saved car</h2>
-            <label class="saved-car">
-                <input type="radio" name="saved-car" aria-label="Saved car details">
-                Saved License Plate <br>
-                Saved Color <br>
-                Saved Country <br>
-                Saved Province
-            </label>
-
-            <p><strong>Parking Date:</strong> <input type="date" value="2025-06-28" readonly></p>
-            <p><strong>Parking Time:</strong> <input type="text" value="2:30pm - 4:30pm" readonly></p>
-            <p><strong>Parking Duration:</strong> 2 hours</p>
-            <p><strong>Total:</strong> total price</p>
-
-            <div class="buttons">
-                <button type="reset">Reset</button>
-                <button type="submit">Confirm</button>
-            </div>
         </div>
         <footer>
             <p>&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
         </footer>
-        <script type="module" src="../../crud.js"></script>
-        <script src="loginPage.js"></script>
-        </body>
+        <script type="module" src="../../checkOutPage.js"></script>
     </div>
 
 </body>

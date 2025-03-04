@@ -1,4 +1,4 @@
-import db, { auth } from "./firebase.js";
+import { db, auth, Timestamp } from "./firebase.js";
 import {
   collection,
   doc,
@@ -6,10 +6,13 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
+  getDoc,
 } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
-
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 
 // User Authentication Logic (Moved from loginPage.js)
 const signUpForm = document.getElementById("signUpForm");
@@ -21,41 +24,39 @@ if (signUpForm) {
     const name = document.getElementById("signupName").value;
     const email = document.getElementById("signupEmail").value;
     const password = document.getElementById("signupPassword").value;
-    const isSpaceOwner = document.getElementById("isSpaceOwner").checked;  
+    const isSpaceOwner = document.getElementById("isSpaceOwner").checked;
 
-    // checkbox for determing role 
+    // checkbox for determing role
     const role = isSpaceOwner ? "spaceOwner" : "user";
 
     createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            alert("Account Created Successfully!");
-            console.log("User Created:", userCredential.user);
-            // Adding data to the firebase
-            addUser(name, email, password, role);
-        })
-        .catch((error) => {
-            alert(error.message);
-        });
-});
-
+      .then((userCredential) => {
+        alert("Account Created Successfully!");
+        console.log("User Created:", userCredential.user);
+        // Adding data to the firebase
+        addUser(name, email, password, role);
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  });
 }
 
-
 if (signInForm) {
-    signInForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const email = document.getElementById("signinEmail").value;
-        const password = document.getElementById("signinPassword").value;
+  signInForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = document.getElementById("signinEmail").value;
+    const password = document.getElementById("signinPassword").value;
 
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                alert("Login Successful!");
-                window.location.href = "homepage.html"; // Redirect after login
-            })
-            .catch((error) => {
-                alert(error.message);
-            });
-    });
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        alert("Login Successful!");
+        window.location.href = "homepage.html"; // Redirect after login
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  });
 }
 
 //logout function, but not implemented yet dont know where we are putting the logout button yet.
@@ -71,13 +72,12 @@ if (signInForm) {
 //     }
 // }
 
-async function addUser(name, email, password_hash, role) {
+async function addUser(name, email, role) {
   const userRef = doc(collection(db, "users"));
   await setDoc(userRef, {
     user_id: userRef.id,
     name,
     email,
-    password_hash,
     role,
   });
   console.log("User added:", userRef.id);
@@ -101,20 +101,42 @@ async function addParkingSpace(owner_id, title, address, price_per_hour) {
 async function addBooking(
   user_id,
   space_id,
+  parkingDate, // Add parkingDate as an argument
   start_time,
   end_time,
-  total_price
+  total_price,
+  license_plate,
+  color
 ) {
   const bookingRef = doc(collection(db, "bookings"));
+  console.log("start_time:", start_time);
+  console.log("end_time:", end_time);
+  console.log("parkingDate:", parkingDate);
+
+  // Combine date and time correctly
+  const startDateTime = new Date(`${parkingDate}T${start_time}:00`); // Add ":00" for seconds
+  const endDateTime = new Date(`${parkingDate}T${end_time}:00`); // Add ":00" for seconds
+
+  console.log("Start Time:", startDateTime);
+  console.log("End Time:", endDateTime);
+
+  // Check if the dates are valid
+  if (isNaN(startDateTime) || isNaN(endDateTime)) {
+    console.error("Invalid date:", start_time, end_time);
+    return; // Exit if date is invalid
+  }
+
   await setDoc(bookingRef, {
     booking_id: bookingRef.id,
     user_id,
     space_id,
-    start_time: new Date(start_time),
-    end_time: new Date(end_time),
+    start_time: Timestamp.fromDate(startDateTime), // Use Firebase Timestamp
+    end_time: Timestamp.fromDate(endDateTime), // Use Firebase Timestamp
     total_price,
+    license_plate,
+    color,
     status: "confirmed",
-    created_at: new Date(),
+    created_at: Timestamp.now(),
   });
   console.log("Booking added:", bookingRef.id);
 }
@@ -152,6 +174,24 @@ async function deleteUser(user_id) {
   console.log("User deleted:", user_id);
 }
 
+async function getBooking(booking_id) {
+  console.log("Booking ID:", booking_id);
+
+  // Reference to the specific document
+  const bookingRef = doc(db, "bookings", booking_id);
+
+  // Fetch the document
+  const bookingSnap = await getDoc(bookingRef);
+
+  if (bookingSnap.exists()) {
+    console.log("Booking Data:", bookingSnap.data());
+    return bookingSnap.data(); // Return the document data if it exists
+  } else {
+    console.error("No such booking!");
+    return null; // Return null if no booking exists for the given ID
+  }
+}
+
 // Export functions for use
 export {
   addUser,
@@ -161,4 +201,5 @@ export {
   getParkingSpaces,
   updateUser,
   deleteUser,
+  getBooking,
 };

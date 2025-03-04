@@ -51,6 +51,8 @@ async function addData() {
       created_at: new Date(),
     });
 
+    
+
 
     const vehicleRef = db.collection("vehicles").doc();
     await vehicleRef.set({
