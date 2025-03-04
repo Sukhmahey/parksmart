@@ -9,7 +9,6 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
-
 async function addUser(name, email, role) {
   const userRef = doc(collection(db, "users"));
   await setDoc(userRef, {
@@ -98,6 +97,23 @@ async function getParkingSpaces() {
   return dataObj;
 }
 
+async function getParkingSpaceById(documentId) {
+  try {
+    const docRef = doc(db, "parking_spaces", documentId); // Reference to document
+    const docSnap = await getDoc(docRef); // Fetch document
+
+    if (docSnap.exists()) {
+      console.log("Document Data:", docSnap.data());
+      return docSnap.data(); // Return document data
+    } else {
+      console.log("No such document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching document:", error);
+  }
+}
+
 // UPDATE: Modify an Existing Document
 async function updateUser(user_id, newData) {
   const userRef = doc(db, "users", user_id);
@@ -140,4 +156,5 @@ export {
   updateUser,
   deleteUser,
   getBooking,
+  getParkingSpaceById,
 };
