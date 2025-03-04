@@ -1,4 +1,4 @@
-import { getParkingSpaces } from "../../crud.js";
+import { getParkingSpaces } from "../../js/crud.js";
 const { Map, InfoWindow } = await google.maps.importLibrary("maps");
 const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
   "marker"
@@ -7,6 +7,10 @@ const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
 const bounds = new google.maps.LatLngBounds();
 
 const mapElement = document.getElementById("map");
+const filterBox = document.getElementById("filterBox");
+
+let userCurrentLocation = null;
+let parkingSpotsArray = [];
 
 const initMap = () => {
   // const markerElement = document.getElementById("marker");
@@ -19,7 +23,7 @@ const initMap = () => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
 
-          console.log("position", lat, lng);
+          userCurrentLocation = { lat, lng };
 
           mapElement.center = { lat, lng };
           marker.position = { lat, lng };
@@ -28,6 +32,7 @@ const initMap = () => {
           bounds.extend(new google.maps.LatLng(lat, lng));
           // Append marker to the map
           mapElement.appendChild(marker);
+          fetchParkingSpots();
         },
         (error) => {
           console.error("Error getting location:", error);
@@ -67,12 +72,82 @@ const initMap = () => {
 };
 
 const fetchParkingSpots = async () => {
-  const parkingSpaceArray = await getParkingSpaces();
+  const parkingSpaceArrayUnsorted = await getParkingSpaces();
+
+  const parkingSpaceArrayDistanceIncluded = parkingSpaceArrayUnsorted.map(
+    (parkingSpace) => {
+      const { lat, lng } = userCurrentLocation;
+      const distance = calculateDistance(userCurrentLocation, {
+        lat: parkingSpace?.latitude,
+        lng: parkingSpace?.longitude,
+      });
+
+      return { ...parkingSpace, distance: distance };
+    }
+  );
+
+  parkingSpotsArray = parkingSpaceArrayDistanceIncluded;
+  renderListOfSpaces(parkingSpaceArrayDistanceIncluded);
+
+  setTimeout(() => {
+    mapElement.setAttribute(
+      "center",
+      `${bounds.getCenter().lat()},${bounds.getCenter().lng()}`
+    );
+    mapElement.setAttribute("zoom", getOptimalZoom(bounds));
+  }, 1000);
+};
+const getOptimalZoom = (bounds) => {
+  const ne = bounds.getNorthEast();
+  const sw = bounds.getSouthWest();
+
+  const latDiff = Math.abs(ne.lat() - sw.lat());
+  const lngDiff = Math.abs(ne.lng() - sw.lng());
+
+  if (latDiff > 1 || lngDiff > 1) return 3;
+  if (latDiff > 0.5 || lngDiff > 0.5) return 8;
+  if (latDiff > 0.1 || lngDiff > 0.1) return 10;
+  if (latDiff > 0.02 || lngDiff > 0.02) return 12;
+  return 14;
+};
+
+const resetAllMarkers = () => {
+  const pin = new PinElement({
+    scale: 1,
+    background: "#EA4336",
+  });
+
+  // Fetch all gmp-advanced-marker elements
+  const markers = document.querySelectorAll("gmp-advanced-marker");
+
+  // Loop through each marker and append the pin element
+  markers.forEach((marker) => {
+    while (marker.firstChild) {
+      marker.removeChild(marker.firstChild);
+    }
+    marker.appendChild(pin.element);
+  });
+};
+
+const renderListOfSpaces = (
+  parkingSpaces,
+  sortby = "distance",
+  radius = 10
+) => {
   const parkingListContainer = document.querySelector(".parking-list");
+  parkingListContainer.innerHTML = "";
 
-  console.log("parkingSpaceArray---", parkingSpaceArray);
+  const parkingSpaceSorted = parkingSpaces
+    ?.filter((obj) => obj?.distance <= radius * 1000)
+    .sort((obj1, obj2) => {
+      return sortby === "distance"
+        ? obj1?.distance - obj2?.distance
+        : obj1?.price_per_hour - obj2?.price_per_hour;
+    });
 
-  parkingSpaceArray.forEach((parkingSpot) => {
+  console.log("Parking", sortby, parkingSpaceSorted);
+
+  parkingSpaceSorted.forEach((parkingSpot) => {
     bounds.extend(
       new google.maps.LatLng(parkingSpot?.latitude, parkingSpot?.longitude)
     );
@@ -113,14 +188,29 @@ const fetchParkingSpots = async () => {
     const spotLocation = document.createElement("p");
     spotLocation.textContent = parkingSpot.address;
 
+    const spotDistance = document.createElement("p");
+    spotDistance.textContent = `Distance: ${(
+      parkingSpot?.distance / 1000
+    ).toFixed(2)}km`;
+
     // Price Per Hour
     const pricePerHour = document.createElement("p");
     pricePerHour.textContent = `Price per hour: $${parkingSpot.price_per_hour}`;
+
+    // Price Per Hour
+    const spotDetailsBtn = document.createElement("button");
+    spotDetailsBtn.textContent = `Go To Details`;
+
+    spotDetailsBtn.addEventListener("click", () => {
+      window.location.href = `/pages/userPages/searchDetailsPage.html?spaceId=${parkingSpot?.space_id}`;
+    });
 
     // Append elements to the spot-info div
     spotInfo.appendChild(spotName);
     spotInfo.appendChild(spotLocation);
     spotInfo.appendChild(pricePerHour);
+    if (parkingSpot?.distance) spotInfo.appendChild(spotDistance);
+    spotInfo.appendChild(spotDetailsBtn);
 
     // Append the spot-image and spot-info to the parking-spot div
     parkingSpotElement.appendChild(spotImage);
@@ -142,20 +232,11 @@ const fetchParkingSpots = async () => {
       });
 
       console.log("Markers", marker, pin.element);
-      // marker.removeChild(pin.element);
-      // Add pin to the marker element
-      // marker.appendChild(pin.element);
 
       let hasSameChild = false;
 
       for (const child of marker.childNodes) {
         // You can use a condition to compare the child (for example, check the type or other properties)
-        console.log(
-          "Check",
-          child,
-          pin.element,
-          JSON.stringify(child) === JSON.stringify(pin.element)
-        );
         if (JSON.stringify(child) === JSON.stringify(pin.element)) {
           hasSameChild = true;
           break;
@@ -164,66 +245,15 @@ const fetchParkingSpots = async () => {
 
       if (!hasSameChild) {
         marker.appendChild(pin.element);
-        console.log("New pin added to marker.");
       }
-
-      // Show overlay modal at the new position
-      // createOverlayFunction(
-      //   marker,
-      //   parkingSpot.imageUrl,
-      //   parkingSpot.address,
-      //   true
-      // );
     });
 
     // Append the parking spot element to the parking-list container
     parkingListContainer.appendChild(parkingSpotElement);
   });
-
-  setTimeout(() => {
-    mapElement.setAttribute(
-      "center",
-      `${bounds.getCenter().lat()},${bounds.getCenter().lng()}`
-    );
-    mapElement.setAttribute("zoom", getOptimalZoom(bounds));
-  }, 1000);
-};
-const getOptimalZoom = (bounds) => {
-  const ne = bounds.getNorthEast();
-  const sw = bounds.getSouthWest();
-
-  const latDiff = Math.abs(ne.lat() - sw.lat());
-  const lngDiff = Math.abs(ne.lng() - sw.lng());
-
-  console.log("Difference", latDiff, lngDiff);
-  if (latDiff > 1 || lngDiff > 1) return 3;
-  if (latDiff > 0.5 || lngDiff > 0.5) return 8;
-  if (latDiff > 0.1 || lngDiff > 0.1) return 10;
-  if (latDiff > 0.02 || lngDiff > 0.02) return 12;
-  return 14;
-};
-
-const resetAllMarkers = () => {
-  const pin = new PinElement({
-    scale: 1,
-    background: "#EA4336",
-  });
-
-  // Fetch all gmp-advanced-marker elements
-  const markers = document.querySelectorAll("gmp-advanced-marker");
-
-  console.log("Map things", markers);
-  // Loop through each marker and append the pin element
-  markers.forEach((marker) => {
-    while (marker.firstChild) {
-      marker.removeChild(marker.firstChild);
-    }
-    marker.appendChild(pin.element);
-  });
 };
 
 const createOverlayFunction = (marker, img, address, showOverlay = false) => {
-  console.log("ShowOverlay", showOverlay);
   const overlay = document.getElementById("marker-overlay");
   const overlayImg = document.getElementById("overlay-img");
   const overlayText = document.getElementById("overlay-text");
@@ -251,32 +281,53 @@ const createOverlayFunction = (marker, img, address, showOverlay = false) => {
       img ||
       "https://images.pexels.com/photos/30913847/pexels-photo-30913847/free-photo-of-indoor-artistic-scene-with-calligraphy-and-cat.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
     overlayText.textContent = address;
-
-    // const infowindow = new google.maps.InfoWindow({
-    //   content: overlay,
-    //   ariaLabel: "Uluru",
-    // });
-
-    // infowindow.open({
-    //   anchor: marker,
-    // });
   }
 };
 
 document.addEventListener("DOMContentLoaded", function () {
   const header = document.querySelector(".asideHeader");
   const content = document.querySelector(".asideContent");
+  const contentHeader = document.querySelector(".asideHeaderContainer");
   const icon = document.querySelector(".toggle-icon");
 
   header.addEventListener("click", function () {
-    const isOpen = content.style.display === "block";
+    const isOpen = contentHeader.style.display === "block";
 
-    content.style.display = isOpen ? "none" : "block";
-    icon.textContent = isOpen ? "▼" : "▲"; // Toggle icon direction
+    contentHeader.style.display = isOpen ? "none" : "block";
   });
 });
 
+document.getElementById("filterBtn").addEventListener("click", function () {
+  filterBox.style.display =
+    filterBox.style.display === "block" ? "none" : "block";
+});
+
+document.getElementById("filterBoxbtn").addEventListener("click", function () {
+  const selectedValue = document.getElementById("sort-options").value;
+  const selectedRadiusValue = document.getElementById("radius").value;
+  console.log("Selected Sort Option:", selectedValue, selectedRadiusValue);
+
+  renderListOfSpaces(parkingSpotsArray, selectedValue, selectedRadiusValue);
+
+  filterBox.style.display =
+    filterBox.style.display === "block" ? "none" : "block";
+});
+
+const calculateDistance = (obj1, obj2) => {
+  // Create LatLng objects
+  const point1 = new google.maps.LatLng(obj1?.lat, obj1?.lng);
+  const point2 = new google.maps.LatLng(obj2?.lat, obj2?.lng);
+
+  // Compute distance in meters
+  const distance = google.maps.geometry.spherical.computeDistanceBetween(
+    point1,
+    point2
+  );
+
+  console.log("Distance", distance.toFixed(2));
+  return distance.toFixed(2);
+};
+
 window.onload = function () {
-  fetchParkingSpots();
   initMap();
 };

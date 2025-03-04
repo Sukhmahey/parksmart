@@ -8,49 +8,73 @@
     <script
       async
       defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7_Nk8Peq06hgtVpm3CXDzDh-4BiVfMKU&libraries=maps,marker&v=beta"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7_Nk8Peq06hgtVpm3CXDzDh-4BiVfMKU&libraries=maps,marker,geometry&v=beta"
     ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
 
     <script defer type="module" src="searchResultsPage.js"></script>
   </head>
   <body>
+    <div class="topBar">
+      <div class="advanceSearch">
+        <div class="asideHeader">
+          <div class="asideHeaderContainer">
+            <div class="asideContent">
+              <form id="searchForm">
+                <!-- Input Field -->
+                <label for="searchInput">Current Address:</label>
+                <input
+                  type="text"
+                  id="searchInput"
+                  placeholder="Your Current Address"
+                />
+
+                <!-- Address Field -->
+                <label for="address">Destination Address:</label>
+                <input
+                  type="text"
+                  id="address"
+                  placeholder="Enter Destination address"
+                />
+
+                <!-- Time Field -->
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime" />
+                <label for="endTime">End Time:</label>
+                <input type="time" id="endTime" />
+
+                <!-- Search Button -->
+                <button type="submit">Search Again</button>
+              </form>
+            </div>
+          </div>
+          <span class="toggle-icon"
+            ><i class="fa-solid fa-magnifying-glass"></i
+          ></span>
+          <h2>Reserve your spot</h2>
+        </div>
+      </div>
+      <i id="filterBtn" class="fa-solid fa-filter"></i>
+      <div class="filter-box" id="filterBox">
+        <label>Sort by:</label>
+        <select id="sort-options">
+          <option value="distance">Sort by Distance</option>
+          <option value="price">Sort by Price</option>
+        </select>
+        <label>Search radius:</label>
+        <input id="radius" type="number" value="10"></input>
+          
+        <button id="filterBoxbtn">Filter</button>
+      </div>
+    </div>
     <div class="mapOuterContainer">
       <aside class="sidebar">
-        <div class="asideHeaderContainer">
-          <div class="asideHeader">
-            <h2>Reserve your spot</h2>
-            <span class="toggle-icon">▼</span>
-          </div>
-          <div class="asideContent">
-            <form id="searchForm">
-              <!-- Input Field -->
-              <label for="searchInput">Current Address:</label>
-              <input
-                type="text"
-                id="searchInput"
-                placeholder="Your Current Address"
-              />
-
-              <!-- Address Field -->
-              <label for="address">Destination Address:</label>
-              <input
-                type="text"
-                id="address"
-                placeholder="Enter Destination address"
-              />
-
-              <!-- Time Field -->
-              <label for="startTime">Start Time:</label>
-              <input type="time" id="startTime" />
-              <label for="endTime">End Time:</label>
-              <input type="time" id="endTime" />
-
-              <!-- Search Button -->
-              <button type="submit">Search Again</button>
-            </form>
-          </div>
-        </div>
-
         <div class="parking-list"></div>
       </aside>
       <gmp-map id="map" zoom="15" map-id="DEMO_MAP_ID"> </gmp-map>
