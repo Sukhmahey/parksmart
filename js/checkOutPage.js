@@ -1,6 +1,8 @@
-import { addBooking } from "../crud.js";
+import { addBooking } from "./crud.js";
 
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("DOM loaded");
+
   const parkingDateInput = document.getElementById("parkingDate");
   const startTimeInput = document.getElementById("startTime");
   const endTimeInput = document.getElementById("endTime");
@@ -15,6 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const startTime = startTimeInput.value;
     const endTime = endTimeInput.value;
+
+    console.log(startTime, endTime);
 
     if (parkingDate && startTime && endTime) {
       const start = new Date(`${parkingDate}T${startTime}`);
@@ -45,10 +49,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const color = document.getElementById("color").value;
     const startTime = startTimeInput.value;
     const endTime = endTimeInput.value;
-    const totalPrice = parseFloat(totalPriceDisplay.textContent); 
+    const totalPrice = parseFloat(totalPriceDisplay.textContent);
 
-    const userId = "JCDexqzzhvRDOZXi188R"; 
-    const spaceId = "OHSWzPzplsw9v5k7oYWh"; 
+    const userId = "JCDexqzzhvRDOZXi188R";
+    const spaceId = "OHSWzPzplsw9v5k7oYWh";
 
     try {
       await addBooking(
