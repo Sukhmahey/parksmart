@@ -45,8 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         totalPriceElement.textContent = bookingData.total_price;
       }
 
-      // TODO: Fetch and display other details like spot location, owner name, and contact
-      // You'll need to add functions in crud.js to fetch these details based on space_id and owner_id
+      
     } else {
       console.error("Booking data not found.");
       // Handle the case where booking data is not found
