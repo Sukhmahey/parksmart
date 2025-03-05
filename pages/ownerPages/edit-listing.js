@@ -1,4 +1,4 @@
-import { fetchListingData, updateListing } from '../../crud.js';
+import { fetchListingData, updateListing } from '../../js/crud.js';
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 let longitudeValue;
 let latitudeValue;
