@@ -92,8 +92,13 @@ main {
     background: #4CAF50;
     padding: 10px 15px;
 }
+.deleteOne
+{
+    background: #f44336;
+    padding: 10px 15px;
+}
 
-.remove {
+.removeAll {
     align-self: flex-end;
     background: red;
     padding: 10px 15px;

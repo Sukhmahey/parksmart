@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parking Spot Management</title>
-    
-    <script src="https://unpkg.com/@geoapify/geocoder-autocomplete@1.0.0/dist/geocoder-autocomplete.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/@geoapify/geocoder-autocomplete@1.0.0/dist/geocoder-autocomplete.min.css">
+    <title>Edit Parking Spot</title>
+    <script src="https://unpkg.com/@geoapify/geocoder-autocomplete@1.5.1/dist/index.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@geoapify/geocoder-autocomplete@1.5.1/styles/minimal.css">
 
     <link rel="stylesheet" href="css/addListing.css">
-    <script type="module" src="addListingPage.js" defer></script>
-    
+    <script type="module" src="edit-listing.js" defer></script>
 </head>
 <body>
     <div class="container">
         <div class="section">
-            <h2 class="section-title">Add Listing</h2>
+            <h2 class="section-title">Edit Listing</h2>
             
             <div class="form-group">
                 <label for="name">Parking Spot Name</label>
@@ -23,11 +21,8 @@
             </div>
 
             <div class="form-group">
-                <input type="text" id="autocomplete" placeholder="Type a location..." />
+                <input type="text" id="autocomplete" placeholder="Type a location...">
                 <div id="suggestions"></div>
-
-
-                <!-- <input type="text" id="location" placeholder="Enter location"> -->
             </div>
 
             <div class="form-group">
@@ -41,16 +36,17 @@
                 <div class="media-buttons">
                     <button id="cameraButton">Use Camera</button>
                 </div>
-                <img id="preview" src="" alt="Image Preview" style="display: none;"/>
+                <img id="preview" alt="Image Preview">
                 <video id="cameraFeed"></video>
                 <canvas id="canvas" style="display: none;"></canvas>
             </div>
         </div>
+        
         <div class="form-group">
             <label>Features</label>
             <div class="features-group">
                 <label class="feature-item">
-                    <input type="checkbox" name="features" value="covered">
+                    <input type="checkbox" name="features" value="covered" checked>
                     Covered
                 </label>
                 <label class="feature-item">
@@ -58,32 +54,30 @@
                     EV Charging
                 </label>
             </div>
+            
             <div class="form-group">
                 <label>Available</label>
                 <div class="toggle-container">
                     <label class="toggle-switch">
-                        <input type="checkbox" id="availabilityToggle">
+                        <input type="checkbox" id="availabilityToggle" checked>
                         <span class="slider"></span>
                     </label>
-                    <span id="availabilityStatus">Not Available</span>
+                    <span id="availabilityStatus">Available</span>
                 </div>
-            </div>   
+            </div>
 
-        <div class="form-group">
-            
+            <div class="form-group">
                 <label>Weekly Availability</label>
                 <div class="day-container" id="availabilityContainer">
-                    <!-- Days will be added dynamically -->
+                    <!-- Pre-filled days will be added dynamically -->
                 </div>
                 <div id="availabilityError" class="error-message" style="display: none;"></div>
-            
-        </div>
+            </div>
 
-        <div class="section">
-            <button type="submit" class="update-btn">Add Listing</button>
+            <div class="section">
+                <button type="submit" class="update-btn">Update Listing</button>
+            </div>
         </div>
     </div>
-
-    
 </body>
 </html>
