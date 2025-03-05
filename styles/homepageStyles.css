@@ -4,35 +4,6 @@
     box-sizing: border-box;
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem;
-    height: 3rem;
-}
-
-header a {
-    width: 200px;
-    height: 35px;
-    border-radius: 20px;
-}
-
-.headerRight a {
-    margin: 0 1rem;
-    background-color: #176F9C;
-    color: white;
-    border: none;
-    padding: 0.5rem 0;
-    text-decoration: none;
-    text-align: center;
-}
-.headerRight{
-    display: flex;
-}
-.profileIcon{
-width: 2rem;
-height: 2rem;
-}
 
 
 .searchInputContainer {
@@ -120,12 +91,6 @@ h2, h3 {
 }
 
 .instructions p {
-    text-align: center;
-}
-
-footer {
-    background: linear-gradient(to right, #42B97C, #38A9E2);
-    padding: 1rem;
     text-align: center;
 }
 
