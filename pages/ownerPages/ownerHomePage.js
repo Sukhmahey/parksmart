@@ -1,4 +1,4 @@
-import { getParkingSpaces,deleteParkingSpace } from "../../crud.js";
+import { getParkingSpaces,deleteParkingSpace } from "../../js/cruds.js";
 
 const listingarea = document.getElementById("listingarea");
 
