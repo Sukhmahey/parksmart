@@ -1,6 +1,6 @@
 
 
-import { addParkingSpace } from "../../crud.js";
+import { addParkingSpace } from "../../js/crud.js";
 const video = document.getElementById("cameraFeed");
 const canvas = document.getElementById("canvas");
 const preview = document.getElementById("preview");
