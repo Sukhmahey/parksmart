@@ -221,8 +221,8 @@ const handleFormSubmission = async (e) => {
     if (!availability) return;
 
     // Collect features
-    const features = Array.from(document.querySelectorAll('input[name="features"]:checked'))
-                        .map(cb => cb.value);
+    // const features = Array.from(document.querySelectorAll('input[name="features"]:checked'))
+    //                     .map(cb => cb.value);
 
     
     const formData = {
@@ -235,7 +235,7 @@ const handleFormSubmission = async (e) => {
         latitude: latitudeValue,
         isAvailable: availableNow,
         availability: availability,
-        features: features
+        // features: features
     };
 
     // Validation 
@@ -260,7 +260,7 @@ const handleFormSubmission = async (e) => {
             formData.latitude,
             formData.isAvailable,
             formData.availability,
-            formData.features
+            // formData.features
 
         );
 

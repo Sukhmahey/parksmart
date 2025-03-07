@@ -22,19 +22,19 @@ async function addUser(name, email, role) {
 }
 
 // function to add parking space / owner side
-async function addParkingSpace(owner_id, title, address, price_per_hour,image,longitude,latitude,availability = {},features = []) {
+async function addParkingSpace(user_id, title, address, price_per_hour,image,longitude,latitude,isAvailable,availability = {}) {
   const parkingRef = doc(collection(db, "parking_spaces"));
   await setDoc(parkingRef, {
     space_id: parkingRef.id,
-    owner_id,
+    user_id,
     title,
     address,
     price_per_hour,
     image,
     longitude,
     latitude,
+    isAvailable,
     availability,
-    features,
     created_at: new Date(),
     updated_at: new Date(),
   });

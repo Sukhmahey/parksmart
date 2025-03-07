@@ -16,7 +16,7 @@ async function populateListings() {
     
     parkingSpaces.forEach((space) => {
       // Create listing elements
-      if(space.owner_id == currentUser)
+      if(space.user_id == currentUser)
       {
         const listing = document.createElement("div");
       listing.classList.add("listing");
