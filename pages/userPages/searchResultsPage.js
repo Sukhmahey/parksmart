@@ -331,3 +331,5 @@ const calculateDistance = (obj1, obj2) => {
 window.onload = function () {
   initMap();
 };
+
+

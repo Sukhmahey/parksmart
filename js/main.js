@@ -33,7 +33,7 @@ if (signInForm) {
     try {
       await signIn(email, password);
       alert("Login Successful!");
-      window.location.href = "homepage.html";
+      window.location.href = "../pages/userPages/homepage.html";
     } catch (error) {
       alert(error.message);
     }
@@ -46,7 +46,7 @@ if (logoutBtn) {
   logoutBtn.addEventListener("click", async () => {
     await logout();
     alert("Logged out successfully!");
-    window.location.href = "loginPage.html";
+    window.location.href = "../pages/userPages/loginPage.html";
   });
 }
 
