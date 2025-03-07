@@ -124,3 +124,28 @@ h2, .instructions h3{
 }
 
 
+#suggestions {
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    background-color: #42B97C;
+    width: 80%;
+    z-index: 9999;
+    top: 55px; 
+    left: 30px;
+    color: white;
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+    color: black;
+}
+
+
+
+
