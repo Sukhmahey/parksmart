@@ -13,9 +13,15 @@ if (signUpForm) {
     const role = isSpaceOwner ? "spaceOwner" : "user";
 
     try {
+      // Sign up the user
       const user = await signUp(name, email, password, role);
       await addUser(name, email, role);
-      alert("Account Created Successfully!");
+
+      // After successful sign up, log the user in
+      await signIn(email, password);
+
+      // Redirect to homepage after successful sign up and login
+      window.location.href = "../pages/userPages/homepage.html";
     } catch (error) {
       alert(error.message);
     }
@@ -32,7 +38,6 @@ if (signInForm) {
 
     try {
       await signIn(email, password);
-      alert("Login Successful!");
       window.location.href = "../pages/userPages/homepage.html";
     } catch (error) {
       alert(error.message);
@@ -49,11 +54,3 @@ if (logoutBtn) {
     window.location.href = "../pages/userPages/loginPage.html";
   });
 }
-
-// Example: Fetching Users
-document
-  .getElementById("fetchUsersBtn")
-  ?.addEventListener("click", async () => {
-    const users = await getUsers();
-    console.log("Users List:", users);
-  });
