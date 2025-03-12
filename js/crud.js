@@ -136,14 +136,14 @@ async function getUsers() {
 
 
 
-async function getParkingSpaces() {
-  const snapshot = await getDocs(collection(db, "parking_spaces"));
-  const dataObj = [];
-  snapshot.forEach((doc) => {
-    // console.log(doc.id, "=>", doc.data());
-    dataObj.push(doc.data());
-  });
-}
+// async function getParkingSpaces() {
+//   const snapshot = await getDocs(collection(db, "parking_spaces"));
+//   const dataObj = [];
+//   snapshot.forEach((doc) => {
+//     // console.log(doc.id, "=>", doc.data());
+//     dataObj.push(doc.data());
+//   });
+// }
 
 
 
