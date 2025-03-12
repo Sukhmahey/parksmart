@@ -1,8 +1,5 @@
 import { getParkingSpaces } from "../../js/crud.js";
-const { Map, InfoWindow } = await google.maps.importLibrary("maps");
-const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
-  "marker"
-);
+const { PinElement } = await google.maps.importLibrary("marker");
 
 const bounds = new google.maps.LatLngBounds();
 
@@ -12,8 +9,33 @@ const filterBox = document.getElementById("filterBox");
 let userCurrentLocation = null;
 let parkingSpotsArray = [];
 
+let queryLatitude;
+let queryLongitude;
+let querylocation;
+let queryDate;
+
+window.onload = function () {
+  initValues();
+};
+
+const initValues = () => {
+  const params = new URLSearchParams(window.location.search);
+  querylocation = params.get("location");
+  queryLongitude = params.get("longitude");
+  queryLatitude = params.get("latitude");
+  queryDate = params.get("date");
+
+  console.log("Query", querylocation, queryLongitude, queryLatitude, queryDate);
+
+  document.getElementById("location").value = querylocation;
+  document.getElementById("datetime").value = queryDate;
+
+  if (querylocation) {
+    initMap();
+  }
+};
+
 const initMap = () => {
-  // const markerElement = document.getElementById("marker");
   const marker = document.createElement("gmp-advanced-marker");
 
   const requestLocation = () => {
@@ -95,20 +117,7 @@ const fetchParkingSpots = async () => {
       `${bounds.getCenter().lat()},${bounds.getCenter().lng()}`
     );
     mapElement.setAttribute("zoom", getOptimalZoom(bounds));
-  }, 1000);
-};
-const getOptimalZoom = (bounds) => {
-  const ne = bounds.getNorthEast();
-  const sw = bounds.getSouthWest();
-
-  const latDiff = Math.abs(ne.lat() - sw.lat());
-  const lngDiff = Math.abs(ne.lng() - sw.lng());
-
-  if (latDiff > 1 || lngDiff > 1) return 3;
-  if (latDiff > 0.5 || lngDiff > 0.5) return 8;
-  if (latDiff > 0.1 || lngDiff > 0.1) return 10;
-  if (latDiff > 0.02 || lngDiff > 0.02) return 12;
-  return 14;
+  }, 500);
 };
 
 const resetAllMarkers = () => {
@@ -127,6 +136,101 @@ const resetAllMarkers = () => {
     }
     marker.appendChild(pin.element);
   });
+};
+
+const createOverlayFunction = (marker, img, address, showOverlay = false) => {
+  const overlay = document.getElementById("marker-overlay");
+  const overlayImg = document.getElementById("overlay-img");
+  const overlayText = document.getElementById("overlay-text");
+
+  // Show overlay on hover
+  marker.addEventListener("mouseenter", (event) => {
+    overlay.style.display = "block";
+    overlayImg.src =
+      img ||
+      "https://images.pexels.com/photos/30913847/pexels-photo-30913847/free-photo-of-indoor-artistic-scene-with-calligraphy-and-cat.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
+    overlayText.textContent = address;
+
+    // Position overlay near the cursor
+    overlay.style.left = `${event.clientX + 15}px`;
+    overlay.style.top = `${event.clientY + 15}px`;
+  });
+
+  marker.addEventListener("mouseleave", () => {
+    overlay.style.display = "none";
+  });
+
+  if (showOverlay) {
+    overlay.style.display = "block";
+    overlayImg.src =
+      img ||
+      "https://images.pexels.com/photos/30913847/pexels-photo-30913847/free-photo-of-indoor-artistic-scene-with-calligraphy-and-cat.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
+    overlayText.textContent = address;
+  }
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+  const header = document.querySelector(".asideHeader");
+  const content = document.querySelector(".asideContent");
+  const contentHeader = document.querySelector(".asideHeaderContainer");
+  const icon = document.querySelector(".toggle-icon");
+
+  header.addEventListener("click", function () {
+    const isOpen = contentHeader.style.display === "block";
+
+    contentHeader.style.display = isOpen ? "none" : "block";
+  });
+});
+
+document.getElementById("filterBtn").addEventListener("click", function () {
+  filterBox.style.display =
+    filterBox.style.display === "block" ? "none" : "block";
+});
+
+document.getElementById("filterBoxbtn").addEventListener("click", function () {
+  const selectedValue = document.getElementById("sort-options").value;
+  const selectedRadiusValue = document.getElementById("radius").value;
+  console.log("Selected Sort Option:", selectedValue, selectedRadiusValue);
+
+  renderListOfSpaces(parkingSpotsArray, selectedValue, selectedRadiusValue);
+
+  filterBox.style.display =
+    filterBox.style.display === "block" ? "none" : "block";
+});
+
+const calculateDistance = (obj1, obj2) => {
+  // Create LatLng objects
+  const point1 = new google.maps.LatLng(obj1?.lat, obj1?.lng);
+  const point2 = new google.maps.LatLng(obj2?.lat, obj2?.lng);
+
+  // Compute distance in meters
+  const distance = google.maps.geometry.spherical.computeDistanceBetween(
+    point1,
+    point2
+  );
+
+  console.log("Distance", distance.toFixed(2));
+  return distance.toFixed(2);
+};
+
+// Navigation
+document.getElementById("logo").addEventListener("click", function () {
+  window.location.href = "/";
+});
+
+// Helper functions
+const getOptimalZoom = (bounds) => {
+  const ne = bounds.getNorthEast();
+  const sw = bounds.getSouthWest();
+
+  const latDiff = Math.abs(ne.lat() - sw.lat());
+  const lngDiff = Math.abs(ne.lng() - sw.lng());
+
+  if (latDiff > 1 || lngDiff > 1) return 3;
+  if (latDiff > 0.5 || lngDiff > 0.5) return 8;
+  if (latDiff > 0.1 || lngDiff > 0.1) return 10;
+  if (latDiff > 0.02 || lngDiff > 0.02) return 12;
+  return 14;
 };
 
 const renderListOfSpaces = (
@@ -252,84 +356,3 @@ const renderListOfSpaces = (
     parkingListContainer.appendChild(parkingSpotElement);
   });
 };
-
-const createOverlayFunction = (marker, img, address, showOverlay = false) => {
-  const overlay = document.getElementById("marker-overlay");
-  const overlayImg = document.getElementById("overlay-img");
-  const overlayText = document.getElementById("overlay-text");
-
-  // Show overlay on hover
-  marker.addEventListener("mouseenter", (event) => {
-    overlay.style.display = "block";
-    overlayImg.src =
-      img ||
-      "https://images.pexels.com/photos/30913847/pexels-photo-30913847/free-photo-of-indoor-artistic-scene-with-calligraphy-and-cat.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
-    overlayText.textContent = address;
-
-    // Position overlay near the cursor
-    overlay.style.left = `${event.clientX + 15}px`;
-    overlay.style.top = `${event.clientY + 15}px`;
-  });
-
-  marker.addEventListener("mouseleave", () => {
-    overlay.style.display = "none";
-  });
-
-  if (showOverlay) {
-    overlay.style.display = "block";
-    overlayImg.src =
-      img ||
-      "https://images.pexels.com/photos/30913847/pexels-photo-30913847/free-photo-of-indoor-artistic-scene-with-calligraphy-and-cat.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
-    overlayText.textContent = address;
-  }
-};
-
-document.addEventListener("DOMContentLoaded", function () {
-  const header = document.querySelector(".asideHeader");
-  const content = document.querySelector(".asideContent");
-  const contentHeader = document.querySelector(".asideHeaderContainer");
-  const icon = document.querySelector(".toggle-icon");
-
-  header.addEventListener("click", function () {
-    const isOpen = contentHeader.style.display === "block";
-
-    contentHeader.style.display = isOpen ? "none" : "block";
-  });
-});
-
-document.getElementById("filterBtn").addEventListener("click", function () {
-  filterBox.style.display =
-    filterBox.style.display === "block" ? "none" : "block";
-});
-
-document.getElementById("filterBoxbtn").addEventListener("click", function () {
-  const selectedValue = document.getElementById("sort-options").value;
-  const selectedRadiusValue = document.getElementById("radius").value;
-  console.log("Selected Sort Option:", selectedValue, selectedRadiusValue);
-
-  renderListOfSpaces(parkingSpotsArray, selectedValue, selectedRadiusValue);
-
-  filterBox.style.display =
-    filterBox.style.display === "block" ? "none" : "block";
-});
-
-const calculateDistance = (obj1, obj2) => {
-  // Create LatLng objects
-  const point1 = new google.maps.LatLng(obj1?.lat, obj1?.lng);
-  const point2 = new google.maps.LatLng(obj2?.lat, obj2?.lng);
-
-  // Compute distance in meters
-  const distance = google.maps.geometry.spherical.computeDistanceBetween(
-    point1,
-    point2
-  );
-
-  console.log("Distance", distance.toFixed(2));
-  return distance.toFixed(2);
-};
-
-window.onload = function () {
-  initMap();
-};
-
-
