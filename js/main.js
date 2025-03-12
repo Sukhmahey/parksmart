@@ -37,8 +37,10 @@ if (signInForm) {
     const password = document.getElementById("signinPassword").value;
 
     try {
-      await signIn(email, password);
-      window.location.href = "../pages/userPages/homepage.html";
+      await signIn(email, password).then((data) => {
+        localStorage.setItem("userId", data?.uid);
+        window.location.href = "../pages/userPages/homepage.html";
+      });
     } catch (error) {
       alert(error.message);
     }
