@@ -142,6 +142,7 @@ async function getParkingSpaces() {
     // console.log(doc.id, "=>", doc.data());
     dataObj.push(doc.data());
   });
+}
 
 
 
