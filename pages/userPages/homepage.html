@@ -1,83 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Find and book parking spots easily with ParkSmart. Hassle-free parking wherever you go!">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Find and book parking spots easily with ParkSmart. Hassle-free parking wherever you go!"
+    />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <title>ParkSmart - Home</title>
-    <link rel="stylesheet" href="../../styles/homepagestyles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-</head>
+    <link rel="stylesheet" href="../../styles/homepagestyles.css" />
+    <link rel="stylesheet" href="../../index-header.css" />
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7_Nk8Peq06hgtVpm3CXDzDh-4BiVfMKU&libraries=maps,marker,geometry&v=beta"
+    ></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script defer type="module" src="./homepage.js"></script>
+  </head>
 
-<body>
+  <body>
     <header>
-        <div class="logoContainer">
-            <img src="Assets/ParkSmartLogo.png" alt="ParkSmart Logo">
-        </div>
-        <div class="headerRight">
-            <!-- <button type="button">Switch To Owner</button>
+      <div class="logoContainer">
+        <img src="Assets/ParkSmartLogo.png" alt="ParkSmart Logo" />
+      </div>
+      <div class="headerRight">
+        <!-- <button type="button">Switch To Owner</button>
             <button type="button">Booking History</button> -->
-            <a href="">Switch To Owner</a>
-            <a href="userBookingHistoryPage.html">Booking History</a>
-            <img class="profileIcon" src="Assets/avatar.png" alt="Profile Icon">
-        </div>
-        </div>
+        <a href="">Become a Host</a>
+        <a href="userBookingHistoryPage.html">Booking History</a>
+        <img class="profileIcon" src="Assets/avatar.png" alt="Profile Icon" />
+      </div>
     </header>
     <main>
-        <div class="mainSectionContainer">
-            <div class="heroText" >
-            <h1><span>Park</span> with Ease,<br> Anytime, Anywhere.</h1>
-        
-            <div class="searchBox">
-                <form class="searchBoxContainer">
-                    <div class="searchInputContainer">
-                        <div class="searchIcon">
-                            <img src="Assets/search_icon.png" alt="Search Icon">
-                        </div>
-                    <input type="text" id="location" placeholder="      Search for Parking Location">
-                    </div>
-                    <input type="datetime-local" id="datetime">
-                    <button type="submit">Search for Spot</button>
-                </form>
-            </div>
-                      
-        </div>
-            <div class="searchImageContainer">
-                <img class="heroImage" src="https://picsum.photos/400/300" alt="heroImage">
-            </div>
+      <div class="mainSectionContainer">
+        <div class="heroText">
+          <h1>
+            <span>Park</span> with Ease,<br />
+            Anytime, Anywhere.
+          </h1>
 
+          <div class="searchBox">
+            <form class="searchBoxContainer" id="searchForm">
+              <div class="searchInputContainer">
+                <div class="searchIcon">
+                  <img src="Assets/search_icon.png" alt="Search Icon" />
+                </div>
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  placeholder="Search for Parking Location"
+                />
+              </div>
+              <input type="datetime-local" id="datetime" name="datetime" />
+              <button type="submit">Search for Spot</button>
+            </form>
+          </div>
         </div>
-        <section class="instructions">
-                <h2>How to ParkSmart</h2>
-                <div class="instructionsContainer">
-                <div class="instructionsCard">
-                    <h3>Search</h3>
-                    <img class="instructionsImage" src="Assets/step1.png" alt="Search for parking spot">
-                    <p>Search for the Right Spot</p>
-                </div>
-                <div class="instructionsCard">
-                    <h3>Reserve</h3>
-                    <img class="instructionsImage"   src="Assets/step2.png" alt="Book a parking spot">
-                    <p>Book the Spot</p>
-                </div>
-                <div class="instructionsCard">
-                    <h3>Park</h3>
-                    <img  class="instructionsImage" src="Assets/step3.png" alt="Enjoy your parking">
-                    <p>Enjoy Hassle-Free Parking</p>
-                </div>
-            </div>
-        </section>
+        <div class="image-container">
+          <img src="Assets/carpark3.avif" alt="Hero Image" class="heroImage" />
+          <p class="image-text">Never Wait for Parking, Ever Again.</p>
+        </div>
+      </div>
+      <section class="instructions">
+        <h2>How to Use ParkSmart ?</h2>
+        <div class="instructionsContainer">
+          <div class="instructionsCard">
+            <h3>Step 1: Search</h3>
+            <img
+              class="instructionsImage"
+              src="Assets/step1.png"
+              alt="Search for parking spot"
+            />
+            <p>Search for the Right Spot</p>
+          </div>
+          <div class="instructionsCard">
+            <h3>Step 2:Reserve</h3>
+            <img
+              class="instructionsImage"
+              src="Assets/step2.png"
+              alt="Book a parking spot"
+            />
+            <p>Reserve the Spot</p>
+          </div>
+          <div class="instructionsCard">
+            <h3>Step 3: Park</h3>
+            <img
+              class="instructionsImage"
+              src="Assets/step3.png"
+              alt="Enjoy your parking"
+            />
+            <p>Enjoy Hassle-Free Parking</p>
+          </div>
+        </div>
+      </section>
     </main>
     <footer>
-        <h3>Contact Us</h3>
-        <p>Email: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
-        <p>&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
+      <h3>Contact Us</h3>
+      <p>Email: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
+      <div class="socialMediaContainer">
+        <img
+          src="Assets/vecteezy_facebook-logo-png-facebook-icon-transparent-png_18930698.png"
+          alt=""
+        />
+        <img
+          src="Assets/vecteezy_instagram-logo-png-instagram-icon-transparent_18930415.png"
+          alt=""
+        />
+        <img
+          src="Assets/vecteezy_twitter-new-logo-twitter-icons-new-twitter-logo-x-2023-x_31737215.png"
+          alt=""
+        />
+      </div>
+      <p>&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
     </footer>
-
-   
-</body>
-
+  </body>
 </html>

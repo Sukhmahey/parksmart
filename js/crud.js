@@ -17,7 +17,7 @@ async function addUser(name, email, role) {
     email,
     role,
   });
-  console.log("User added:", userRef.id);
+  // console.log("User added:", userRef.id);
   return userRef.id;
 }
 
@@ -38,7 +38,7 @@ async function addParkingSpace(user_id, title, address, price_per_hour,image,lon
     created_at: new Date(),
     updated_at: new Date(),
   });
-  console.log("Parking space added:", parkingRef.id);
+  // console.log("Parking space added:", parkingRef.id);
 }
 
 // function to populate parking space details / owner side
@@ -94,20 +94,20 @@ async function addBooking(
   color
 ) {
   const bookingRef = doc(collection(db, "bookings"));
-  console.log("start_time:", start_time);
-  console.log("end_time:", end_time);
-  console.log("parkingDate:", parkingDate);
+  // console.log("start_time:", start_time);
+  // console.log("end_time:", end_time);
+  // console.log("parkingDate:", parkingDate);
 
   // Combine date and time correctly
   const startDateTime = new Date(`${parkingDate}T${start_time}:00`); // Add ":00" for seconds
   const endDateTime = new Date(`${parkingDate}T${end_time}:00`); // Add ":00" for seconds
 
-  console.log("Start Time:", startDateTime);
-  console.log("End Time:", endDateTime);
+  // console.log("Start Time:", startDateTime);
+  // console.log("End Time:", endDateTime);
 
   // Check if the dates are valid
   if (isNaN(startDateTime) || isNaN(endDateTime)) {
-    console.error("Invalid date:", start_time, end_time);
+    // console.error("Invalid date:", start_time, end_time);
     return; // Exit if date is invalid
   }
 
@@ -123,16 +123,25 @@ async function addBooking(
     status: "confirmed",
     created_at: Timestamp.now(),
   });
-  console.log("Booking added:", bookingRef.id);
+  // console.log("Booking added:", bookingRef.id);
 }
 
 // READ: Get Data from Firestore
 async function getUsers() {
   const snapshot = await getDocs(collection(db, "users"));
   snapshot.forEach((doc) => {
-    console.log(doc.id, "=>", doc.data());
+    // console.log(doc.id, "=>", doc.data());
   });
 }
+
+
+async function getParkingSpaces() {
+  const snapshot = await getDocs(collection(db, "parking_spaces"));
+  const dataObj = [];
+  snapshot.forEach((doc) => {
+    // console.log(doc.id, "=>", doc.data());
+    dataObj.push(doc.data());
+  });
 
 
 
@@ -142,10 +151,10 @@ async function getParkingSpaceById(documentId) {
     const docSnap = await getDoc(docRef); // Fetch document
 
     if (docSnap.exists()) {
-      console.log("Document Data:", docSnap.data());
+      // console.log("Document Data:", docSnap.data());
       return docSnap.data(); // Return document data
     } else {
-      console.log("No such document!");
+      // console.log("No such document!");
       return null;
     }
   } catch (error) {
@@ -188,6 +197,21 @@ async function getBooking(booking_id) {
 }
 
 
+async function fetchListingData(listingId) {
+  const docRef = doc(db, "parking_spaces", listingId);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) throw new Error("Listing not found");
+  return { id: docSnap.id, ...docSnap.data() };
+}
+
+async function updateListing(listingId, updatedData) {
+  const docRef = doc(db, "parking_spaces", listingId);
+  await updateDoc(docRef, updatedData);
+  console.log("Listing updated:", listingId);
+}
+
+
 // Export functions for use
 export {
   addUser,
@@ -201,5 +225,6 @@ export {
   getParkingSpaceById,
   fetchListingData,
   updateListing,
-  deleteParkingSpace
+  deleteParkingSpace,
+
 };
