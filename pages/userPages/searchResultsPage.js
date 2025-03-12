@@ -236,7 +236,7 @@ const getOptimalZoom = (bounds) => {
 const renderListOfSpaces = (
   parkingSpaces,
   sortby = "distance",
-  radius = 10
+  radius = 50
 ) => {
   const parkingListContainer = document.querySelector(".parking-list");
   parkingListContainer.innerHTML = "";
