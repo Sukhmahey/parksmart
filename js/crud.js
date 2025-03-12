@@ -135,6 +135,7 @@ async function getUsers() {
 }
 
 
+
 async function getParkingSpaces() {
   const snapshot = await getDocs(collection(db, "parking_spaces"));
   const dataObj = [];
@@ -143,6 +144,7 @@ async function getParkingSpaces() {
     dataObj.push(doc.data());
   });
 }
+
 
 
 
@@ -197,20 +199,6 @@ async function getBooking(booking_id) {
   }
 }
 
-
-async function fetchListingData(listingId) {
-  const docRef = doc(db, "parking_spaces", listingId);
-  const docSnap = await getDoc(docRef);
-
-  if (!docSnap.exists()) throw new Error("Listing not found");
-  return { id: docSnap.id, ...docSnap.data() };
-}
-
-async function updateListing(listingId, updatedData) {
-  const docRef = doc(db, "parking_spaces", listingId);
-  await updateDoc(docRef, updatedData);
-  console.log("Listing updated:", listingId);
-}
 
 
 // Export functions for use
