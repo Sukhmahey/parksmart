@@ -1,4 +1,4 @@
-import { getParkingSpaces,deleteParkingSpace } from "../../js/cruds.js";
+import { getParkingSpaces,deleteParkingSpace } from "../../js/crud.js";
 
 const listingarea = document.getElementById("listingarea");
 
@@ -16,7 +16,7 @@ async function populateListings() {
     
     parkingSpaces.forEach((space) => {
       // Create listing elements
-      if(space.owner_id == currentUser)
+      if(space.user_id == currentUser)
       {
         const listing = document.createElement("div");
       listing.classList.add("listing");

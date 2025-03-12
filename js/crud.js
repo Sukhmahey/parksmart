@@ -21,19 +21,67 @@ async function addUser(name, email, role) {
   return userRef.id;
 }
 
-async function addParkingSpace(owner_id, title, address, price_per_hour) {
+// function to add parking space / owner side
+async function addParkingSpace(user_id, title, address, price_per_hour,image,longitude,latitude,isAvailable,availability = {}) {
   const parkingRef = doc(collection(db, "parking_spaces"));
   await setDoc(parkingRef, {
     space_id: parkingRef.id,
-    owner_id,
+    user_id,
     title,
     address,
     price_per_hour,
+    image,
+    longitude,
+    latitude,
+    isAvailable,
+    availability,
     created_at: new Date(),
     updated_at: new Date(),
   });
   // console.log("Parking space added:", parkingRef.id);
 }
+
+// function to populate parking space details / owner side
+async function getParkingSpaces() {
+  const snapshot = await getDocs(collection(db, "parking_spaces"));
+  const dataObj = [];
+  snapshot.forEach((doc) => {
+    console.log(doc.id, "=>", doc.data());
+    dataObj.push(doc.data());
+  });
+
+  return dataObj;
+}
+
+// function to delete parking space / owner side
+async function deleteParkingSpace(spaceId) {
+  try {
+    const parkingRef = doc(db, "parking_spaces", spaceId);
+    await deleteDoc(parkingRef);
+    console.log("Parking space deleted:", spaceId);
+    return true;
+  } catch (error) {
+    console.error("Error deleting parking space:", error);
+    throw error;
+  }
+}
+// function to populate parking space details w.r.t. space id / owner side
+async function fetchListingData(listingId) {
+  const docRef = doc(db, "parking_spaces", listingId);
+  const docSnap = await getDoc(docRef);
+  
+  if (!docSnap.exists()) throw new Error("Listing not found");
+  return { id: docSnap.id, ...docSnap.data() };
+}
+
+// function to update parking space details / owner side
+async function updateListing(listingId, updatedData) {
+  const docRef = doc(db, "parking_spaces", listingId);
+  await updateDoc(docRef, updatedData);
+  console.log("Listing updated:", listingId);
+}
+
+
 
 async function addBooking(
   user_id,
@@ -86,6 +134,7 @@ async function getUsers() {
   });
 }
 
+
 async function getParkingSpaces() {
   const snapshot = await getDocs(collection(db, "parking_spaces"));
   const dataObj = [];
@@ -94,8 +143,7 @@ async function getParkingSpaces() {
     dataObj.push(doc.data());
   });
 
-  return dataObj;
-}
+
 
 async function getParkingSpaceById(documentId) {
   try {
@@ -113,6 +161,8 @@ async function getParkingSpaceById(documentId) {
     console.error("Error fetching document:", error);
   }
 }
+
+
 
 // UPDATE: Modify an Existing Document
 async function updateUser(user_id, newData) {
@@ -146,6 +196,7 @@ async function getBooking(booking_id) {
   }
 }
 
+
 async function fetchListingData(listingId) {
   const docRef = doc(db, "parking_spaces", listingId);
   const docSnap = await getDoc(docRef);
@@ -160,6 +211,7 @@ async function updateListing(listingId, updatedData) {
   console.log("Listing updated:", listingId);
 }
 
+
 // Export functions for use
 export {
   addUser,
@@ -173,4 +225,6 @@ export {
   getParkingSpaceById,
   fetchListingData,
   updateListing,
+  deleteParkingSpace,
+
 };
