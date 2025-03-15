@@ -6,6 +6,8 @@ const canvas = document.getElementById("canvas");
 const preview = document.getElementById("preview");
 let longitudeValue;
 let latitudeValue;
+let ownerId = localStorage.getItem("userId");
+console.log(ownerId)
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
@@ -249,7 +251,7 @@ const handleFormSubmission = async (e) => {
 
     try {
        
-        const ownerId = 4;
+        
         // addParkingSpace function from crud.
         await addParkingSpace(
             ownerId,
