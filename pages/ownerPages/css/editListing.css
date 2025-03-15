@@ -328,6 +328,34 @@ input:checked + .slider:before {
     animation: loading 0.8s linear infinite;
 }
 
+
+
+.media-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+#cameraFeed {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.camera-controls {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+#preview {
+    max-width: 100%;
+    margin-top: 10px;
+    display: none;
+}
+
 @keyframes loading {
     to {
         transform: rotate(360deg);
