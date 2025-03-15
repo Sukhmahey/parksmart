@@ -82,49 +82,90 @@ async function updateListing(listingId, updatedData) {
 }
 
 
-
 async function addBooking(
   user_id,
   space_id,
-  parkingDate, // Add parkingDate as an argument
+  parkingDate,
   start_time,
   end_time,
   total_price,
   license_plate,
   color
 ) {
-  const bookingRef = doc(collection(db, "bookings"));
-  // console.log("start_time:", start_time);
-  // console.log("end_time:", end_time);
-  // console.log("parkingDate:", parkingDate);
+  try {
+    const bookingRef = doc(collection(db, "bookings"));
 
-  // Combine date and time correctly
-  const startDateTime = new Date(`${parkingDate}T${start_time}:00`); // Add ":00" for seconds
-  const endDateTime = new Date(`${parkingDate}T${end_time}:00`); // Add ":00" for seconds
+    const startDateTime = new Date(`${parkingDate}T${start_time}:00`);
+    const endDateTime = new Date(`${parkingDate}T${end_time}:00`);
 
-  // console.log("Start Time:", startDateTime);
-  // console.log("End Time:", endDateTime);
+    if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
+      throw new Error("Invalid date/time format.");
+    }
 
-  // Check if the dates are valid
-  if (isNaN(startDateTime) || isNaN(endDateTime)) {
-    // console.error("Invalid date:", start_time, end_time);
-    return; // Exit if date is invalid
+    await setDoc(bookingRef, {
+      booking_id: bookingRef.id,
+      user_id,
+      space_id,
+      start_time: Timestamp.fromDate(startDateTime),
+      end_time: Timestamp.fromDate(endDateTime),
+      total_price,
+      license_plate,
+      color,
+      status: "confirmed",
+      created_at: Timestamp.now(),
+    });
+
+    console.log("Booking added successfully:", bookingRef.id);
+  } catch (error) {
+    console.error("Error adding booking:", error);
+    throw error;
   }
-
-  await setDoc(bookingRef, {
-    booking_id: bookingRef.id,
-    user_id,
-    space_id,
-    start_time: Timestamp.fromDate(startDateTime), // Use Firebase Timestamp
-    end_time: Timestamp.fromDate(endDateTime), // Use Firebase Timestamp
-    total_price,
-    license_plate,
-    color,
-    status: "confirmed",
-    created_at: Timestamp.now(),
-  });
-  // console.log("Booking added:", bookingRef.id);
 }
+
+
+
+// async function addBooking(
+//   user_id,
+//   space_id,
+//   parkingDate, // Add parkingDate as an argument
+//   start_time,
+//   end_time,
+//   total_price,
+//   license_plate,
+//   color
+// ) {
+//   const bookingRef = doc(collection(db, "bookings"));
+//   // console.log("start_time:", start_time);
+//   // console.log("end_time:", end_time);
+//   // console.log("parkingDate:", parkingDate);
+
+//   // Combine date and time correctly
+//   const startDateTime = new Date(`${parkingDate}T${start_time}:00`); // Add ":00" for seconds
+//   const endDateTime = new Date(`${parkingDate}T${end_time}:00`); // Add ":00" for seconds
+
+//   // console.log("Start Time:", startDateTime);
+//   // console.log("End Time:", endDateTime);
+
+//   // Check if the dates are valid
+//   if (isNaN(startDateTime) || isNaN(endDateTime)) {
+//     // console.error("Invalid date:", start_time, end_time);
+//     return; // Exit if date is invalid
+//   }
+
+//   await setDoc(bookingRef, {
+//     booking_id: bookingRef.id,
+//     user_id,
+//     space_id,
+//     start_time: Timestamp.fromDate(startDateTime), // Use Firebase Timestamp
+//     end_time: Timestamp.fromDate(endDateTime), // Use Firebase Timestamp
+//     total_price,
+//     license_plate,
+//     color,
+//     status: "confirmed",
+//     created_at: Timestamp.now(),
+//   });
+//   // console.log("Booking added:", bookingRef.id);
+// }
 
 // READ: Get Data from Firestore
 async function getUsers() {
@@ -203,6 +244,7 @@ async function getBooking(booking_id) {
 
 // Export functions for use
 export {
+   
   addUser,
   addParkingSpace,
   addBooking,
