@@ -165,9 +165,11 @@ document.addEventListener("DOMContentLoaded", () => {
 const handleImage = async () => {
     const preview = document.getElementById('preview');
     if (!preview.src.startsWith('data:image')) return null;
-    
+
     return preview.src;
 };
+
+
 
 async function handleCameraCapture() {
     let stream;
@@ -232,8 +234,8 @@ const handleFormSubmission = async (e) => {
         name: document.getElementById('name').value.trim(),
         location: document.getElementById('autocomplete').value.trim(),
         price: document.getElementById('price').value.trim(),
-        // image: await handleImage(),
-        image: "https://loremflickr.com/640/480",
+        image: await handleImage(),
+        // image: "https://loremflickr.com/640/480",
         longitude: longitudeValue,
         latitude: latitudeValue,
         isAvailable: availableNow,
