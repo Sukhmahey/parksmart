@@ -5,6 +5,7 @@ const bounds = new google.maps.LatLngBounds();
 
 const mapElement = document.getElementById("map");
 const filterBox = document.getElementById("filterBox");
+const dateTimeInput = document.getElementById("datetime");
 
 let userCurrentLocation = null;
 let parkingSpotsArray = [];
@@ -28,9 +29,35 @@ const initValues = () => {
   document.getElementById("location").value = querylocation;
   document.getElementById("datetime").value = queryDate;
 
-  if (querylocation || true) {
+  if (querylocation) {
     initMap();
   }
+};
+
+const destinationMarker = (coords) => {
+  const marker = document.createElement("gmp-advanced-marker");
+
+  document.querySelectorAll("gmp-advanced-marker").forEach((el) => {
+    if (el.title == "Destination location") el.remove();
+  });
+
+  const { lat, lng } = coords;
+
+  console.log("coords", coords);
+  mapElement.center = { lat: Number(coords.lat), lng: Number(coords.lng) };
+  marker.position = { lat: Number(coords.lat), lng: Number(coords.lng) };
+  marker.title = "Destination location";
+
+  const pin = new PinElement({
+    scale: 1.3,
+    background: "#41B97C",
+  });
+
+  marker.appendChild(pin.element);
+
+  bounds.extend(new google.maps.LatLng(lat, lng));
+  // Append marker to the map
+  mapElement.appendChild(marker);
 };
 
 const initMap = () => {
@@ -48,6 +75,13 @@ const initMap = () => {
           mapElement.center = { lat, lng };
           marker.position = { lat, lng };
           marker.title = "Your current location";
+
+          const pin = new PinElement({
+            scale: 1.1,
+            background: "#38C2E2",
+          });
+
+          marker.appendChild(pin.element);
 
           bounds.extend(new google.maps.LatLng(lat, lng));
           // Append marker to the map
@@ -114,7 +148,14 @@ const fetchParkingSpots = async (boundLocation) => {
           lng: parkingSpace?.longitude,
         });
 
-        return { ...parkingSpace, distance: distance };
+        return {
+          ...parkingSpace,
+          distance: distance,
+          isAvailableNow: isWithinConstraint(
+            dateTimeInput.value,
+            parkingSpace?.availability
+          ),
+        };
       }
     );
 
@@ -178,19 +219,6 @@ const createOverlayFunction = (
     overlay.style.left = `${event.clientX + 15}px`;
     overlay.style.top = `${event.clientY + 15}px`;
   });
-  // marker.addEventListener("click", (event) => {
-  //   overlay.style.display = "block";
-  //   overlayImg.src =
-  //     img ||
-  //     "https://images.pexels.com/photos/30913847/pexels-photo-30913847/free-photo-of-indoor-artistic-scene-with-calligraphy-and-cat.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
-  //   overlayText.textContent = address;
-
-  //   // Position overlay near the cursor
-  //   overlay.style.left = `${event.clientX + 15}px`;
-  //   overlay.style.top = `${event.clientY + 15}px`;
-
-  //   showBorder(marker.id);
-  // });
 
   marker.addEventListener("mouseleave", () => {
     overlay.style.display = "none";
@@ -274,29 +302,33 @@ const getOptimalZoom = (bounds) => {
 const renderListOfSpaces = (
   parkingSpaces,
   sortby = "distance",
-  radius = 10
+  radius = 25
 ) => {
   const parkingListContainer = document.querySelector(".parking-list");
   parkingListContainer.innerHTML = "";
 
-  if (!(parkingSpaces || []).length) {
-    const noElementMessage = document.createElement("h3");
-    noElementMessage.innerHTML = "No Parking Space Found!!";
-
-    parkingListContainer.appendChild(noElementMessage);
-  }
-
-  const parkingSpaceSorted = parkingSpaces
-    ?.filter((obj) => obj?.distance <= radius * 1000)
+  const parkingSpaceSorted = (parkingSpaces || [])
+    .filter((obj) => {
+      return obj?.distance <= radius * 1000 && obj?.isAvailableNow;
+    })
     .sort((obj1, obj2) => {
       return sortby === "distance"
         ? obj1?.distance - obj2?.distance
         : obj1?.price_per_hour - obj2?.price_per_hour;
     });
 
+  if (!(parkingSpaceSorted || []).length) {
+    const noElementMessage = document.createElement("h3");
+    noElementMessage.innerHTML = "No Parking Space Found!!";
+    parkingListContainer.appendChild(noElementMessage);
+  }
+
   document.querySelectorAll("gmp-advanced-marker").forEach((el) => {
     if (el.title != "Your current location") el.remove();
   });
+
+  destinationMarker({ lat: queryLatitude, lng: queryLongitude });
+  console.log("parkingSpaceSorted", parkingSpaceSorted);
 
   parkingSpaceSorted.forEach((parkingSpot) => {
     bounds.extend(
@@ -409,6 +441,39 @@ const renderListOfSpaces = (
   });
 };
 
+function isWithinConstraint(currentTimeAndDate, constraint) {
+  // Convert the input date string to a Date object
+  let date = new Date(currentTimeAndDate);
+  let dayOfWeek = date
+    .toLocaleString("en-US", { weekday: "long" })
+    .toLowerCase(); // Get day name (e.g., "friday")
+
+  // Check if the day exists in constraints
+  if (!constraint.hasOwnProperty(dayOfWeek)) return false;
+
+  // Parse start and end times from constraint
+  let [startTime, endTime] = constraint[dayOfWeek].split(" - ").map((time) => {
+    let [hour, minute] = time.match(/\d+/g).map(Number); // Extract hour and minute
+    let isPM = time.includes("PM");
+    if (hour === 12) isPM = !isPM; // Handle 12 AM / 12 PM correctly
+    return isPM ? hour + 12 : hour; // Convert to 24-hour format
+  });
+
+  let currentHour = date.getHours();
+  let currentMinute = date.getMinutes();
+
+  // Convert current time into minutes for comparison
+  let currentTotalMinutes = currentHour * 60 + currentMinute;
+  let startTotalMinutes = startTime * 60;
+  let endTotalMinutes = endTime * 60;
+
+  // Return true if within the time range
+  return (
+    currentTotalMinutes >= startTotalMinutes &&
+    currentTotalMinutes <= endTotalMinutes
+  );
+}
+
 // Location Suggestions
 
 const inputField = document.getElementById("location");
@@ -475,7 +540,6 @@ function displaySuggestions(features) {
 }
 
 // On Click Of Search
-
 const searchBtn = document.getElementById("searchBtn");
 
 searchBtn.addEventListener("click", (e) => {
