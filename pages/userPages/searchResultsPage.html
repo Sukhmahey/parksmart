@@ -27,7 +27,11 @@
         <img src="Assets/ParkSmartLogo.png" alt="ParkSmart Logo" />
       </div>
       <div class="headerRight">
-        <form class="searchBoxContainer" id="searchBoxContainer">
+        <form
+          class="searchBoxContainer"
+          id="searchBoxContainer"
+          autocomplete="off"
+        >
           <div class="searchInputContainer">
             <!-- <div class="searchIcon">
               <img src="Assets/search_icon.png" alt="Search Icon" />
@@ -40,7 +44,7 @@
             />
           </div>
           <input type="datetime-local" id="datetime" name="datetime" />
-          <button type="submit">
+          <button type="submit" id="searchBtn">
             <img src="Assets/search_icon.png" alt="Search Icon" />
           </button>
           <i id="filterBtn" class="fa-solid fa-filter"></i>

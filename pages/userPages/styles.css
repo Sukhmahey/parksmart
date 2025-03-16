@@ -125,6 +125,16 @@ main {
   border-radius: 8px;
   border: 1px solid grey;
   cursor: pointer;
+
+  transition: border 0.8s ease-in-out;
+  opacity: 1;
+}
+
+.gradient-border {
+  border-image: linear-gradient(45deg, #41b97c, #38bae2);
+  border-radius: 8px;
+  border-image-slice: 1;
+  border-width: 3px;
 }
 
 .spot-image {
@@ -439,7 +449,7 @@ footer {
 
 /* Suggestions */
 
-/* #suggestions {
+#suggestions {
   max-height: 200px;
   overflow-y: auto;
   position: absolute;
@@ -459,4 +469,15 @@ footer {
 .suggestion-item:hover {
   background-color: #f0f0f0;
   color: black;
-} */
+}
+
+.overlayInfo {
+  display: flex;
+  padding: 4px;
+  flex-direction: column;
+  gap: 8px;
+
+  span {
+    font-weight: bold;
+  }
+}
