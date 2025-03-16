@@ -25,12 +25,10 @@ const initValues = () => {
   queryLatitude = params.get("latitude");
   queryDate = params.get("date");
 
-  console.log("Query", querylocation, queryLongitude, queryLatitude, queryDate);
-
   document.getElementById("location").value = querylocation;
   document.getElementById("datetime").value = queryDate;
 
-  if (querylocation) {
+  if (querylocation || true) {
     initMap();
   }
 };
@@ -93,23 +91,36 @@ const initMap = () => {
   }
 };
 
-const fetchParkingSpots = async () => {
-  const parkingSpaceArrayUnsorted = await getParkingSpaces();
+const fetchParkingSpots = async (boundLocation) => {
+  let parkingSpaceArrayUnsorted = [];
 
-  const parkingSpaceArrayDistanceIncluded = parkingSpaceArrayUnsorted.map(
-    (parkingSpace) => {
-      const { lat, lng } = userCurrentLocation;
-      const distance = calculateDistance(userCurrentLocation, {
-        lat: parkingSpace?.latitude,
-        lng: parkingSpace?.longitude,
-      });
+  if (!parkingSpotsArray.length) {
+    parkingSpaceArrayUnsorted = await getParkingSpaces();
+  } else {
+    parkingSpaceArrayUnsorted = parkingSpotsArray;
+  }
 
-      return { ...parkingSpace, distance: distance };
-    }
-  );
+  let locationCoords = boundLocation ?? userCurrentLocation;
 
-  parkingSpotsArray = parkingSpaceArrayDistanceIncluded;
-  renderListOfSpaces(parkingSpaceArrayDistanceIncluded);
+  if (!locationCoords?.lat) {
+    renderListOfSpaces([]);
+    return;
+  } else {
+    const parkingSpaceArrayDistanceIncluded = parkingSpaceArrayUnsorted.map(
+      (parkingSpace) => {
+        const { lat, lng } = locationCoords;
+        const distance = calculateDistance(locationCoords, {
+          lat: parkingSpace?.latitude,
+          lng: parkingSpace?.longitude,
+        });
+
+        return { ...parkingSpace, distance: distance };
+      }
+    );
+
+    parkingSpotsArray = parkingSpaceArrayDistanceIncluded;
+    renderListOfSpaces(parkingSpaceArrayDistanceIncluded);
+  }
 
   setTimeout(() => {
     mapElement.setAttribute(
@@ -138,23 +149,48 @@ const resetAllMarkers = () => {
   });
 };
 
-const createOverlayFunction = (marker, img, address, showOverlay = false) => {
+const createOverlayFunction = (
+  parkingSpot = {},
+  marker,
+  img,
+  address,
+  showOverlay = false
+) => {
   const overlay = document.getElementById("marker-overlay");
   const overlayImg = document.getElementById("overlay-img");
   const overlayText = document.getElementById("overlay-text");
 
   // Show overlay on hover
+  marker.addEventListener("click", (event) => {
+    showBorder(marker.id);
+  });
+
   marker.addEventListener("mouseenter", (event) => {
     overlay.style.display = "block";
     overlayImg.src =
       img ||
       "https://images.pexels.com/photos/30913847/pexels-photo-30913847/free-photo-of-indoor-artistic-scene-with-calligraphy-and-cat.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
-    overlayText.textContent = address;
+    overlayText.innerHTML = `<div class="overlayInfo"><div><span>Address:</span> ${address}</div><div><span>Distance:</span> ${(
+      Number(parkingSpot?.distance) / 1000
+    ).toFixed(2)}km</div></div>`;
 
     // Position overlay near the cursor
     overlay.style.left = `${event.clientX + 15}px`;
     overlay.style.top = `${event.clientY + 15}px`;
   });
+  // marker.addEventListener("click", (event) => {
+  //   overlay.style.display = "block";
+  //   overlayImg.src =
+  //     img ||
+  //     "https://images.pexels.com/photos/30913847/pexels-photo-30913847/free-photo-of-indoor-artistic-scene-with-calligraphy-and-cat.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
+  //   overlayText.textContent = address;
+
+  //   // Position overlay near the cursor
+  //   overlay.style.left = `${event.clientX + 15}px`;
+  //   overlay.style.top = `${event.clientY + 15}px`;
+
+  //   showBorder(marker.id);
+  // });
 
   marker.addEventListener("mouseleave", () => {
     overlay.style.display = "none";
@@ -169,28 +205,31 @@ const createOverlayFunction = (marker, img, address, showOverlay = false) => {
   }
 };
 
-document.addEventListener("DOMContentLoaded", function () {
-  const header = document.querySelector(".asideHeader");
-  const content = document.querySelector(".asideContent");
-  const contentHeader = document.querySelector(".asideHeaderContainer");
-  const icon = document.querySelector(".toggle-icon");
+function showBorder(elementId) {
+  let element = document.getElementById(`${elementId}-space`);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Transition to Gradient Border
+    element.classList.add("gradient-border");
 
-  header.addEventListener("click", function () {
-    const isOpen = contentHeader.style.display === "block";
+    // Transition Back to Black Border after 3 seconds
+    setTimeout(() => {
+      element.classList.remove("gradient-border");
+      // element.style.border = "1px solid black";
+    }, 3000);
+  }
+}
 
-    contentHeader.style.display = isOpen ? "none" : "block";
-  });
-});
-
-document.getElementById("filterBtn").addEventListener("click", function () {
+document.getElementById("filterBtn").addEventListener("click", function (e) {
+  e.preventDefault();
   filterBox.style.display =
     filterBox.style.display === "block" ? "none" : "block";
 });
 
-document.getElementById("filterBoxbtn").addEventListener("click", function () {
+document.getElementById("filterBoxbtn").addEventListener("click", function (e) {
+  e.preventDefault();
   const selectedValue = document.getElementById("sort-options").value;
   const selectedRadiusValue = document.getElementById("radius").value;
-  console.log("Selected Sort Option:", selectedValue, selectedRadiusValue);
 
   renderListOfSpaces(parkingSpotsArray, selectedValue, selectedRadiusValue);
 
@@ -209,7 +248,6 @@ const calculateDistance = (obj1, obj2) => {
     point2
   );
 
-  console.log("Distance", distance.toFixed(2));
   return distance.toFixed(2);
 };
 
@@ -236,10 +274,17 @@ const getOptimalZoom = (bounds) => {
 const renderListOfSpaces = (
   parkingSpaces,
   sortby = "distance",
-  radius = 50
+  radius = 10
 ) => {
   const parkingListContainer = document.querySelector(".parking-list");
   parkingListContainer.innerHTML = "";
+
+  if (!(parkingSpaces || []).length) {
+    const noElementMessage = document.createElement("h3");
+    noElementMessage.innerHTML = "No Parking Space Found!!";
+
+    parkingListContainer.appendChild(noElementMessage);
+  }
 
   const parkingSpaceSorted = parkingSpaces
     ?.filter((obj) => obj?.distance <= radius * 1000)
@@ -249,7 +294,9 @@ const renderListOfSpaces = (
         : obj1?.price_per_hour - obj2?.price_per_hour;
     });
 
-  console.log("Parking", sortby, parkingSpaceSorted);
+  document.querySelectorAll("gmp-advanced-marker").forEach((el) => {
+    if (el.title != "Your current location") el.remove();
+  });
 
   parkingSpaceSorted.forEach((parkingSpot) => {
     bounds.extend(
@@ -263,15 +310,22 @@ const renderListOfSpaces = (
       lng: parkingSpot?.longitude,
     };
     marker.title = parkingSpot?.title;
+    marker.id = parkingSpot?.space_id;
 
     // Append marker to the map
     mapElement.appendChild(marker);
 
-    createOverlayFunction(marker, parkingSpot.imageUrl, parkingSpot.address);
+    createOverlayFunction(
+      parkingSpot,
+      marker,
+      parkingSpot.imageUrl,
+      parkingSpot.address
+    );
 
     // Populating list of available spaces
     const parkingSpotElement = document.createElement("div");
     parkingSpotElement.classList.add("parking-spot");
+    parkingSpotElement.id = `${parkingSpot?.space_id}-space`;
 
     // Create element for Image
     const spotImage = document.createElement("div");
@@ -335,8 +389,6 @@ const renderListOfSpaces = (
         background: "#FBBC04",
       });
 
-      console.log("Markers", marker, pin.element);
-
       let hasSameChild = false;
 
       for (const child of marker.childNodes) {
@@ -356,3 +408,79 @@ const renderListOfSpaces = (
     parkingListContainer.appendChild(parkingSpotElement);
   });
 };
+
+// Location Suggestions
+
+const inputField = document.getElementById("location");
+const suggestionsList = document.createElement("div");
+suggestionsList.setAttribute("id", "suggestions");
+inputField.parentNode.appendChild(suggestionsList);
+
+inputField.addEventListener("input", async () => {
+  const location = inputField.value.trim();
+
+  if (location.length > 0) {
+    await fetchLocationSuggestions(location);
+  } else {
+    suggestionsList.innerHTML = "";
+  }
+});
+
+async function fetchLocationSuggestions(location) {
+  const apiKey = "d79219fb6dcc45159636535b526e950f";
+  try {
+    const response = await fetch(
+      `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
+        location
+      )}&apiKey=${apiKey}`
+    );
+    const data = await response.json();
+
+    if (data.features && data.features.length > 0) {
+      displaySuggestions(data.features);
+    } else {
+      suggestionsList.innerHTML = "<p>No suggestions found.</p>";
+    }
+  } catch (error) {
+    console.error("Error fetching location suggestions:", error);
+  }
+}
+
+function displaySuggestions(features) {
+  suggestionsList.innerHTML = "";
+
+  features.forEach((feature) => {
+    const suggestionItem = document.createElement("div");
+    suggestionItem.classList.add("suggestion-item");
+    suggestionItem.textContent = feature.properties.formatted;
+
+    let selected = false;
+    // Handle user selection of a suggestion
+    suggestionItem.addEventListener("click", () => {
+      inputField.value = feature.properties.formatted;
+      queryLatitude = feature.properties.lat;
+      queryLongitude = feature.properties.lon;
+
+      suggestionsList.innerHTML = "";
+      selected = true;
+    });
+
+    if (!selected) {
+      queryLatitude = null;
+      queryLongitude = null;
+    }
+
+    suggestionsList.appendChild(suggestionItem);
+  });
+}
+
+// On Click Of Search
+
+const searchBtn = document.getElementById("searchBtn");
+
+searchBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  suggestionsList.innerHTML = "";
+
+  fetchParkingSpots({ lat: queryLatitude, lng: queryLongitude });
+});

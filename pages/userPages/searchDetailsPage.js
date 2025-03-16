@@ -64,7 +64,7 @@ const renderData = (spaceData) => {
   section.innerHTML = `
         <h2>${spaceData?.title || "House Owner Parking"}</h2>
         <p>${spaceData?.address || "No Address Provided"}</p>
-        <p>Owned by: ${spaceData?.owner_id || "Unknown Owner"}</p>
+        <p>Owned by: ${spaceData?.owner_name || "Unknown Owner"}</p>
         <p>Price: <span id="price">$${
           spaceData?.price_per_hour || 0
         }</span>/hr</p>
@@ -78,7 +78,6 @@ const renderData = (spaceData) => {
 
         <div class="booking">
           <button onclick="bookNow()">Book Now</button>
-          <button onclick="resetForm()">Reset</button>
         </div>
   `;
 
