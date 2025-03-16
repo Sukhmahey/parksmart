@@ -126,7 +126,7 @@ main {
   border: 1px solid grey;
   cursor: pointer;
 
-  transition: border 0.8s ease-in-out;
+  transition: border 0.3s ease-in-out;
   opacity: 1;
 }
 
