@@ -90,3 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+const userId = localStorage.getItem("userId");
+console.log("Homepage Stored userId in localStorage:", userId);

@@ -9,18 +9,22 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
-async function addUser(name, email, role) {
-  const userRef = doc(collection(db, "users"));
+async function addUser(userId, firstName, lastName, email, phoneNumber, password, role) {
+  const userRef = doc(db, "users", userId);  // Use userId (UID) as the document ID
   await setDoc(userRef, {
-    user_id: userRef.id,
-    name,
+    user_id: userId,
+    firstName,
+    lastName,
     email,
+    phoneNumber,
+    password,  
     role,
+    createdAt: new Date(),  
   });
-  // console.log("User added:", userRef.id);
-  return userRef.id;
-}
 
+  console.log("User added:", userId);
+  return userId;  
+}
 // function to add parking space / owner side
 async function addParkingSpace(user_id, title, address, price_per_hour,image,longitude,latitude,isAvailable,availability = {}) {
   const parkingRef = doc(collection(db, "parking_spaces"));
