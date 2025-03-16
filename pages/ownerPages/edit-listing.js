@@ -20,6 +20,12 @@ async function populateForm(listingId) {
         const data = await fetchListingData(listingId);
         currentListingId = listingId;
         existingImageUrl = data.image || '';
+        // Existing image handling
+        if (data.image) {
+            const preview = document.getElementById('preview');
+            preview.src = data.image;
+            preview.style.display = 'block'; // Add this line
+        }
 
         // Basic fields
         document.getElementById('name').value = data.title || '';
@@ -66,6 +72,7 @@ async function populateForm(listingId) {
         console.error("Error populating form:", error);
     }
 }
+
 
 
 
@@ -265,18 +272,109 @@ let existingImageUrl = '';
 let currentListingId = getListingIdFromUrl();
 console.log(currentListingId);
 
-async function handleImageUpload() {
-    const fileInput = document.getElementById('fileInput');
-    if (!fileInput?.files[0]) return existingImageUrl;
+let mediaStream = null;
 
+async function handleCameraCapture() {
     try {
-        const imageUrl = await uploadToStorage(fileInput.files[0]);
-        return imageUrl;
+        // Clear previous preview
+        const preview = document.getElementById('preview');
+        preview.style.display = 'none';
+
+        // Stop existing stream
+        if (mediaStream) {
+            mediaStream.getTracks().forEach(track => track.stop());
+        }
+
+        // Create camera controls
+        const controls = document.createElement('div');
+        controls.className = 'camera-controls';
+        controls.innerHTML = `
+            <button type="button" id="captureBtn">Capture</button>
+            <button type="button" id="stopBtn">Stop Camera</button>
+        `;
+        document.querySelector('.media-buttons').appendChild(controls);
+
+        // Get camera access
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment' }
+        });
+
+        // Show video feed
+        const video = document.getElementById('cameraFeed');
+        video.style.display = 'block';
+        video.srcObject = mediaStream;
+        
+        // Play video feed
+        try {
+            await video.play();
+        } catch (err) {
+            console.log('Video play error:', err);
+        }
+
+        // Capture handler
+        document.getElementById('captureBtn').onclick = () => {
+            const canvas = document.getElementById('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            preview.src = canvas.toDataURL('image/jpeg');
+            preview.style.display = 'block';
+            video.style.display = 'none';
+        };
+
+        // Stop handler
+        document.getElementById('stopBtn').onclick = () => {
+            mediaStream.getTracks().forEach(track => track.stop());
+            video.style.display = 'none';
+            controls.remove();
+            mediaStream = null;
+        };
+
     } catch (error) {
-        console.error("Image upload failed:", error);
-        return existingImageUrl;
+        console.error('Camera error:', error);
+        alert(`Camera error: ${error.message}`);
+        if (mediaStream) mediaStream.getTracks().forEach(track => track.stop());
     }
 }
+document.getElementById('cameraButton')?.addEventListener('click', handleCameraCapture);
+
+
+
+
+document.getElementById('fileInput').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('preview').src = e.target.result; 
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+async function handleImageUpload() {
+    // If new image was captured (from camera or file)
+    if (document.getElementById('preview').src.startsWith('data:image')) {
+        return document.getElementById('preview').src;
+    }
+    
+    // If file input was used
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput.files.length > 0) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                resolve(e.target.result);
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        });
+    }
+
+    
+    return existingImageUrl;
+}
+
 
 
 

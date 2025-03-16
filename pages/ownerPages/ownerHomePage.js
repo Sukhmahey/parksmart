@@ -2,8 +2,10 @@ import { getParkingSpaces,deleteParkingSpace } from "../../js/crud.js";
 
 const listingarea = document.getElementById("listingarea");
 
-// const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-const currentUser = 4;
+
+const currentUser = localStorage.getItem("userId");
+
+
 
 
 
