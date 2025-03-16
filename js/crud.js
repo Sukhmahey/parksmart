@@ -72,6 +72,16 @@ async function getParkingSpaces() {
   return dataObj;
 }
 
+async function getOwnerBookingHistory() {
+  const snapshot = await getDocs(collection(db, "owner_history"));
+  const dataObj = [];
+  snapshot.forEach((doc) => {
+    dataObj.push(doc.data());
+  });
+
+  return dataObj;
+}
+
 // function to delete parking space / owner side
 async function deleteParkingSpace(spaceId) {
   try {
@@ -260,4 +270,5 @@ export {
   fetchListingData,
   updateListing,
   deleteParkingSpace,
+  getOwnerBookingHistory,
 };
