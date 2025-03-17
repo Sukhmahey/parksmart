@@ -1,11 +1,19 @@
-import { getParkingSpaces,deleteParkingSpace } from "../../js/crud.js";
+import { getParkingSpaces,deleteParkingSpace, getUserById,getUsersR } from "../../js/crud.js";
 
 const listingarea = document.getElementById("listingarea");
 
 
 const currentUser = localStorage.getItem("userId");
 
+// const userName = await getUserById(currentUser);
+// console.log(currentUser + " " + userName);
+getUsersR();
+async function testGetUser() {
+  const user = await getUserById(currentUser);
+  // console.log(user);
+}
 
+testGetUser();
 
 
 
