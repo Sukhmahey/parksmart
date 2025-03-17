@@ -6,23 +6,22 @@ const signUpForm = document.getElementById("signUpForm");
 if (signUpForm) {
   signUpForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const name = document.getElementById("signupName").value;
+    
+    // Get the input values from the form
+    const firstName = document.getElementById("signupFirstName").value;
+    const lastName = document.getElementById("signupLastName").value;
     const email = document.getElementById("signupEmail").value;
     const password = document.getElementById("signupPassword").value;
+    const phoneNumber = document.getElementById("signupPhoneNumber").value; // Add this field in your form
     const isSpaceOwner = document.getElementById("isSpaceOwner").checked;
     const role = isSpaceOwner ? "spaceOwner" : "user";
 
     try {
       // Sign up the user
-<<<<<<< Updated upstream
-      const user = await signUp(name, email, password, role);
-      await addUser(name, email, role);
-=======
       const user = await signUp(email, password);
       localStorage.setItem("userId", user.uid);
       // Add user information to Firestore
       await addUser(user.uid, firstName, lastName, email, phoneNumber, password, role);
->>>>>>> Stashed changes
 
       // After successful sign up, log the user in
       await signIn(email, password);
@@ -35,6 +34,8 @@ if (signUpForm) {
   });
 }
 
+
+
 // Handling Sign In Form
 const signInForm = document.getElementById("signInForm");
 if (signInForm) {
@@ -44,8 +45,10 @@ if (signInForm) {
     const password = document.getElementById("signinPassword").value;
 
     try {
-      await signIn(email, password);
-      window.location.href = "../pages/userPages/homepage.html";
+      await signIn(email, password).then((data) => {
+        localStorage.setItem("userId", data?.uid);
+        window.location.href = "../pages/userPages/homepage.html";
+      });
     } catch (error) {
       alert(error.message);
     }

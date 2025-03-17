@@ -9,103 +9,203 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
-async function addUser(name, email, role) {
-  const userRef = doc(collection(db, "users"));
+async function addUser(
+  userId,
+  firstName,
+  lastName,
+  email,
+  phoneNumber,
+  password,
+  role
+) {
+  const userRef = doc(db, "users", userId); // Use userId (UID) as the document ID
   await setDoc(userRef, {
-    user_id: userRef.id,
-<<<<<<< Updated upstream
-    name,
-=======
+    user_id: userId,
     firstName,
     lastName,
->>>>>>> Stashed changes
     email,
+    phoneNumber,
+    password,
     role,
-<<<<<<< Updated upstream
-=======
     createdAt: new Date(),
-    account_id: userId,
->>>>>>> Stashed changes
   });
-  console.log("User added:", userRef.id);
-  return userRef.id;
-}
 
-async function addParkingSpace(owner_id, title, address, price_per_hour) {
+  return userId;
+}
+// function to add parking space / owner side
+async function addParkingSpace(
+  user_id,
+  title,
+  address,
+  price_per_hour,
+  image,
+  longitude,
+  latitude,
+  isAvailable,
+  availability = {}
+) {
   const parkingRef = doc(collection(db, "parking_spaces"));
   await setDoc(parkingRef, {
     space_id: parkingRef.id,
-    owner_id,
+    user_id,
     title,
     address,
     price_per_hour,
+    image,
+    longitude,
+    latitude,
+    isAvailable,
+    availability,
     created_at: new Date(),
     updated_at: new Date(),
   });
-  console.log("Parking space added:", parkingRef.id);
+}
+
+// function to populate parking space details / owner side
+async function getParkingSpaces() {
+  const snapshot = await getDocs(collection(db, "parking_spaces"));
+  const dataObj = [];
+  snapshot.forEach((doc) => {
+    dataObj.push(doc.data());
+  });
+
+  return dataObj;
+}
+
+async function getOwnerBookingHistory() {
+  const snapshot = await getDocs(collection(db, "owner_history"));
+  const dataObj = [];
+  snapshot.forEach((doc) => {
+    dataObj.push(doc.data());
+  });
+
+  return dataObj;
+}
+
+// function to delete parking space / owner side
+async function deleteParkingSpace(spaceId) {
+  try {
+    const parkingRef = doc(db, "parking_spaces", spaceId);
+    await deleteDoc(parkingRef);
+    console.log("Parking space deleted:", spaceId);
+    return true;
+  } catch (error) {
+    console.error("Error deleting parking space:", error);
+    throw error;
+  }
+}
+// function to populate parking space details w.r.t. space id / owner side
+async function fetchListingData(listingId) {
+  const docRef = doc(db, "parking_spaces", listingId);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) throw new Error("Listing not found");
+  return { id: docSnap.id, ...docSnap.data() };
+}
+
+// function to update parking space details / owner side
+async function updateListing(listingId, updatedData) {
+  const docRef = doc(db, "parking_spaces", listingId);
+  await updateDoc(docRef, updatedData);
 }
 
 async function addBooking(
   user_id,
   space_id,
-  parkingDate, // Add parkingDate as an argument
+  parkingDate,
   start_time,
   end_time,
   total_price,
   license_plate,
   color
 ) {
-  const bookingRef = doc(collection(db, "bookings"));
-  console.log("start_time:", start_time);
-  console.log("end_time:", end_time);
-  console.log("parkingDate:", parkingDate);
+  try {
+    const bookingRef = doc(collection(db, "bookings"));
 
-  // Combine date and time correctly
-  const startDateTime = new Date(`${parkingDate}T${start_time}:00`); // Add ":00" for seconds
-  const endDateTime = new Date(`${parkingDate}T${end_time}:00`); // Add ":00" for seconds
+    const startDateTime = new Date(`${parkingDate}T${start_time}:00`);
+    const endDateTime = new Date(`${parkingDate}T${end_time}:00`);
 
-  console.log("Start Time:", startDateTime);
-  console.log("End Time:", endDateTime);
+    if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
+      throw new Error("Invalid date/time format.");
+    }
 
-  // Check if the dates are valid
-  if (isNaN(startDateTime) || isNaN(endDateTime)) {
-    console.error("Invalid date:", start_time, end_time);
-    return; // Exit if date is invalid
+    await setDoc(bookingRef, {
+      booking_id: bookingRef.id,
+      user_id,
+      space_id,
+      start_time: Timestamp.fromDate(startDateTime),
+      end_time: Timestamp.fromDate(endDateTime),
+      total_price,
+      license_plate,
+      color,
+      status: "confirmed",
+      created_at: Timestamp.now(),
+    });
+  } catch (error) {
+    console.error("Error adding booking:", error);
+    throw error;
   }
-
-  await setDoc(bookingRef, {
-    booking_id: bookingRef.id,
-    user_id,
-    space_id,
-    start_time: Timestamp.fromDate(startDateTime), // Use Firebase Timestamp
-    end_time: Timestamp.fromDate(endDateTime), // Use Firebase Timestamp
-    total_price,
-    license_plate,
-    color,
-    status: "confirmed",
-    created_at: Timestamp.now(),
-  });
-  console.log("Booking added:", bookingRef.id);
 }
+
+// async function addBooking(
+//   user_id,
+//   space_id,
+//   parkingDate, // Add parkingDate as an argument
+//   start_time,
+//   end_time,
+//   total_price,
+//   license_plate,
+//   color
+// ) {
+//   const bookingRef = doc(collection(db, "bookings"));
+//   // console.log("start_time:", start_time);
+//   // console.log("end_time:", end_time);
+//   // console.log("parkingDate:", parkingDate);
+
+//   // Combine date and time correctly
+//   const startDateTime = new Date(`${parkingDate}T${start_time}:00`); // Add ":00" for seconds
+//   const endDateTime = new Date(`${parkingDate}T${end_time}:00`); // Add ":00" for seconds
+
+//   // console.log("Start Time:", startDateTime);
+//   // console.log("End Time:", endDateTime);
+
+//   // Check if the dates are valid
+//   if (isNaN(startDateTime) || isNaN(endDateTime)) {
+//     // console.error("Invalid date:", start_time, end_time);
+//     return; // Exit if date is invalid
+//   }
+
+//   await setDoc(bookingRef, {
+//     booking_id: bookingRef.id,
+//     user_id,
+//     space_id,
+//     start_time: Timestamp.fromDate(startDateTime), // Use Firebase Timestamp
+//     end_time: Timestamp.fromDate(endDateTime), // Use Firebase Timestamp
+//     total_price,
+//     license_plate,
+//     color,
+//     status: "confirmed",
+//     created_at: Timestamp.now(),
+//   });
+//   // console.log("Booking added:", bookingRef.id);
+// }
 
 // READ: Get Data from Firestore
 async function getUsers() {
   const snapshot = await getDocs(collection(db, "users"));
   snapshot.forEach((doc) => {
-    console.log(doc.id, "=>", doc.data());
+    // console.log(doc.id, "=>", doc.data());
   });
 }
 
-async function getParkingSpaces() {
-  const snapshot = await getDocs(collection(db, "parking_spaces"));
-  const dataObj = [];
-  snapshot.forEach((doc) => {
-    console.log(doc.id, "=>", doc.data());
-    dataObj.push(doc.data());
-  });
-
-  return dataObj;
-}
+// async function getParkingSpaces() {
+//   const snapshot = await getDocs(collection(db, "parking_spaces"));
+//   const dataObj = [];
+//   snapshot.forEach((doc) => {
+//     // console.log(doc.id, "=>", doc.data());
+//     dataObj.push(doc.data());
+//   });
+// }
 
 async function getParkingSpaceById(documentId) {
   try {
@@ -113,10 +213,10 @@ async function getParkingSpaceById(documentId) {
     const docSnap = await getDoc(docRef); // Fetch document
 
     if (docSnap.exists()) {
-      console.log("Document Data:", docSnap.data());
+      // console.log("Document Data:", docSnap.data());
       return docSnap.data(); // Return document data
     } else {
-      console.log("No such document!");
+      // console.log("No such document!");
       return null;
     }
   } catch (error) {
@@ -167,4 +267,8 @@ export {
   deleteUser,
   getBooking,
   getParkingSpaceById,
+  fetchListingData,
+  updateListing,
+  deleteParkingSpace,
+  getOwnerBookingHistory,
 };

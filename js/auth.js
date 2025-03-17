@@ -4,19 +4,12 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+import { db } from "./firebase.js";  // Make sure to import the db reference
 
 // Signup function
 async function signUp(email, password) {
   try {
-<<<<<<< Updated upstream
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    console.log("User Created:", userCredential.user);
-    return userCredential.user;
-=======
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     console.log("User Created:", user);
@@ -32,7 +25,6 @@ async function signUp(email, password) {
     console.log("User data saved to Firestore");
 
     return user; // Return user to continue with signup flow
->>>>>>> Stashed changes
   } catch (error) {
     console.error("Signup Error:", error.message);
     throw error;
@@ -42,11 +34,7 @@ async function signUp(email, password) {
 // Signin function
 async function signIn(email, password) {
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     console.log("Login Successful:", userCredential.user);
     return userCredential.user;
   } catch (error) {
