@@ -13,12 +13,16 @@ header a {
 
 .headerRight a {
     margin: 0 1rem;
-    background-color: #176F9C;
     color: white;
     border: none;
-    padding: 0.5rem 0;
+    
     text-decoration: none;
     text-align: center;
+}
+
+.headericon{
+    background-color: #176F9C;
+    padding: 0.5rem 0;
 }
 .headerRight{
     display: flex;

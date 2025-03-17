@@ -13,8 +13,8 @@ if (signUpForm) {
     const email = document.getElementById("signupEmail").value;
     const password = document.getElementById("signupPassword").value;
     const phoneNumber = document.getElementById("signupPhoneNumber").value; // Add this field in your form
-    const isSpaceOwner = document.getElementById("isSpaceOwner").checked;
-    const role = isSpaceOwner ? "spaceOwner" : "user";
+
+    
 
     try {
       // Sign up the user

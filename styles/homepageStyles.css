@@ -29,7 +29,14 @@
     max-width: 1000px;
     margin: auto;
 }
+.profileiconContainer{
+    width: 40px;
+    margin-top: 0;
+}
 
+.profileIcon{
+    margin-top: 0;
+}
 .image-container {
     width: 400px; /* Set the visible size */
     height: 300px;
@@ -146,7 +153,9 @@ h2, .instructions h3{
     background-color: #f0f0f0;
     color: black;
 }
-
+.headericon{
+    background-color: none;
+}
 
 
 
