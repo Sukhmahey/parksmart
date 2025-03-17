@@ -1,0 +1,149 @@
+/* checkout.css */
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f0f0f0; /* Light gray background */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column; /* Added to make header and container stack */
+  align-items: center;
+  min-height: 100vh;
+}
+
+header {
+  width: 100%;
+  text-align: left; /* Align logo to the left */
+  padding: 10px 20px;
+  background-color: white; /* Header background */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+.logoContainer img {
+  height: 40px; /* Adjust logo size as needed */
+}
+
+.container {
+  width: 80%;
+  max-width: 800px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin: 20px auto; /* Center the container */
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.parking-info {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.parking-info img {
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.parking-info div {
+  flex-grow: 1;
+}
+
+parking-info h2 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+parking-info p {
+  margin: 5px 0;
+  font-size: 0.9em;
+  color: #666;
+}
+
+parking-info .price {
+  margin-left: auto;
+  font-weight: bold;
+  color: #2ca058;
+  align-self: flex-start;
+}
+
+.form-container {
+  padding: 20px;
+  border: 2px solid #add8e6; /* Light blue border */
+  border-radius: 8px;
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+  font-size: 1.1em;
+  color: #333;
+  text-align: center;
+}
+
+#checkoutForm label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+#checkoutForm input[type="text"],
+#checkoutForm input[type="date"],
+#checkoutForm input[type="time"] {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.9em;
+}
+
+#checkoutForm p {
+  margin-bottom: 10px;
+}
+
+.buttons {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.buttons button {
+  padding: 12px 30px;
+  margin: 0 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.buttons button[type="reset"] {
+  background-color: white;
+  color: #add8e6; /* Light blue text */
+  border: 2px solid #add8e6; /* Light blue border */
+}
+
+.buttons button[type="submit"] {
+  background-color: #add8e6; /* Light blue background */
+  color: white;
+  border: none;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;
+  font-size: 0.8em;
+  color: white;
+  background-color: #0056b3; /* Dark blue background */
+  border-radius: 0 0 10px 10px;
+}

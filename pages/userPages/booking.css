@@ -1,0 +1,117 @@
+/* booking-details.css */
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f0f0f0; /* Light gray background */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+header {
+  width: 100%;
+  text-align: left;
+  padding: 10px 20px;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logoContainer img {
+  height: 40px;
+}
+
+.container {
+  width: 80%;
+  max-width: 600px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin: 20px auto;
+  text-align: center; /* Center all text in the container */
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+p {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.booking-info,
+.booking-details {
+  margin-bottom: 20px;
+}
+
+.booking-info h2 {
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.booking-details strong {
+  font-weight: bold;
+  color: #333;
+}
+
+#backToHome {
+  padding: 12px 30px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+#backToHome:hover {
+  background-color: #0056b3;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;
+  font-size: 0.8em;
+  color: white;
+  background-color: #0056b3; /* Dark blue background */
+  width: 100%; /* Make footer full width */
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center items horizontally */
+}
+
+footer p {
+  margin: 5px 0; /* Add some vertical margin */
+  color: white;
+}
+
+footer a {
+  text-decoration: none;
+  color: white;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.social-icons a {
+  margin: 0 10px;
+}
+
+.social-icons img {
+  width: 30px; /* Adjust icon size as needed */
+  height: 30px;
+  border-radius: 50%; /* Make icons circular */
+  background-color: #007bff; /* Blue background for icons */
+  padding: 5px; /* Add padding inside the icon circles */
+}
