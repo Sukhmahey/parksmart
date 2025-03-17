@@ -1,4 +1,4 @@
-import db, { auth } from "./firebase.js";
+import { db, auth } from "./firebase.js";
 import {
   collection,
   doc,
@@ -8,55 +8,55 @@ import {
   deleteDoc,
 } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+// // User Authentication Logic (Moved from loginPage.js)
+// const signUpForm = document.getElementById("signUpForm");
+// const signInForm = document.getElementById("signInForm");
 
-// User Authentication Logic (Moved from loginPage.js)
-const signUpForm = document.getElementById("signUpForm");
-const signInForm = document.getElementById("signInForm");
+// if (signUpForm) {
+//   signUpForm.addEventListener("submit", (e) => {
+//     e.preventDefault();
+//     const name = document.getElementById("signupName").value;
+//     const email = document.getElementById("signupEmail").value;
+//     const password = document.getElementById("signupPassword").value;
+//     const isSpaceOwner = document.getElementById("isSpaceOwner").checked;
 
-if (signUpForm) {
-  signUpForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const name = document.getElementById("signupName").value;
-    const email = document.getElementById("signupEmail").value;
-    const password = document.getElementById("signupPassword").value;
-    const isSpaceOwner = document.getElementById("isSpaceOwner").checked;  
+//     // checkbox for determing role
+//     const role = isSpaceOwner ? "spaceOwner" : "user";
 
-    // checkbox for determing role 
-    const role = isSpaceOwner ? "spaceOwner" : "user";
+//     createUserWithEmailAndPassword(auth, email, password)
+//       .then((userCredential) => {
+//         alert("Account Created Successfully!");
+//         console.log("User Created:", userCredential.user);
+//         // Adding data to the firebase
+//         addUser(name, email, password, role);
+//       })
+//       .catch((error) => {
+//         alert(error.message);
+//       });
+//   });
+// }
 
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            alert("Account Created Successfully!");
-            console.log("User Created:", userCredential.user);
-            // Adding data to the firebase
-            addUser(name, email, password, role);
-        })
-        .catch((error) => {
-            alert(error.message);
-        });
-});
+// if (signInForm) {
+//   signInForm.addEventListener("submit", (e) => {
+//     e.preventDefault();
+//     const email = document.getElementById("signinEmail").value;
+//     const password = document.getElementById("signinPassword").value;
 
-}
-
-
-if (signInForm) {
-    signInForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const email = document.getElementById("signinEmail").value;
-        const password = document.getElementById("signinPassword").value;
-
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                alert("Login Successful!");
-                window.location.href = "homepage.html"; // Redirect after login
-            })
-            .catch((error) => {
-                alert(error.message);
-            });
-    });
-}
+//     signInWithEmailAndPassword(auth, email, password)
+//       .then((userCredential) => {
+//         console.log("userCredential", userCredential);
+//         alert("Login Successful!");
+//       })
+//       .catch((error) => {
+//         alert(error.message);
+//       });
+//   });
+// }
 
 //logout function, but not implemented yet dont know where we are putting the logout button yet.
 // import { signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
@@ -80,11 +80,21 @@ async function addUser(name, email, password_hash, role) {
     password_hash,
     role,
   });
-  console.log("User added:", userRef.id);
+  // console.log("User added:", userRef.id);
   return userRef.id;
 }
 
-async function addParkingSpace(owner_id, title, address, price_per_hour,image,longitude,latitude,availability = {},features = []) {
+async function addParkingSpace(
+  owner_id,
+  title,
+  address,
+  price_per_hour,
+  image,
+  longitude,
+  latitude,
+  availability = {},
+  features = []
+) {
   const parkingRef = doc(collection(db, "parking_spaces"));
   await setDoc(parkingRef, {
     space_id: parkingRef.id,
@@ -100,7 +110,7 @@ async function addParkingSpace(owner_id, title, address, price_per_hour,image,lo
     created_at: new Date(),
     updated_at: new Date(),
   });
-  console.log("Parking space added:", parkingRef.id);
+  // console.log("Parking space added:", parkingRef.id);
 }
 async function deleteParkingSpace(spaceId) {
   try {
@@ -139,7 +149,7 @@ async function addBooking(
 async function getUsers() {
   const snapshot = await getDocs(collection(db, "users"));
   snapshot.forEach((doc) => {
-    console.log(doc.id, "=>", doc.data());
+    // console.log(doc.id, "=>", doc.data());
   });
 }
 
@@ -147,7 +157,7 @@ async function getParkingSpaces() {
   const snapshot = await getDocs(collection(db, "parking_spaces"));
   const dataObj = [];
   snapshot.forEach((doc) => {
-    console.log(doc.id, "=>", doc.data());
+    // console.log(doc.id, "=>", doc.data());
     dataObj.push(doc.data());
   });
 
@@ -158,14 +168,14 @@ async function getParkingSpaces() {
 async function updateUser(user_id, newData) {
   const userRef = doc(db, "users", user_id);
   await updateDoc(userRef, newData);
-  console.log("User updated:", user_id);
+  // console.log("User updated:", user_id);
 }
 
 // DELETE: Remove Data
 async function deleteUser(user_id) {
   const userRef = doc(db, "users", user_id);
   await deleteDoc(userRef);
-  console.log("User deleted:", user_id);
+  // console.log("User deleted:", user_id);
 }
 
 // Export functions for use
@@ -177,5 +187,5 @@ export {
   getParkingSpaces,
   updateUser,
   deleteUser,
-  deleteParkingSpace
+  deleteParkingSpace,
 };

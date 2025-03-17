@@ -22,6 +22,14 @@ async function signUp(email, password) {
     //   createdAt: new Date(),
     // });
 
+    await setDoc(doc(db, "users", user.uid), {
+      name: name,
+      email: email,
+      role: role,
+      createdAt: new Date(),
+    });
+
+
     console.log("User data saved to Firestore");
 
     return user; // Return user to continue with signup flow

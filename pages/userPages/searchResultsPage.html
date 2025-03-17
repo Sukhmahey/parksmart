@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Google Map with Marker</title>
+    <!-- <link rel="stylesheet" href="../../styles/homepageStyles.css" /> -->
     <link rel="stylesheet" href="styles.css" />
     <script
       async
@@ -21,67 +22,58 @@
     <script defer type="module" src="searchResultsPage.js"></script>
   </head>
   <body>
-    <div class="topBar">
-      <div class="advanceSearch">
-        <div class="asideHeader">
-          <div class="asideHeaderContainer">
-            <div class="asideContent">
-              <form id="searchForm">
-                <!-- Input Field -->
-                <label for="searchInput">Current Address:</label>
-                <input
-                  type="text"
-                  id="searchInput"
-                  placeholder="Your Current Address"
-                />
-
-                <!-- Address Field -->
-                <label for="address">Destination Address:</label>
-                <input
-                  type="text"
-                  id="address"
-                  placeholder="Enter Destination address"
-                />
-
-                <!-- Time Field -->
-                <label for="startTime">Start Time:</label>
-                <input type="time" id="startTime" />
-                <label for="endTime">End Time:</label>
-                <input type="time" id="endTime" />
-
-                <!-- Search Button -->
-                <button type="submit">Search Again</button>
-              </form>
-            </div>
+    <header>
+      <div class="logoContainer" id="logo">
+        <img src="Assets/ParkSmartLogo.png" alt="ParkSmart Logo" />
+      </div>
+      <div class="headerRight">
+        <form
+          class="searchBoxContainer"
+          id="searchBoxContainer"
+          autocomplete="off"
+        >
+          <div class="searchInputContainer">
+            <!-- <div class="searchIcon">
+              <img src="Assets/search_icon.png" alt="Search Icon" />
+            </div> -->
+            <input
+              type="text"
+              id="location"
+              name="location"
+              placeholder="Search for Parking Location"
+            />
           </div>
-          <span class="toggle-icon"
-            ><i class="fa-solid fa-magnifying-glass"></i
-          ></span>
-          <h2>Reserve your spot</h2>
-        </div>
+          <input type="datetime-local" id="datetime" name="datetime" />
+          <button type="submit" id="searchBtn">
+            <img src="Assets/search_icon.png" alt="Search Icon" />
+          </button>
+          <i id="filterBtn" class="fa-solid fa-filter"></i>
+          <div class="filter-box" id="filterBox">
+            <label>Sort by:</label>
+            <select id="sort-options">
+              <option value="distance">Sort by Distance</option>
+              <option value="price">Sort by Price</option>
+            </select>
+            <label>Search radius:</label>
+            <input id="radius" type="number" value="25" />
+
+            <button id="filterBoxbtn">Filter</button>
+          </div>
+        </form>
       </div>
-      <i id="filterBtn" class="fa-solid fa-filter"></i>
-      <div class="filter-box" id="filterBox">
-        <label>Sort by:</label>
-        <select id="sort-options">
-          <option value="distance">Sort by Distance</option>
-          <option value="price">Sort by Price</option>
-        </select>
-        <label>Search radius:</label>
-        <input id="radius" type="number" value="10"></input>
-          
-        <button id="filterBoxbtn">Filter</button>
+      <img class="profileIcon" src="Assets/avatar.png" alt="Profile Icon" />
+    </header>
+    <main>
+      <div class="mapOuterContainer">
+        <aside class="sidebar">
+          <div class="parking-list"></div>
+        </aside>
+        <gmp-map id="map" zoom="15" map-id="DEMO_MAP_ID"> </gmp-map>
       </div>
-    </div>
-    <div class="mapOuterContainer">
-      <aside class="sidebar">
-        <div class="parking-list"></div>
-      </aside>
-      <gmp-map id="map" zoom="15" map-id="DEMO_MAP_ID"> </gmp-map>
-    </div>
-    <div id="marker-overlay" class="marker-overlay">
-      <img id="overlay-img" src="" alt="Location Image" />
-      <p id="overlay-text"></p>
-    </div>
+      <div id="marker-overlay" class="marker-overlay">
+        <img id="overlay-img" alt="Location Image" />
+        <p id="overlay-text"></p>
+      </div>
+    </main>
   </body>
 </html>

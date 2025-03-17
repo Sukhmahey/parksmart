@@ -1,77 +1,132 @@
-import { addBooking } from "./crud.js";
+import { addBooking, getParkingSpaceById } from "../../js/crud.js";
 
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("DOM loaded");
+// Function to get query parameters from URL
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
 
-  const parkingDateInput = document.getElementById("parkingDate");
-  const startTimeInput = document.getElementById("startTime");
-  const endTimeInput = document.getElementById("endTime");
-  const durationDisplay = document.getElementById("duration");
-  const totalPriceDisplay = document.getElementById("totalPrice");
-  const parkingDate = parkingDateInput.value;
+// Get spaceId from URL and userId from localStorage
+const spaceId = getQueryParam("spaceId");
+const userId = localStorage.getItem("userId");
 
-  const pricePerHour = 5;
+if (!spaceId || !userId) {
+  alert("Invalid access. Missing space or user ID.");
+  window.location.href = "../userPages/homepage.html";
+}
 
-  function calculateDurationAndPrice() {
-    console.log(parkingDate);
-
-    const startTime = startTimeInput.value;
-    const endTime = endTimeInput.value;
-
-    console.log(startTime, endTime);
-
-    if (parkingDate && startTime && endTime) {
-      const start = new Date(`${parkingDate}T${startTime}`);
-      const end = new Date(`${parkingDate}T${endTime}`);
-      console.log(start, end);
-
-      if (end > start) {
-        const duration = (end - start) / (1000 * 60 * 60);
-        durationDisplay.textContent = duration.toFixed(2);
-
-        const totalPrice = duration * pricePerHour;
-        totalPriceDisplay.textContent = totalPrice.toFixed(2);
-      } else {
-        durationDisplay.textContent = "0";
-        totalPriceDisplay.textContent = "0.00";
-      }
+const parkingSpace = await getParkingSpaceById(spaceId);
+async function populateCheckoutDetails() {
+  try {
+    if (!parkingSpace) {
+      alert("Parking space not found.");
+      window.location.href = "../userPages/homepage.html";
+      return;
     }
+
+    // Populate parking space details
+    document.querySelector(
+      ".image-placeholder"
+    ).style.backgroundImage = `url(${parkingSpace.image})`;
+    document.querySelector("h2").textContent = parkingSpace.title;
+    document.querySelector(".parking-info p:nth-child(2)").textContent =
+      parkingSpace.address;
+    document.querySelector(
+      ".price"
+    ).textContent = `$${parkingSpace.price_per_hour} per hour`;
+  } catch (error) {
+    console.error("Error fetching parking details:", error);
+  }
+}
+
+// Calculate duration and total price
+document.getElementById("startTime").addEventListener("input", calculatePrice);
+document.getElementById("endTime").addEventListener("input", calculatePrice);
+
+function calculatePrice() {
+  const pricePerHour = parseFloat(
+    document.querySelector(".price").textContent.replace("$", "")
+  );
+  const startTime = document.getElementById("startTime").value;
+  const endTime = document.getElementById("endTime").value;
+
+  if (!startTime || !endTime) return;
+
+  const start = new Date(`2025-01-01T${startTime}:00`);
+  const end = new Date(`2025-01-01T${endTime}:00`);
+  const duration = (end - start) / (1000 * 60 * 60); // Convert ms to hours
+
+  if (duration > 0) {
+    document.getElementById("duration").textContent = duration.toFixed(2);
+    document.getElementById("totalPrice").textContent = (
+      duration * pricePerHour
+    ).toFixed(2);
+  } else {
+    document.getElementById("duration").textContent = "0";
+    document.getElementById("totalPrice").textContent = "0.00";
+  }
+}
+
+// Handle booking submission
+document.querySelector("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const license = document.getElementById("license").value;
+  const color = document.getElementById("color").value;
+  const parkingDate = document.getElementById("parkingDate").value;
+  const startTime = document.getElementById("startTime").value;
+  const endTime = document.getElementById("endTime").value;
+  const totalPrice = document.getElementById("totalPrice").textContent;
+
+  if (
+    !license ||
+    !color ||
+    !parkingDate ||
+    !startTime ||
+    !endTime ||
+    totalPrice === "0.00"
+  ) {
+    alert("Please fill in all details correctly.");
+    return;
   }
 
-  const form = document.querySelector("form");
+  try {
+    await addBooking(
+      userId,
+      spaceId,
+      parkingDate,
+      startTime,
+      endTime,
+      parseFloat(totalPrice),
+      license,
+      color
+    );
 
-  form.addEventListener("submit", async (e) => {
-    console.log("Form submitted");
-
-    e.preventDefault();
-
-    const licensePlate = document.getElementById("license").value;
-    const color = document.getElementById("color").value;
-    const startTime = startTimeInput.value;
-    const endTime = endTimeInput.value;
-    const totalPrice = parseFloat(totalPriceDisplay.textContent);
-
-    const userId = "JCDexqzzhvRDOZXi188R";
-    const spaceId = "OHSWzPzplsw9v5k7oYWh";
-
-    try {
-      await addBooking(
-        userId,
-        spaceId,
+    localStorage.setItem(
+      "bookingData",
+      JSON.stringify({
+        parkingTitle: parkingSpace.title,
+        parkingLocation: parkingSpace.address,
+        ownerName: "John Doe", // Replace with actual owner data if available
+        ownerContact: "+1 234 567 890", // Replace with actual owner contact
         parkingDate,
         startTime,
         endTime,
+        duration: (
+          (new Date(`2025-01-01T${endTime}:00`) -
+            new Date(`2025-01-01T${startTime}:00`)) /
+          (1000 * 60 * 60)
+        ).toFixed(2),
         totalPrice,
-        licensePlate,
-        color
-      );
-      console.log("Booking added successfully!");
-    } catch (error) {
-      console.error("Error adding booking:", error);
-    }
-  });
+      })
+    );
 
-  parkingDateInput.addEventListener("change", calculateDurationAndPrice);
-  startTimeInput.addEventListener("change", calculateDurationAndPrice);
-  endTimeInput.addEventListener("change", calculateDurationAndPrice);
+    alert("Booking confirmed!");
+    window.location.href = "../userPages/booking.html";
+  } catch (error) {
+    console.error("Error booking:", error);
+    alert("Booking failed.");
+  }
 });
+
+populateCheckoutDetails();

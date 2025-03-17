@@ -1,4 +1,4 @@
-import { fetchListingData, updateListing } from '../../crud.js';
+import { fetchListingData, updateListing } from '../../js/crud.js';
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 let longitudeValue;
 let latitudeValue;
@@ -12,6 +12,72 @@ function getListingIdFromUrl() {
 }
 
 
+
+async function populateForm(listingId) {
+    if (!listingId) return;
+
+    try {
+        const data = await fetchListingData(listingId);
+        currentListingId = listingId;
+        existingImageUrl = data.image || '';
+        // Existing image handling
+        if (data.image) {
+            const preview = document.getElementById('preview');
+            preview.src = data.image;
+            preview.style.display = 'block'; // Add this line
+        }
+
+        // Basic fields
+        document.getElementById('name').value = data.title || '';
+        document.getElementById('autocomplete').value = data.address || '';
+        document.getElementById('price').value = data.price_per_hour || '';
+        document.getElementById('preview').src = existingImageUrl;
+
+        // Handle availability toggle
+        const availabilityToggle = document.getElementById('availabilityToggle');
+        availabilityToggle.checked = data.isAvailable;
+        document.getElementById('availabilityStatus').textContent = 
+            data.isAvailable ? "Available" : "Not Available";
+
+        // Generate calendar only if available
+        const availabilityContainer = document.getElementById('availabilityContainer');
+        if (data.isAvailable) {
+            generateCalendar();
+            
+            // Populate after short delay to ensure DOM exists
+            setTimeout(() => {
+                if (data.availability) {
+                    Object.entries(data.availability).forEach(([day, timeRange]) => {
+                        const [start12h, end12h] = timeRange.split(/\s*-\s*/);
+                        const start24h = convertTo24HourFormat(start12h);
+                        const end24h = convertTo24HourFormat(end12h);
+
+                        const checkbox = document.querySelector(`[data-day="${day}"]`);
+                        const startInput = document.querySelector(`[data-day="${day}-start"]`);
+                        const endInput = document.querySelector(`[data-day="${day}-end"]`);
+
+                        if (checkbox && startInput && endInput) {
+                            checkbox.checked = true;
+                            startInput.value = start24h;
+                            endInput.value = end24h;
+                        }
+                    });
+                }
+            }, 50);
+        } else {
+            availabilityContainer.innerHTML = '';
+        }
+
+    } catch (error) {
+        console.error("Error populating form:", error);
+    }
+}
+
+
+
+
+
+
 async function handleFormSubmission(e) {
     e.preventDefault();
     
@@ -22,64 +88,101 @@ async function handleFormSubmission(e) {
     submitBtn.textContent = 'Saving...';
 
     try {
+        const isAvailable = document.getElementById('availabilityToggle').checked;
+        let availability;
+
+        
+        if (isAvailable) {
+            availability = getAvailabilityData();
+            if (!availability) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Update Listing';
+                return;
+            }
+        } else {
+            availability = null; 
+        }
+
         const imageUrl = await handleImageUpload();
-        const availability = getAvailabilityData();
-        const features = Array.from(document.querySelectorAll('input[name="features"]:checked'))
-                        .map(cb => cb.value);
 
         let formData;
 
-        if(AddressChanged)
-        {
+        if (AddressChanged) {
             formData = {
                 title: document.getElementById('name')?.value.trim() || '',
                 address: document.getElementById('autocomplete')?.value.trim() || '',
                 price_per_hour: parseFloat(document.getElementById('price')?.value.trim() || ''),
-                availability: validateAvailability(availability),
+                isAvailable: isAvailable,
+                availability: availability,
                 image: imageUrl || existingImageUrl,
-                longitude : latitudeValue,
-                latitude : longitudeValue,
-                features: features
-                
+                longitude: longitudeValue,
+                latitude: latitudeValue
             };
-        }
-        else
-        {
+        } else {
             formData = {
                 title: document.getElementById('name')?.value.trim() || '',
                 address: document.getElementById('autocomplete')?.value.trim() || '',
                 price_per_hour: parseFloat(document.getElementById('price')?.value.trim() || ''),
-                availability: validateAvailability(availability),
-                image: imageUrl || existingImageUrl,
-                features: features
-                
+                isAvailable: isAvailable,
+                availability: availability,
+                image: imageUrl || existingImageUrl
             };
         }
 
-        
-        
         await updateListing(currentListingId, formData);
-      
         alert('Listing updated successfully!');
     } catch (error) {
         console.error('Error updating listing:', error);
+        alert(`Error: ${error.message}`);
     } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Update Listing';
     }
 }
 
+
+function convertTo12HourFormat(time24) {
+    let [hours, minutes] = time24.split(':');
+    hours = parseInt(hours);
+
+    const period = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12; // Convert 0 to 12 for AM
+
+    return `${hours}:${minutes} ${period}`;
+}
+
+
+
 function getAvailabilityData() {
+    const errorElement = document.getElementById('availabilityError');
+    errorElement.style.display = 'none';
+    let isValid = true;
     const availability = {};
+
     document.querySelectorAll('.day-checkbox input[type="checkbox"]').forEach(checkbox => {
+        const day = checkbox.dataset.day;
+        const startInput = document.querySelector(`[data-day="${day}-start"]`);
+        const endInput = document.querySelector(`[data-day="${day}-end"]`);
+
         if (checkbox.checked) {
-            const day = checkbox.dataset.day;
-            const start = document.querySelector(`[data-day="${day}-start"]`)?.value || '';
-            const end = document.querySelector(`[data-day="${day}-end"]`)?.value || '';
-            availability[day] = `${start} - ${end}`;
+            const startTime = startInput.value;
+            const endTime = endInput.value;
+
+            if (!startTime || !endTime) {
+                errorElement.textContent = `Please set both start and end times for ${day}.`;
+                errorElement.style.display = 'block';
+                isValid = false;
+            } else if (startTime >= endTime) {
+                errorElement.textContent = `End time must be after start time on ${day}.`;
+                errorElement.style.display = 'block';
+                isValid = false;
+            } else {
+                availability[day] = `${convertTo12HourFormat(startTime)} - ${convertTo12HourFormat(endTime)}`;
+            }
         }
     });
-    return availability;
+
+    return isValid ? availability : false;
 }
 
 function validateForm() {
@@ -91,6 +194,10 @@ function validateForm() {
     
     if (requiredFields.some(field => !field)) {
         alert('Please fill all required fields');
+        return false;
+    }
+    const isAvailable = document.getElementById('availabilityToggle').checked;
+    if (isAvailable && !getAvailabilityData()) {
         return false;
     }
     
@@ -165,18 +272,109 @@ let existingImageUrl = '';
 let currentListingId = getListingIdFromUrl();
 console.log(currentListingId);
 
-async function handleImageUpload() {
-    const fileInput = document.getElementById('fileInput');
-    if (!fileInput?.files[0]) return existingImageUrl;
+let mediaStream = null;
 
+async function handleCameraCapture() {
     try {
-        const imageUrl = await uploadToStorage(fileInput.files[0]);
-        return imageUrl;
+        // Clear previous preview
+        const preview = document.getElementById('preview');
+        preview.style.display = 'none';
+
+        // Stop existing stream
+        if (mediaStream) {
+            mediaStream.getTracks().forEach(track => track.stop());
+        }
+
+        // Create camera controls
+        const controls = document.createElement('div');
+        controls.className = 'camera-controls';
+        controls.innerHTML = `
+            <button type="button" id="captureBtn">Capture</button>
+            <button type="button" id="stopBtn">Stop Camera</button>
+        `;
+        document.querySelector('.media-buttons').appendChild(controls);
+
+        // Get camera access
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment' }
+        });
+
+        // Show video feed
+        const video = document.getElementById('cameraFeed');
+        video.style.display = 'block';
+        video.srcObject = mediaStream;
+        
+        // Play video feed
+        try {
+            await video.play();
+        } catch (err) {
+            console.log('Video play error:', err);
+        }
+
+        // Capture handler
+        document.getElementById('captureBtn').onclick = () => {
+            const canvas = document.getElementById('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            preview.src = canvas.toDataURL('image/jpeg');
+            preview.style.display = 'block';
+            video.style.display = 'none';
+        };
+
+        // Stop handler
+        document.getElementById('stopBtn').onclick = () => {
+            mediaStream.getTracks().forEach(track => track.stop());
+            video.style.display = 'none';
+            controls.remove();
+            mediaStream = null;
+        };
+
     } catch (error) {
-        console.error("Image upload failed:", error);
-        return existingImageUrl;
+        console.error('Camera error:', error);
+        alert(`Camera error: ${error.message}`);
+        if (mediaStream) mediaStream.getTracks().forEach(track => track.stop());
     }
 }
+document.getElementById('cameraButton')?.addEventListener('click', handleCameraCapture);
+
+
+
+
+document.getElementById('fileInput').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('preview').src = e.target.result; 
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+async function handleImageUpload() {
+    // If new image was captured (from camera or file)
+    if (document.getElementById('preview').src.startsWith('data:image')) {
+        return document.getElementById('preview').src;
+    }
+    
+    // If file input was used
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput.files.length > 0) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                resolve(e.target.result);
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        });
+    }
+
+    
+    return existingImageUrl;
+}
+
 
 
 
@@ -192,105 +390,67 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
         console.error("No listing ID found in URL.");
     }
+
+    
+document.getElementById("availabilityToggle").addEventListener("change", function() {
+    const container = document.getElementById('availabilityContainer');
+    if (this.checked) {
+        generateCalendar();
+       
+    } else {
+        container.innerHTML = '';
+    }
+});
 });
 
-
-
-
-
-
-
-
 function convertTo24HourFormat(time12) {
-    const [time, modifier] = time12.split(/(AM|PM)/);
-    const [hours, minutes] = time.split(':');
     
-    let parsedHours = parseInt(hours);
-    if (modifier === 'PM' && parsedHours < 12) parsedHours += 12;
-    if (modifier === 'AM' && parsedHours === 12) parsedHours = 0;
+    if (!time12) return '';
     
-    return `${String(parsedHours).padStart(2, '0')}:${minutes}`;
+    const cleaned = time12.trim().replace(/\s+/g, '');
+    const match = cleaned.match(/(\d+):(\d+)(AM|PM)/i);
+    if (!match) return '';
+    
+    let [_, hours, minutes, period] = match;
+    hours = parseInt(hours);
+    minutes = minutes.padStart(2, '0');
+
+   
+    if (period.toUpperCase() === 'PM' && hours < 12) hours += 12;
+    if (period.toUpperCase() === 'AM' && hours === 12) hours = 0;
+
+    return `${String(hours).padStart(2, '0')}:${minutes}`;
 }
+
+
+
+
+
 
 
 function generateCalendar() {
     const container = document.getElementById('availabilityContainer');
-    container.innerHTML = ''; 
+    container.innerHTML = '';
 
     daysOfWeek.forEach(day => {
         const div = document.createElement('div');
         div.className = 'day-row';
         div.innerHTML = `
-            <label class="day-checkbox">
-                <input type="checkbox" class="day-checkbox" data-day="${day}">
-                ${day.charAt(0).toUpperCase() + day.slice(1)}
-            </label>
-            <div class="time-inputs">
-                <input type="time" data-day="${day}-start">
-                <span>to</span>
-                <input type="time" data-day="${day}-end">
-            </div>
-        `;
+    <label class="day-checkbox">
+        <input type="checkbox" class="day-checkbox" data-day="${day}">
+        ${day.charAt(0).toUpperCase() + day.slice(1)}
+    </label>
+    <div class="time-inputs">
+        <input type="time" data-day="${day}-start" min="00:00" max="23:59">
+        <span>to</span>
+        <input type="time" data-day="${day}-end" min="00:00" max="23:59">
+    </div>
+`;
+
         container.appendChild(div);
     });
 }
 
 
-async function populateForm(listingId) {
-    if (!listingId) return;
-
-    try {
-        const data = await fetchListingData(listingId);
-        currentListingId = listingId;
-        existingImageUrl = data.image || '';
-
-        // Basic fields
-        document.getElementById('name').value = data.title || '';
-        document.getElementById('autocomplete').value = data.address || '';
-        document.getElementById('price').value = data.price_per_hour || '';
-        document.getElementById('preview').src = existingImageUrl;
-
-        // Handle availability toggle
-        const availabilityToggle = document.getElementById('availabilityToggle');
-        availabilityToggle.checked = data.isAvailable;
-        document.getElementById('availabilityStatus').textContent = 
-            data.isAvailable ? "Available" : "Not Available";
-
-        
-        if (data.isAvailable) {
-            generateCalendar(); 
-
-           
-            setTimeout(() => {
-                if (data.availability) {
-                    Object.entries(data.availability).forEach(([day, timeRange]) => {
-                        const [start12h, end12h] = timeRange.split(' - ');
-                        const start24h = convertTo24HourFormat(start12h);
-                        const end24h = convertTo24HourFormat(end12h);
-
-                        const checkbox = document.querySelector(`[data-day="${day}"]`);
-                        const startInput = document.querySelector(`[data-day="${day}-start"]`);
-                        const endInput = document.querySelector(`[data-day="${day}-end"]`);
-
-                        if (checkbox && startInput && endInput) {
-                            checkbox.checked = true;
-                            startInput.value = start24h;
-                            endInput.value = end24h;
-                        }
-                    });
-                }
-            }, 50);
-        }
-
-        if (data.features) {
-            document.querySelectorAll('input[name="features"]').forEach(checkbox => {
-                checkbox.checked = data.features.includes(checkbox.value);
-            });
-        }
-
-    } catch (error) {
-        console.error("Error populating form:", error);
-    }
-}
 document.querySelector('.update-btn').addEventListener('click', handleFormSubmission);
 

@@ -1,11 +1,13 @@
 
 
-import { addParkingSpace } from "../../crud.js";
+import { addParkingSpace } from "../../js/crud.js";
 const video = document.getElementById("cameraFeed");
 const canvas = document.getElementById("canvas");
 const preview = document.getElementById("preview");
 let longitudeValue;
 let latitudeValue;
+let ownerId = localStorage.getItem("userId");
+console.log(ownerId)
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
@@ -163,9 +165,11 @@ document.addEventListener("DOMContentLoaded", () => {
 const handleImage = async () => {
     const preview = document.getElementById('preview');
     if (!preview.src.startsWith('data:image')) return null;
-    
+
     return preview.src;
 };
+
+
 
 async function handleCameraCapture() {
     let stream;
@@ -222,21 +226,21 @@ const handleFormSubmission = async (e) => {
     if (!availability) return;
 
     // Collect features
-    const features = Array.from(document.querySelectorAll('input[name="features"]:checked'))
-                        .map(cb => cb.value);
+    // const features = Array.from(document.querySelectorAll('input[name="features"]:checked'))
+    //                     .map(cb => cb.value);
 
     
     const formData = {
         name: document.getElementById('name').value.trim(),
         location: document.getElementById('autocomplete').value.trim(),
         price: document.getElementById('price').value.trim(),
-        // image: await handleImage(),
-        image: "https://loremflickr.com/640/480",
+        image: await handleImage(),
+        // image: "https://loremflickr.com/640/480",
         longitude: longitudeValue,
         latitude: latitudeValue,
         isAvailable: availableNow,
         availability: availability,
-        features: features
+        // features: features
     };
 
     // Validation 
@@ -249,7 +253,7 @@ const handleFormSubmission = async (e) => {
 
     try {
        
-        const ownerId = 4;
+        
         // addParkingSpace function from crud.
         await addParkingSpace(
             ownerId,
@@ -261,7 +265,7 @@ const handleFormSubmission = async (e) => {
             formData.latitude,
             formData.isAvailable,
             formData.availability,
-            formData.features
+            // formData.features
 
         );
 

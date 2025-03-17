@@ -5,25 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking Detail</title>
-    <script defer src="booking.js"></script>
+    <link rel="stylesheet" href="../../index.css">
 </head>
 
 <body>
-    <h1>Booking Detail</h1>
-    <p>Your booking has been confirmed!</p>
+    <div class="container">
+        <h1>Booking Confirmed! 🎉</h1>
 
-    <div id="booking-info">
-        <img id="parking-image" alt="Parking spot image">
-        <p><strong>Parking Spot:</strong> <span id="spot-name"></span></p>
-        <p><strong>Location:</strong> <span id="spot-location"></span></p>
-        <p><strong>Owner:</strong> <span id="owner-name"></span></p>
-        <p><strong>Contact:</strong> <span id="owner-contact"></span></p>
-        <p><strong>Parking Date:</strong> <span id="parking-date"></span></p>
-        <p><strong>Parking Time:</strong> <span id="parking-time"></span></p>
-        <p><strong>Duration:</strong> <span id="parking-duration"></span> hours</p>
-        <p><strong>Total Price:</strong> $<span id="total-price"></span></p>
+        <p>Your booking has been successfully placed.</p>
 
+        <div class="booking-info">
+            <h2 id="parkingTitle">Parking spot name</h2>
+            <p id="parkingLocation">Parking spot location</p>
+            <p><strong>Owned by:</strong> <span id="ownerName">Owner Name</span></p>
+            <p><strong>Owner Contact:</strong> <span id="ownerContact">Contact</span></p>
+        </div>
+
+        <div class="booking-details">
+            <p><strong>Parking Date:</strong> <span id="parkingDate">06/20/2025</span></p>
+            <p><strong>Parking Time:</strong> <span id="parkingTime">2:30pm - 4:30pm</span></p>
+            <p><strong>Parking Duration:</strong> <span id="parkingDuration">2 hours</span></p>
+            <p><strong>Total:</strong> $<span id="totalPrice">0.00</span></p>
+        </div>
+
+        <button id="backToHome">Back to Home</button>
+
+        <footer>
+            <p>Contact Us: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
+            <p>© 2025 ParkSmart. All rights reserved.</p>
+        </footer>
     </div>
+
     <script type="module" src="../../js/booking.js"></script>
 </body>
 
