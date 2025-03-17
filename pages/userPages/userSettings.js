@@ -21,7 +21,6 @@ async function fetchUserData() {
             document.getElementById("lastName").value = userData.lastName || "";
             document.getElementById("email").value = userData.email || "";
             document.getElementById("phone").value = userData.phoneNumber || ""; // Ensure correct field name
-            document.getElementById("password").value; // Mask password for security
             document.getElementById("license").value = userData.license || "";
             document.getElementById("color").value = userData.color || "";
             document.getElementById("country").value = userData.country || "";

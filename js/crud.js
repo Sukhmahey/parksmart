@@ -9,7 +9,7 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
-async function addUser(userId, firstName, lastName, email, phoneNumber, password, role) {
+async function addUser(userId, firstName, lastName, email, phoneNumber, password) {
   const userRef = doc(db, "users", userId);  // Use userId (UID) as the document ID
   await setDoc(userRef, {
     user_id: userRef.id,
@@ -18,7 +18,6 @@ async function addUser(userId, firstName, lastName, email, phoneNumber, password
     email,
     phoneNumber,
     password,  
-    role,
     createdAt: new Date(),
     account_id: userId,
   });
