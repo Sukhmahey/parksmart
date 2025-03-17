@@ -14,8 +14,15 @@ if (signUpForm) {
 
     try {
       // Sign up the user
+<<<<<<< Updated upstream
       const user = await signUp(name, email, password, role);
       await addUser(name, email, role);
+=======
+      const user = await signUp(email, password);
+      localStorage.setItem("userId", user.uid);
+      // Add user information to Firestore
+      await addUser(user.uid, firstName, lastName, email, phoneNumber, password, role);
+>>>>>>> Stashed changes
 
       // After successful sign up, log the user in
       await signIn(email, password);

@@ -13,9 +13,19 @@ async function addUser(name, email, role) {
   const userRef = doc(collection(db, "users"));
   await setDoc(userRef, {
     user_id: userRef.id,
+<<<<<<< Updated upstream
     name,
+=======
+    firstName,
+    lastName,
+>>>>>>> Stashed changes
     email,
     role,
+<<<<<<< Updated upstream
+=======
+    createdAt: new Date(),
+    account_id: userId,
+>>>>>>> Stashed changes
   });
   console.log("User added:", userRef.id);
   return userRef.id;
