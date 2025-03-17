@@ -8,19 +8,27 @@ import { doc, setDoc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-
 import { db } from "./firebase.js";  // Make sure to import the db reference
 
 // Signup function
-async function signUp(name, email, password, role) {
+async function signUp(email, password) {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     console.log("User Created:", user);
 
     // Save the user information to Firestore
+    // await setDoc(doc(db, "users", user.uid), {
+    //   name: name,
+    //   email: email,
+    //   role: role,
+    //   createdAt: new Date(),
+    // });
+
     await setDoc(doc(db, "users", user.uid), {
       name: name,
       email: email,
       role: role,
       createdAt: new Date(),
     });
+
 
     console.log("User data saved to Firestore");
 
