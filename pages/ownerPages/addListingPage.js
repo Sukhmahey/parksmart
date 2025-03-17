@@ -1,5 +1,4 @@
 
-
 import { addParkingSpace,getUserById } from "../../js/crud.js";
 
 const video = document.getElementById("cameraFeed");
@@ -8,14 +7,9 @@ const preview = document.getElementById("preview");
 let longitudeValue;
 let latitudeValue;
 let ownerId = localStorage.getItem("userId");
-// console.log(ownerId)
+let username = localStorage.getItem("username");
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-
-
-const userData = await getUserById(ownerId);
-const userNm = userData.firstName;
-
 
 
 function convertTo12HourFormat(time24) {
@@ -265,6 +259,7 @@ const handleFormSubmission = async (e) => {
         await addParkingSpace(
             ownerId,
             formData.name,
+            username,
             formData.location,
             parseFloat(formData.price),
             formData.image || "https://loremflickr.com/640/480",

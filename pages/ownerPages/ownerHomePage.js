@@ -12,6 +12,8 @@ const userNm = await getUserById(currentUser);
 const username = document.getElementById('username');
 username.textContent = userNm.firstName;
 
+// storing user name in local storage
+localStorage.setItem("username", userNm.firstName);
 
 
 async function populateListings() {
