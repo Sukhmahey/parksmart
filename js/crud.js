@@ -219,6 +219,33 @@ async function updateUser(user_id, newData) {
   console.log("User updated:", user_id);
 }
 
+// Get user by id
+async function getUserById(user_id) {
+  try {
+    console.log("Fetching user with ID:", user_id); // Debugging log
+
+    if (!db) {
+      throw new Error("Firestore DB is not initialized!");
+    }
+
+    const userRef = doc(db, "users", user_id);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      console.log("User found:", userSnap.data());
+      return userSnap.data();
+    } else {
+      console.error("No such user with ID:", user_id);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error in getUserById:", error);
+  }
+}
+
+
+
+
 // DELETE: Remove Data
 async function deleteUser(user_id) {
   const userRef = doc(db, "users", user_id);
@@ -244,6 +271,13 @@ async function getBooking(booking_id) {
   }
 }
 
+async function getUsersR() {
+  const snapshot = await getDocs(collection(db, "users"));
+  snapshot.forEach((doc) => {
+    console.log("User ID:", doc.id, "=>", doc.data());
+  });
+}
+
 
 
 // Export functions for use
@@ -261,5 +295,7 @@ export {
   fetchListingData,
   updateListing,
   deleteParkingSpace,
+  getUserById,
+  getUsersR
 
 };
