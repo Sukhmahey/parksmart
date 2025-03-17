@@ -130,10 +130,11 @@ async function handleFormSubmission(e) {
         }
 
         await updateListing(currentListingId, formData);
-        alert('Listing updated successfully!');
+        showModal('Listing updated successfully!');
     } catch (error) {
         console.error('Error updating listing:', error);
-        alert(`Error: ${error.message}`);
+        showModal(`Error updating listing`,true);
+       
     } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Update Listing';
@@ -193,7 +194,8 @@ function validateForm() {
     ];
     
     if (requiredFields.some(field => !field)) {
-        alert('Please fill all required fields');
+        showModal('Please fill all required fields',true);
+
         return false;
     }
     const isAvailable = document.getElementById('availabilityToggle').checked;
@@ -333,7 +335,7 @@ async function handleCameraCapture() {
 
     } catch (error) {
         console.error('Camera error:', error);
-        alert(`Camera error: ${error.message}`);
+        showModal('Camera error',true);
         if (mediaStream) mediaStream.getTracks().forEach(track => track.stop());
     }
 }
@@ -454,3 +456,70 @@ function generateCalendar() {
 
 document.querySelector('.update-btn').addEventListener('click', handleFormSubmission);
 
+
+function showModal(message, isError = false) {
+    let modal = document.getElementById("messageModal");
+    let overlay = document.querySelector('.modal-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        document.body.appendChild(overlay);
+    }
+    
+    
+    if (!modal) {
+        modal = document.createElement("div");
+        modal.id = "messageModal";
+        modal.className = "modal";
+        modal.innerHTML = `
+            <div class="modal-content">
+                <p id="modalText"></p>
+                <button id="modalButton"></button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    const modalText = modal.querySelector("#modalText");
+    const modalButton = modal.querySelector("#modalButton");
+
+    modalText.textContent = message;
+    modal.classList.add("show");
+    overlay.classList.add("show");
+
+    if (isError) {
+        modal.classList.add("error");
+        modalButton.textContent = "Close";
+        modalButton.onclick = () => {
+            overlay.classList.remove("show");
+            modal.classList.remove("show")};
+    } else {
+        modal.classList.remove("error");
+        modalButton.textContent = "Go to Homepage";
+        modalButton.onclick = () => {
+            overlay.classList.remove("show");
+            window.location.href = "ownerHomePage.html"};
+    }
+}
+
+
+const modalStyle = document.createElement("style");
+modalStyle.innerHTML = `
+    .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+    }
+    .modal.show { display: block; }
+    .modal-content { text-align: center; }
+    .modal.error { background: #f8d7da; }
+    #modalButton { margin-top: 10px; padding: 8px 16px; cursor: pointer; }
+`;
+document.head.appendChild(modalStyle);
