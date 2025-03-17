@@ -222,7 +222,6 @@ async function updateUser(user_id, newData) {
 // Get user by id
 async function getUserById(user_id) {
   try {
-    console.log("Fetching user with ID:", user_id); // Debugging log
 
     if (!db) {
       throw new Error("Firestore DB is not initialized!");
@@ -232,10 +231,10 @@ async function getUserById(user_id) {
     const userSnap = await getDoc(userRef);
 
     if (userSnap.exists()) {
-      console.log("User found:", userSnap.data());
+      // console.log("User found:", userSnap.data());
       return userSnap.data();
     } else {
-      console.error("No such user with ID:", user_id);
+      // console.error("No such user with ID:", user_id);
       return null;
     }
   } catch (error) {
@@ -296,6 +295,5 @@ export {
   updateListing,
   deleteParkingSpace,
   getUserById,
-  getUsersR
 
 };
