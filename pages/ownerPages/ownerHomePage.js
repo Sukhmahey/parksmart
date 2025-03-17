@@ -76,11 +76,10 @@ async function populateListings() {
       listing.appendChild(deleteOne);
 
       deleteOne.addEventListener("click", () => {
-        console.log("delete button clicked for:", space.space_id);
-        deleteParkingSpace(space.space_id);
-
-        populateListings();
-
+        showDeleteModal(() => {
+          deleteParkingSpace(space.space_id);
+          populateListings();
+        }, "Are you sure you want to delete this listing?");
       });
       }
 
@@ -100,21 +99,81 @@ async function populateListings() {
 
 // Function to delete all parking spaces
 async function deleteAllParkingSpaces() {
-  try {
-    const parkingSpaces = await getParkingSpaces();
-    for (const space of parkingSpaces) {
-      if (space.owner_id == currentUser) {
-        await deleteParkingSpace(space.space_id);
+  showDeleteModal(async () => {
+    try {
+      const parkingSpaces = await getParkingSpaces();
+      for (const space of parkingSpaces) {
+        if (space.owner_id == currentUser) {
+          await deleteParkingSpace(space.space_id);
+        }
       }
+      populateListings();
+    } catch (error) {
+      console.error("Error deleting all parking spaces:", error);
     }
-    populateListings();
-  } catch (error) {
-    console.error("Error deleting all parking spaces:", error);
-  }
+  }, "Are you sure you want to delete all listings?");
 }
 
-
 document.querySelector('.removeAll').addEventListener('click', deleteAllParkingSpaces);
+
+
+
+function showDeleteModal(confirmCallback, message) {
+  let modal = document.getElementById("deleteModal");
+  let overlay = document.getElementById("modalOverlay");
+
+  // Create modal if not exists
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "deleteModal";
+    modal.classList.add("modal");
+    modal.innerHTML = `
+      <div class="modal-content">
+        <p id="modalMessage"></p>
+        <button id="confirmDelete">Yes</button>
+        <button id="cancelDelete">No</button>
+      </div>`;
+    document.body.appendChild(modal);
+  }
+
+  // Create overlay if not exists
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "modalOverlay";
+    overlay.classList.add("modal-overlay");
+    document.body.appendChild(overlay);
+  }
+
+  document.getElementById("modalMessage").textContent = message;
+
+  // Show modal and overlay
+  modal.classList.add("show");
+  overlay.classList.add("show");
+
+  // Ensure previous event listeners are removed before adding new ones
+  const confirmBtn = document.getElementById("confirmDelete");
+  const cancelBtn = document.getElementById("cancelDelete");
+
+  confirmBtn.replaceWith(confirmBtn.cloneNode(true)); // Remove old event listener
+  cancelBtn.replaceWith(cancelBtn.cloneNode(true)); // Remove old event listener
+
+  // Add event listeners to new elements
+  document.getElementById("confirmDelete").addEventListener("click", () => {
+    confirmCallback();
+    closeModal();
+  });
+
+  document.getElementById("cancelDelete").addEventListener("click", closeModal);
+
+  // Allow clicking outside the modal to close it
+  overlay.onclick = closeModal;
+}
+
+// Function to close the modal
+function closeModal() {
+  document.getElementById("deleteModal")?.classList.remove("show");
+  document.getElementById("modalOverlay")?.classList.remove("show");
+}
 
 
 
