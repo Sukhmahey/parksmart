@@ -46,10 +46,21 @@ header h1 {
     color: #2d3748;
 }
 
-.buttons {
+.buttons{
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
+}
+
+header a{
+    padding: 10px 20px;
+    background-color: #4a90e2;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+}
+a{
+    text-decoration: none; 
 }
 
 .buttons button {
