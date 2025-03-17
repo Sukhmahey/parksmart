@@ -1,6 +1,6 @@
 
 
-import { addParkingSpace } from "../../js/crud.js";
+import { addParkingSpace,getUserById } from "../../js/crud.js";
 
 const video = document.getElementById("cameraFeed");
 const canvas = document.getElementById("canvas");
@@ -8,9 +8,13 @@ const preview = document.getElementById("preview");
 let longitudeValue;
 let latitudeValue;
 let ownerId = localStorage.getItem("userId");
-console.log(ownerId)
+// console.log(ownerId)
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+
+const userData = await getUserById(ownerId);
+const userNm = userData.firstName;
 
 
 
@@ -121,6 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&apiKey=${apiKey}`);
             const data = await response.json();
             displaySuggestions(data);
+
         } catch (error) {
             console.error("Error fetching autocomplete results:", error);
         }
@@ -128,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function displaySuggestions(data) {
         suggestionsList.innerHTML = ""; // Clear old suggestions
+        console.log("Autocomplete data:", data);
 
         if (data.features && data.features.length > 0) {
             suggestionsList.style.display = "block"; // Show suggestions

@@ -270,7 +270,7 @@ function initializeGeoapify() {
 
 let existingImageUrl = '';
 let currentListingId = getListingIdFromUrl();
-console.log(currentListingId);
+// console.log(currentListingId);
 
 let mediaStream = null;
 
