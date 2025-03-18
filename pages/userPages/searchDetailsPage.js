@@ -4,6 +4,7 @@ let images = ["parking1.jpg", "parking2.jpg", "parking3.jpg"];
 let currentIndex = 0;
 
 let spaceId = null;
+let queryDate = "";
 let spaceData = {};
 
 function nextImage() {
@@ -12,14 +13,7 @@ function nextImage() {
 }
 
 function bookNow() {
-  window.location.href = `/pages/userPages/checkOutPage.html?spaceId=${spaceId}`;
-}
-
-function resetForm() {
-  document.getElementById("start-time").value = "";
-  document.getElementById("end-time").value = "";
-  document.getElementById("duration").innerText = "0";
-  document.getElementById("total-price").innerText = "$0";
+  window.location.href = `/pages/userPages/checkOutPage.html?spaceId=${spaceId}&dateTime=${queryDate}`;
 }
 
 const renderData = (spaceData) => {
@@ -173,6 +167,7 @@ const getSpaceData = async (spaceIdRef) => {
 
 window.onload = function () {
   spaceId = getParam("spaceId");
+  queryDate = getParam("dateTime");
   console.log("spaceId: " + spaceId);
 
   getSpaceData(spaceId);
