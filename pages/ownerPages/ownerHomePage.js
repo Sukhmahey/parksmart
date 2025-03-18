@@ -118,11 +118,12 @@ document.querySelector('.removeAll').addEventListener('click', deleteAllParkingS
 
 
 
-function showDeleteModal(confirmCallback, message) {
+let deleteAction = null; // Stores the function to execute on confirmation
+
+function showDeleteModal(action, message) {
   let modal = document.getElementById("deleteModal");
   let overlay = document.getElementById("modalOverlay");
 
-  // Create modal if not exists
   if (!modal) {
     modal = document.createElement("div");
     modal.id = "deleteModal";
@@ -136,7 +137,6 @@ function showDeleteModal(confirmCallback, message) {
     document.body.appendChild(modal);
   }
 
-  // Create overlay if not exists
   if (!overlay) {
     overlay = document.createElement("div");
     overlay.id = "modalOverlay";
@@ -145,35 +145,34 @@ function showDeleteModal(confirmCallback, message) {
   }
 
   document.getElementById("modalMessage").textContent = message;
+  
+  deleteAction = action; // Store the function to call when confirmed
 
-  // Show modal and overlay
   modal.classList.add("show");
   overlay.classList.add("show");
-
-  // Ensure previous event listeners are removed before adding new ones
-  const confirmBtn = document.getElementById("confirmDelete");
-  const cancelBtn = document.getElementById("cancelDelete");
-
-  confirmBtn.replaceWith(confirmBtn.cloneNode(true)); // Remove old event listener
-  cancelBtn.replaceWith(cancelBtn.cloneNode(true)); // Remove old event listener
-
-  // Add event listeners to new elements
-  document.getElementById("confirmDelete").addEventListener("click", () => {
-    confirmCallback();
-    closeModal();
-  });
-
-  document.getElementById("cancelDelete").addEventListener("click", closeModal);
-
-  // Allow clicking outside the modal to close it
-  overlay.onclick = closeModal;
 }
 
-// Function to close the modal
+// Set a single event listener for the "Yes" button
+document.body.addEventListener("click", (event) => {
+  if (event.target.id === "confirmDelete" && deleteAction) {
+    deleteAction(); // Execute the stored function
+    closeModal();
+  }
+});
+
+// Set a single event listener for the "No" button
+document.body.addEventListener("click", (event) => {
+  if (event.target.id === "cancelDelete") {
+    closeModal();
+  }
+});
+
+// Close modal function
 function closeModal() {
   document.getElementById("deleteModal")?.classList.remove("show");
   document.getElementById("modalOverlay")?.classList.remove("show");
 }
+
 
 
 
