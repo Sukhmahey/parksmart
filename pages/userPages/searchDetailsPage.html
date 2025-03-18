@@ -5,29 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Parking Spot Detail</title>
     <link rel="stylesheet" href="./styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
     <script defer type="module" src="./searchDetailsPage.js"></script>
   </head>
-  <body>
-    <!-- <header>
-      <div class="logo">ParkSmart</div>
-      <button class="switch-owner">Switch to Owner</button>
-      <div class="profile-icon">&#9679;</div>
-    </header> -->
-
-    <main>
-      <a href="#" onclick="goBack()" class="back-button"
-        >&larr; Parking Spot Detail</a
-      >
-      <div id="imageSlider" class="image-slider">
-        <button class="next" onclick="nextImage()">&rarr;</button>
+  <body id="searchDetailsPage">
+    <header>
+      <div class="logoContainer" id="logo">
+        <img src="Assets/ParkSmartLogo.png" alt="ParkSmart Logo" />
       </div>
 
-      <section id="parkingDetails" class="parking-details"></section>
-    </main>
+      <a href="userSettings.html"
+        ><img class="profileIcon" src="Assets/avatar.png" alt="Profile Icon"
+      /></a>
+    </header>
 
-    <!-- <footer>
-      <p>Contact Us: parksmart@gmail.com</p>
-      <div class="social-icons">Facebook | Instagram | Twitter</div>
-    </footer> -->
+    <main>
+      <a href="#" id="back-btn" onclick="goBack()" class="back-button"
+        >Go Back</a
+      >
+      <div class="outerContainer">
+        <div id="imageSlider" class="image-slider"></div>
+
+        <section id="parkingDetails" class="parking-details"></section>
+      </div>
+    </main>
+    <footer>
+      <h3>Contact Us</h3>
+      <p>Email: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
+      <div class="socialMediaContainer">
+        <img
+          src="Assets/vecteezy_facebook-logo-png-facebook-icon-transparent-png_18930698.png"
+          alt=""
+        />
+        <img
+          src="Assets/vecteezy_instagram-logo-png-instagram-icon-transparent_18930415.png"
+          alt=""
+        />
+        <img
+          src="Assets/vecteezy_twitter-new-logo-twitter-icons-new-twitter-logo-x-2023-x_31737215.png"
+          alt=""
+        />
+      </div>
+      <p>&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
+    </footer>
   </body>
 </html>
