@@ -76,11 +76,10 @@ async function populateListings() {
       listing.appendChild(deleteOne);
 
       deleteOne.addEventListener("click", () => {
-        console.log("delete button clicked for:", space.space_id);
-        deleteParkingSpace(space.space_id);
-
-        populateListings();
-
+        showDeleteModal(() => {
+          deleteParkingSpace(space.space_id);
+          populateListings();
+        }, "Are you sure you want to delete this listing?");
       });
       }
 
@@ -100,21 +99,80 @@ async function populateListings() {
 
 // Function to delete all parking spaces
 async function deleteAllParkingSpaces() {
-  try {
-    const parkingSpaces = await getParkingSpaces();
-    for (const space of parkingSpaces) {
-      if (space.owner_id == currentUser) {
-        await deleteParkingSpace(space.space_id);
+  showDeleteModal(async () => {
+    try {
+      const parkingSpaces = await getParkingSpaces();
+      for (const space of parkingSpaces) {
+        if (space.owner_id == currentUser) {
+          await deleteParkingSpace(space.space_id);
+        }
       }
+      populateListings();
+    } catch (error) {
+      console.error("Error deleting all parking spaces:", error);
     }
-    populateListings();
-  } catch (error) {
-    console.error("Error deleting all parking spaces:", error);
-  }
+  }, "Are you sure you want to delete all listings?");
 }
 
-
 document.querySelector('.removeAll').addEventListener('click', deleteAllParkingSpaces);
+
+
+
+let deleteAction = null; // Stores the function to execute on confirmation
+
+function showDeleteModal(action, message) {
+  let modal = document.getElementById("deleteModal");
+  let overlay = document.getElementById("modalOverlay");
+
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "deleteModal";
+    modal.classList.add("modal");
+    modal.innerHTML = `
+      <div class="modal-content">
+        <p id="modalMessage"></p>
+        <button id="confirmDelete">Yes</button>
+        <button id="cancelDelete">No</button>
+      </div>`;
+    document.body.appendChild(modal);
+  }
+
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "modalOverlay";
+    overlay.classList.add("modal-overlay");
+    document.body.appendChild(overlay);
+  }
+
+  document.getElementById("modalMessage").textContent = message;
+  
+  deleteAction = action; // Store the function to call when confirmed
+
+  modal.classList.add("show");
+  overlay.classList.add("show");
+}
+
+// Set a single event listener for the "Yes" button
+document.body.addEventListener("click", (event) => {
+  if (event.target.id === "confirmDelete" && deleteAction) {
+    deleteAction(); // Execute the stored function
+    closeModal();
+  }
+});
+
+// Set a single event listener for the "No" button
+document.body.addEventListener("click", (event) => {
+  if (event.target.id === "cancelDelete") {
+    closeModal();
+  }
+});
+
+// Close modal function
+function closeModal() {
+  document.getElementById("deleteModal")?.classList.remove("show");
+  document.getElementById("modalOverlay")?.classList.remove("show");
+}
+
 
 
 

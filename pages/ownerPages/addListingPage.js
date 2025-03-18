@@ -212,7 +212,7 @@ async function handleCameraCapture() {
         });
 
     } catch (error) {
-        alert(`Camera error: ${error.message}`);
+        return showModal(`Camera error: ${error.message}`, true);
         if (stream) stream.getTracks().forEach(track => track.stop());
     }
 }
@@ -226,9 +226,7 @@ const handleFormSubmission = async (e) => {
     const availability = validateAvailability();
     if (!availability) return;
 
-    // Collect features
-    // const features = Array.from(document.querySelectorAll('input[name="features"]:checked'))
-    //                     .map(cb => cb.value);
+    
 
     
     const formData = {
@@ -246,10 +244,10 @@ const handleFormSubmission = async (e) => {
 
     // Validation 
     if (!formData.name || !formData.location || !formData.price) {
-        return alert('Please fill in all required fields');
+        return showModal('Please fill in all required fields', true);
     }
     if (isNaN(formData.price)) {
-        return alert('Please enter a valid price');
+        return showModal('Please enter a valid price', true);
     }
 
     try {
@@ -276,10 +274,10 @@ const handleFormSubmission = async (e) => {
         document.getElementById('autocomplete').value = '';
         document.getElementById('price').value = '';
         document.getElementById('preview').style.display = 'none';
-        alert('Parking space added successfully!');
+        showModal('Parking space added successfully!');
     } catch (error) {
         console.error('Submission error:', error);
-        alert(`Error saving listing: ${error.message}`);
+        showModal(`Error saving listing: ${error.message}`, true);
     }
 };
 
@@ -314,7 +312,69 @@ document.querySelector('.update-btn')?.addEventListener('click', handleFormSubmi
 
 
 
+function showModal(message, isError = false) {
+    let modal = document.getElementById("messageModal");
+    let overlay = document.querySelector('.modal-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        document.body.appendChild(overlay);
+    }
+    
+    
+    if (!modal) {
+        modal = document.createElement("div");
+        modal.id = "messageModal";
+        modal.className = "modal";
+        modal.innerHTML = `
+            <div class="modal-content">
+                <p id="modalText"></p>
+                <button id="modalButton"></button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    const modalText = modal.querySelector("#modalText");
+    const modalButton = modal.querySelector("#modalButton");
+
+    modalText.textContent = message;
+    modal.classList.add("show");
+    overlay.classList.add("show");
+
+    if (isError) {
+        modal.classList.add("error");
+        modalButton.textContent = "Close";
+        modalButton.onclick = () => {
+            overlay.classList.remove("show");
+            modal.classList.remove("show")};
+    } else {
+        modal.classList.remove("error");
+        modalButton.textContent = "Go to Homepage";
+        modalButton.onclick = () => {
+            overlay.classList.remove("show");
+            window.location.href = "ownerHomePage.html"};
+    }
+}
 
 
-
-
+const modalStyle = document.createElement("style");
+modalStyle.innerHTML = `
+    .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+    }
+    .modal.show { display: block; }
+    .modal-content { text-align: center; }
+    .modal.error { background: #f8d7da; }
+    #modalButton { margin-top: 10px; padding: 8px 16px; cursor: pointer; }
+`;
+document.head.appendChild(modalStyle);

@@ -9,81 +9,22 @@
       type="image/svg+xml"
     />
     <title>Booking History</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <header>
-      <div class="logo">ParkSmart</div>
-      <div class="user-actions">
-        <button class="switch-user">Switch to User</button>
-        <div class="profile-icon">👤</div>
-      </div>
-    </header>
-    <main>
-      <div class="booking-container">
-        <div class="tab-header">
-          <button id="current-bookings" class="active">Current Booking</button>
-          <button id="booking-history">Booking History</button>
+    <link rel="stylesheet" href="styles.css">
+    <!-- <script src="owner-history.js" defer></script> -->
+    <script src="bookingHistory.js" defer></script>
+    <link rel="stylesheet" href="css/bookinghistory.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Booking History</h2>
+        <div class="filter-container">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search by name, location, date, or time...">
+                <button id="searchButton" class="search-button">Search</button>
+            </div>
+            <button id="filterButton" class="filter-button">Filter: Newest to Oldest</button>
         </div>
-        <div class="tab-content"></div>
-      </div>
-    </main>
-    <script type="module">
-      import { getOwnerBookingHistory } from "../../js/crud.js";
-
-      document.addEventListener("DOMContentLoaded", async () => {
-        const bookingsContainer = document.querySelector(".tab-content");
-        const currentBtn = document.getElementById("current-bookings");
-        const historyBtn = document.getElementById("booking-history");
-
-        async function fetchBookings(filter) {
-          const snapshot = await getDocs(collection(db, "bookings"));
-          let bookingsHTML = "";
-          const now = new Date();
-          snapshot.forEach((doc) => {
-            const data = doc.data();
-            const startTime = data.start_time.toDate();
-            if (
-              (filter === "current" && startTime > now) ||
-              (filter === "history" && startTime <= now)
-            ) {
-              bookingsHTML += `
-                            <div class="booking-card">
-                                <img src="${
-                                  data.image || "default.jpg"
-                                }" alt="Parking Image">
-                                <div class="details">
-                                    <h4>${data.title}</h4>
-                                    <p>${data.address}</p>
-                                    <p>${new Date(
-                                      data.start_time.toDate()
-                                    ).toLocaleString()} - ${new Date(
-                data.end_time.toDate()
-              ).toLocaleString()}</p>
-                                </div>
-                                <div class="arrow">&rarr;</div>
-                            </div>
-                        `;
-            }
-          });
-          bookingsContainer.innerHTML =
-            bookingsHTML || "<p>No bookings found.</p>";
-        }
-
-        currentBtn.addEventListener("click", () => {
-          currentBtn.classList.add("active");
-          historyBtn.classList.remove("active");
-          fetchBookings("current");
-        });
-
-        historyBtn.addEventListener("click", () => {
-          historyBtn.classList.add("active");
-          currentBtn.classList.remove("active");
-          fetchBookings("history");
-        });
-
-        await fetchBookings("current"); // Load current bookings by default
-      });
-    </script>
-  </body>
+        <ul id="bookingList" class="booking-list"></ul>
+    </div>
+</body>
 </html>
