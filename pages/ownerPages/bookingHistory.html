@@ -9,22 +9,29 @@
       type="image/svg+xml"
     />
     <title>Booking History</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <!-- <script src="owner-history.js" defer></script> -->
     <script src="bookingHistory.js" defer></script>
-    <link rel="stylesheet" href="css/bookinghistory.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/bookinghistory.css" />
+  </head>
+  <body>
     <div class="container">
-        <h2>Booking History</h2>
-        <div class="filter-container">
-            <div class="search-container">
-                <input type="text" id="searchInput" class="search-input" placeholder="Search by name, location, date, or time...">
-                <button id="searchButton" class="search-button">Search</button>
-            </div>
-            <button id="filterButton" class="filter-button">Filter: Newest to Oldest</button>
+      <h2>Booking History</h2>
+      <div class="filter-container">
+        <div class="search-container">
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search by name, location, date, or time..."
+          />
+          <button id="searchButton" class="search-button">Search</button>
         </div>
-        <ul id="bookingList" class="booking-list"></ul>
+        <button id="filterButton" class="filter-button">
+          Filter: Newest to Oldest
+        </button>
+      </div>
+      <ul id="bookingList" class="booking-list"></ul>
     </div>
-</body>
+  </body>
 </html>
