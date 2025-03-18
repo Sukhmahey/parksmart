@@ -392,7 +392,7 @@ const renderListOfSpaces = (
     spotDetailsBtn.textContent = `Go To Details`;
 
     spotDetailsBtn.addEventListener("click", () => {
-      window.location.href = `/pages/userPages/searchDetailsPage.html?spaceId=${parkingSpot?.space_id}`;
+      window.location.href = `/pages/userPages/searchDetailsPage.html?spaceId=${parkingSpot?.space_id}&dateTime=${queryDate}`;
     });
 
     // Append elements to the spot-info div
