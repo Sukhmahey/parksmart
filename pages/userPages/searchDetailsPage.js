@@ -1,20 +1,8 @@
 import { getParkingSpaceById } from "../../js/crud.js";
 
-let images = ["parking1.jpg", "parking2.jpg", "parking3.jpg"];
-let currentIndex = 0;
-
 let spaceId = null;
 let queryDate = "";
 let spaceData = {};
-
-function nextImage() {
-  currentIndex = (currentIndex + 1) % images.length;
-  document.getElementById("slider").src = images[currentIndex];
-}
-
-function bookNow() {
-  window.location.href = `/pages/userPages/checkOutPage.html?spaceId=${spaceId}&dateTime=${queryDate}`;
-}
 
 const renderData = (spaceData) => {
   const imageSlider = document.getElementById("imageSlider");
@@ -30,7 +18,7 @@ const renderData = (spaceData) => {
   imgElement.classList.add("slider-image");
   imgElement.style.backgroundImage = spaceData?.imageUrl
     ? `url(${spaceData.imageUrl})`
-    : "url('https://via.placeholder.com/600x300')"; // Fallback image
+    : "url('https://via.placeholder.com/600x300')";
 
   // Insert the image before the button
   const nextButton = imageSlider.querySelector(".next");
@@ -44,16 +32,6 @@ const renderData = (spaceData) => {
         .map(([day, time]) => `<p class="availability-day">${day}: ${time}</p>`)
         .join("")
     : `<p class="availability-day" >No availability info</p>`;
-
-  const features = spaceData?.features
-    ? `
-      <p>Features:</p>
-      <ul>
-        <li>EV Charging: ${spaceData.features.EV_charging ? "Yes" : "No"}</li>
-        <li>Covered: ${spaceData.features.covered ? "Yes" : "No"}</li>
-      </ul>
-    `
-    : "<p>No features listed.</p>";
 
   // Set inner HTML with dynamic data
   section.innerHTML = `
@@ -113,7 +91,6 @@ const renderData = (spaceData) => {
 const copyBtnId = document.getElementById("copy-btn");
 
 const copyAddress = () => {
-  console.log("Here");
   navigator.clipboard
     .writeText((spaceData?.address || "").trim())
     .then(() => {
@@ -130,7 +107,6 @@ const copyAddress = () => {
 };
 
 copyBtnId?.addEventListener("click", (e) => {
-  console.log("Here");
   navigator.clipboard
     .writeText((spaceData?.address || "").trim())
     .then(() => {
@@ -162,14 +138,16 @@ const getSpaceData = async (spaceIdRef) => {
   renderData(data);
   spaceData = data;
 
-  console.log(data);
+  console.log("Search Details", data);
+};
+
+const bookNow = () => {
+  window.location.href = `/pages/userPages/checkOutPage.html?spaceId=${spaceId}&dateTime=${queryDate}`;
 };
 
 window.onload = function () {
   spaceId = getParam("spaceId");
   queryDate = getParam("dateTime");
-  console.log("spaceId: " + spaceId);
-
   getSpaceData(spaceId);
 };
 
