@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Google Map with Marker</title>
-    <!-- <link rel="stylesheet" href="../../styles/homepageStyles.css" /> -->
+    <link rel="icon" href="./Assets/fevicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
     <script
       async
@@ -24,7 +24,7 @@
   <body>
     <header>
       <div class="logoContainer" id="logo">
-        <img src="Assets/ParkSmartLogo.png" alt="ParkSmart Logo" />
+        <img src="Assets/Logo-FullSize.svg" alt="ParkSmart Logo" />
       </div>
       <div class="headerRight">
         <form
@@ -33,9 +33,6 @@
           autocomplete="off"
         >
           <div class="searchInputContainer">
-            <!-- <div class="searchIcon">
-              <img src="Assets/search_icon.png" alt="Search Icon" />
-            </div> -->
             <input
               type="text"
               id="location"
@@ -45,9 +42,13 @@
           </div>
           <input type="datetime-local" id="datetime" name="datetime" />
           <button type="submit" id="searchBtn">
-            <img src="Assets/search_icon.png" alt="Search Icon" />
+            <img src="Assets/search.svg" alt="Search Icon" />
           </button>
-          <i id="filterBtn" class="fa-solid fa-filter"></i>
+          <button type="submit" id="filterBtn">
+            <img src="Assets/filter.svg" alt="Filter Icon" />
+            <!-- <i class="fa-solid fa-filter"></i> -->
+          </button>
+
           <div class="filter-box" id="filterBox">
             <label>Sort by:</label>
             <select id="sort-options">
@@ -61,7 +62,12 @@
           </div>
         </form>
       </div>
-      <a href="userSettings.html"><img class="profileIcon" src="Assets/avatar.png" alt="Profile Icon" /></a>
+      <a href="userSettings.html"
+        ><img
+          class="profileIcon"
+          src="Assets/avatar-svg.svg"
+          alt="Profile Icon"
+      /></a>
     </header>
     <main>
       <div class="mapOuterContainer">

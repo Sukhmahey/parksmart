@@ -114,6 +114,11 @@ body {
   background-color: #0056b3;
 }
 
+#searchBtn img {
+  width: 16px;
+  color: white;
+}
+
 /* Parking Spot Cards */
 .parking-list {
   display: flex;
@@ -246,10 +251,27 @@ body {
     background-color: white;
 
     img {
-      width: 32px;
-      height: 32px;
+      width: 16px;
+      height: 16px;
     }
   }
+}
+
+.searchBoxContainer button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.searchBoxContainer button img {
+  width: 16px;
+  height: 16px;
+}
+
+#filterBtn img {
+  width: 18px;
+  width: 18px;
 }
 
 .searchInputContainer {
@@ -268,23 +290,6 @@ body {
   border: 1px solid;
   padding: 8px;
   border-radius: 4px;
-}
-
-button {
-  background-color: #007bff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button img {
-  width: 16px;
-  height: 16px;
-}
-
-button:hover {
-  background-color: #0056b3;
 }
 
 #logo {
@@ -399,7 +404,7 @@ header {
   margin-left: 10px;
 }
 
-button {
+.parking-spot button {
   padding: 10px 15px;
   margin: 10px 5px;
   cursor: pointer;
@@ -409,7 +414,7 @@ button {
   border-radius: 5px;
 }
 
-button:hover {
+.parking-spot button:hover {
   background: #248c4a;
 }
 

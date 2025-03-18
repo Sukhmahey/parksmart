@@ -1,48 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Booking Detail</title>
-    <link rel="stylesheet" href="./booking.css">
-</head>
+    <link rel="icon" href="./Assets/fevicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./booking.css" />
+  </head>
 
-<body>
+  <body>
     <header>
-        <div class="logoContainer" id="logo">
-            <img src="Assets/ParkSmartLogo.png" alt="ParkSmart Logo" />
-        </div>
+      <div class="logoContainer" id="logo">
+        <img src="Assets/Logo-FullSize.svg" alt="ParkSmart Logo" />
+      </div>
     </header>
     <div class="container">
+      <h1>Booking Confirmed! 🎉</h1>
 
-        <h1>Booking Confirmed! 🎉</h1>
+      <p>Your booking has been successfully placed.</p>
 
-        <p>Your booking has been successfully placed.</p>
+      <div class="booking-info">
+        <h2 id="parkingTitle">Parking spot name</h2>
+        <p id="parkingLocation">Parking spot location</p>
+        <p><strong>Owned by:</strong> <span id="ownerName">Owner Name</span></p>
+        <p>
+          <strong>Owner Contact:</strong> <span id="ownerContact">Contact</span>
+        </p>
+      </div>
 
-        <div class="booking-info">
-            <h2 id="parkingTitle">Parking spot name</h2>
-            <p id="parkingLocation">Parking spot location</p>
-            <p><strong>Owned by:</strong> <span id="ownerName">Owner Name</span></p>
-            <p><strong>Owner Contact:</strong> <span id="ownerContact">Contact</span></p>
-        </div>
+      <div class="booking-details">
+        <p>
+          <strong>Parking Date:</strong>
+          <span id="parkingDate">06/20/2025</span>
+        </p>
+        <p>
+          <strong>Parking Time:</strong>
+          <span id="parkingTime">2:30pm - 4:30pm</span>
+        </p>
+        <p>
+          <strong>Parking Duration:</strong>
+          <span id="parkingDuration">2 hours</span>
+        </p>
+        <p><strong>Total:</strong> $<span id="totalPrice">0.00</span></p>
+      </div>
 
-        <div class="booking-details">
-            <p><strong>Parking Date:</strong> <span id="parkingDate">06/20/2025</span></p>
-            <p><strong>Parking Time:</strong> <span id="parkingTime">2:30pm - 4:30pm</span></p>
-            <p><strong>Parking Duration:</strong> <span id="parkingDuration">2 hours</span></p>
-            <p><strong>Total:</strong> $<span id="totalPrice">0.00</span></p>
-        </div>
+      <button id="backToHome">Back to Home</button>
 
-        <button id="backToHome">Back to Home</button>
-
-        <footer>
-            <p>Contact Us: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
-            <p>© 2025 ParkSmart. All rights reserved.</p>
-        </footer>
+      <footer>
+        <p>
+          Contact Us:
+          <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a>
+        </p>
+        <p>© 2025 ParkSmart. All rights reserved.</p>
+      </footer>
     </div>
 
     <script type="module" src="../../js/booking.js"></script>
-</body>
-
+  </body>
 </html>
