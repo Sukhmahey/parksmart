@@ -129,3 +129,7 @@ header a {
 .profileIcon {
   width: 35px;
 }
+
+* {
+  font-family: "Poppins", sans-serif;
+}

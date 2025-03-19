@@ -130,16 +130,6 @@ parking-info .price {
   border: none;
 }
 
-footer {
-  text-align: center;
-  padding: 20px;
-  margin-top: 30px;
-  font-size: 0.8em;
-  color: white;
-  background-color: #0056b3; /* Dark blue background */
-  border-radius: 0 0 10px 10px;
-}
-
 header {
   display: flex;
   justify-content: space-between;
@@ -159,4 +149,19 @@ header {
 
 .logoContainer {
   cursor: pointer;
+}
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+footer {
+  background: linear-gradient(to right, #42b97c, #38a9e2);
+  padding: 1rem;
+  margin-top: 5rem;
+  width: 100%;
+}
+
+footer p {
+  margin: 0.5rem 0;
 }

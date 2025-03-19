@@ -2,7 +2,7 @@
 /* Always set the map height explicitly to define the size of the div */
 gmp-map {
   height: 100%;
-  width: 80%;
+  width: 60%;
   min-width: 550px;
 }
 
@@ -29,7 +29,7 @@ body {
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: 35%;
+  width: 40%;
   border-radius: 8px;
   min-width: 320px;
   margin-right: 20px;
@@ -339,6 +339,7 @@ body {
   background-color: #248c4a;
   padding: 8px;
   border-radius: 8px;
+  color: white;
 }
 
 #filterBtn {
@@ -363,8 +364,8 @@ header {
 #imageSlider {
   position: relative;
   width: 100%;
-  max-width: 300px;
-  height: 300px;
+  max-width: 400px;
+  height: 400px;
   overflow: hidden;
 }
 
@@ -582,7 +583,7 @@ footer {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 24px;
-  max-width: 320px;
+  max-width: 420px;
 
   h1 {
     margin: 0;

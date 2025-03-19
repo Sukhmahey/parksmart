@@ -2,7 +2,13 @@ header {
   display: flex;
   justify-content: space-between;
   padding: 1rem;
-  height: 3rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  /* height: 3rem; */
+}
+
+.logoContainer {
+  cursor: pointer;
 }
 
 header a {
@@ -35,6 +41,7 @@ footer {
   padding: 1rem;
   margin-top: 5rem;
   width: 100%;
+  text-align: center;
 }
 
 footer p {
@@ -43,6 +50,10 @@ footer p {
 .socialMediaContainer img {
   max-width: 50px;
   max-height: 50px;
+}
+
+* {
+  font-family: "Poppins", sans-serif;
 }
 
 /* ============================== */
