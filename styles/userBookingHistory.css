@@ -9,22 +9,30 @@ h1 {
   margin-bottom: 2rem;
 }
 
+
+
 .bookingCard {
   display: flex;
   flex-direction: row;
   gap: 2rem;
-  background-color: lightgrey;
   max-width: 1000px;
   margin: auto;
   padding: 1rem;
 }
 .bookingContainer {
   width: 1200px;
-  background-color: grey;
   margin: auto;
   padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 * {
   font-family: "Poppins", sans-serif;
+}
+
+
+.bookingImage img{
+  width: 250px;
+  height: 150px;
+
 }

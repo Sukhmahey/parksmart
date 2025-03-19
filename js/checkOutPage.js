@@ -108,7 +108,8 @@ document.querySelector("form").addEventListener("submit", async (e) => {
       license,
       color,
       parkingSpace?.title || "",
-      parkingSpace?.address || ""
+      parkingSpace?.address || "",
+      parkingSpace?.imgURL || ""
     );
 
     localStorage.setItem(

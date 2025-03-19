@@ -75,28 +75,28 @@ p {
   background-color: #0056b3;
 }
 
-footer {
+/* footer {
   text-align: center;
   padding: 20px;
   margin-top: 30px;
   font-size: 0.8em;
   color: white;
-  background-color: #0056b3; /* Dark blue background */
-  width: 100%; /* Make footer full width */
-  display: flex; /* Use flexbox for layout */
-  flex-direction: column; /* Stack elements vertically */
-  align-items: center; /* Center items horizontally */
+  background-color: #0056b3; 
+  width: 100%; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
 }
 
 footer p {
-  margin: 5px 0; /* Add some vertical margin */
+  margin: 5px 0; /
   color: white;
 }
 
 footer a {
   text-decoration: none;
   color: white;
-}
+} */
 
 .social-icons {
   display: flex;

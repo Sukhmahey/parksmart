@@ -1,5 +1,9 @@
 /* checkout.css */
-
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 body {
   font-family: "Poppins", sans-serif;
   background-color: #f0f0f0; /* Light gray background */
@@ -120,12 +124,12 @@ parking-info .price {
 
 .buttons button[type="reset"] {
   background-color: white;
-  color: #add8e6; /* Light blue text */
-  border: 2px solid #add8e6; /* Light blue border */
+  color: #38a9e2; /* Light blue text */
+  border: 2px solid #38a9e2; /* Light blue border */
 }
 
 .buttons button[type="submit"] {
-  background-color: #add8e6; /* Light blue background */
+  background-color: #38a9e2; /* Light blue background */
   color: white;
   border: none;
 }
@@ -155,7 +159,7 @@ header {
   font-family: "Poppins", sans-serif;
 }
 
-footer {
+/* footer {
   background: linear-gradient(to right, #42b97c, #38a9e2);
   padding: 1rem;
   margin-top: 5rem;
@@ -164,4 +168,4 @@ footer {
 
 footer p {
   margin: 0.5rem 0;
-}
+} */

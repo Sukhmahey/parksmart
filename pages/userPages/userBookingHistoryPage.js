@@ -29,11 +29,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 bookingCard.innerHTML = `
                     <div class="bookingCard">
                         <div class="bookingImage">
-                            <img src="https://picsum.photos/100" alt="Parking Spot Image">
+                            <img src="${booking.imgURL}" alt="Parking Spot Image">
                         </div>
                         <div class="bookingInfo">
-                            <h2>Booking ID: ${booking.booking_id}</h2>
-                            <p>Parking Spot: ${booking.space_id}</p>
+                            <h2> ${booking.name}</h2><br>
                             <p>Date: ${new Date(booking.start_time.toDate()).toLocaleDateString()}</p>
                             <p>Time: ${new Date(booking.start_time.toDate()).toLocaleTimeString()} - ${new Date(booking.end_time.toDate()).toLocaleTimeString()}</p>
                             <p>Status: ${booking.status}</p>
