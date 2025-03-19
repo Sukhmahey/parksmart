@@ -151,10 +151,11 @@ const fetchParkingSpots = async (boundLocation) => {
         return {
           ...parkingSpace,
           distance: distance,
-          isAvailableNow: isWithinConstraint(
-            dateTimeInput.value,
-            parkingSpace?.availability
-          ),
+          isAvailableNow:
+            isWithinConstraint(
+              dateTimeInput.value,
+              parkingSpace?.availability
+            ) || true,
         };
       }
     );
@@ -350,7 +351,7 @@ const renderListOfSpaces = (
     createOverlayFunction(
       parkingSpot,
       marker,
-      parkingSpot.imageUrl,
+      parkingSpot.imgURL,
       parkingSpot.address
     );
 
@@ -360,11 +361,10 @@ const renderListOfSpaces = (
     parkingSpotElement.id = `${parkingSpot?.space_id}-space`;
 
     // Create element for Image
-    const spotImage = document.createElement("div");
+    console.log("parkingSpot?.imageURL", parkingSpot?.imgURL);
+    const spotImage = document.createElement("img");
     spotImage.classList.add("spot-image");
-    spotImage.style.backgroundImage = parkingSpot?.imageUrl
-      ? `url(${parkingSpot?.imageUrl})`
-      : "";
+    spotImage.src = parkingSpot?.imgURL ?? "";
 
     // Container for Info
     const spotInfo = document.createElement("div");

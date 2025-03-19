@@ -151,7 +151,7 @@ body {
   flex: 2;
   min-width: 80px;
   height: 100%;
-  background: gray;
+  /* background: gray; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -363,7 +363,7 @@ header {
 #imageSlider {
   position: relative;
   width: 100%;
-  max-width: 600px; /* Adjust as needed */
+  max-width: 300px;
   height: 300px;
   overflow: hidden;
 }

@@ -1,4 +1,5 @@
 import { addParkingSpace, getUserById } from "../../js/crud.js";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 const video = document.getElementById("cameraFeed");
 const canvas = document.getElementById("canvas");
@@ -7,6 +8,90 @@ let longitudeValue;
 let latitudeValue;
 let ownerId = localStorage.getItem("userId");
 let username = localStorage.getItem("username");
+
+const supabaseUrl = "https://uilvkvvhtlcluutiflwk.supabase.co";
+const supabaseKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpbHZrdnZodGxjbHV1dGlmbHdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzNDA0MjIsImV4cCI6MjA1NzkxNjQyMn0.Ay2oFoNhYSzf6eChcFfI13ChJNjtDiFMlTViUfROl0o";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+let uploadedImageUrl = null;
+console.log("uploadedImageUrl", uploadedImageUrl);
+
+const fileInput = document.getElementById("file-input");
+const uploadBtn = document.getElementById("upload-btn");
+const fileName = document.getElementById("file-name");
+
+fileInput.addEventListener("change", function (e) {
+  if (this.files && this.files.length > 0) {
+    fileName.textContent = this.files[0].name;
+    uploadBtn.disabled = false;
+  } else {
+    fileName.textContent = "No file chosen";
+    uploadBtn.disabled = true;
+  }
+});
+
+function sanitizeFileName(fileName) {
+  return fileName
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/[^\w\-\.]+/g, "") // Remove any non-alphanumeric characters except for dots and hyphens
+    .toLowerCase(); // Optionally, convert to lowercase
+}
+
+async function uploadImage(e) {
+  const file = fileInput.files[0];
+
+  if (!file) {
+    alert("Please select an image first.");
+    return;
+  }
+
+  const fileName = `${Date.now()}_${file.name}`;
+
+  const { data, error } = await supabase.storage
+    .from("images")
+    .upload(sanitizeFileName(fileName), file, {});
+
+  console.log("data", data);
+  if (error) {
+    console.error(error);
+    alert("Error uploading file");
+  } else {
+    alert("File uploaded successfully");
+    displayImage(data?.path);
+  }
+}
+
+async function displayImage(filePath) {
+  console.log("here", filePath);
+  const data = await supabase.storage.from("images").getPublicUrl(filePath); // Get the public URL of the file
+
+  if (data) {
+    console.log("herererererer", data);
+    uploadedImageUrl = data.data.publicUrl;
+  }
+
+  console.log("Data", data, data.data.publicUrl);
+  if (data?.error) {
+    console.log("error here", error);
+    console.error(error);
+    return;
+  }
+
+  // https://uilvkvvhtlcluutiflwk.supabase.co/storage/v1/object/public/images/1742347538558_pexels-stephanthem-753865.jpg
+
+  const imageElementContainer = document.getElementById("imgContainer");
+  const imageElement = document.createElement("img");
+
+  if (data?.data?.publicUrl) {
+    imageElementContainer.style.display = "flex";
+    console.log("imageElement", imageElement);
+    imageElement.src = data?.data?.publicUrl || "";
+    imageElementContainer.appendChild(imageElement);
+  }
+}
+
+window.uploadImage = uploadImage;
 
 const daysOfWeek = [
   "monday",
@@ -169,9 +254,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const handleImage = async () => {
   const preview = document.getElementById("preview");
-  if (!preview.src.startsWith("data:image")) return null;
+  if (!preview?.src?.startsWith("data:image")) return null;
 
-  return preview.src;
+  return preview?.src;
 };
 
 async function handleCameraCapture() {
@@ -238,11 +323,15 @@ const handleFormSubmission = async (e) => {
     latitude: latitudeValue,
     isAvailable: availableNow,
     availability: availability,
+
     // features: features
   };
 
-  // Validation
+  if (uploadedImageUrl) {
+    formData.imgURL = uploadedImageUrl;
+  }
   if (!formData.name || !formData.location || !formData.price) {
+    // Validation
     return showModal("Please fill in all required fields", true);
   }
   if (isNaN(formData.price)) {
@@ -257,6 +346,7 @@ const handleFormSubmission = async (e) => {
       username,
       formData.location,
       formData.description,
+      formData.imgURL,
       parseFloat(formData.price),
       formData.image || "https://loremflickr.com/640/480",
       formData.longitude,
@@ -271,7 +361,7 @@ const handleFormSubmission = async (e) => {
     document.getElementById("autocomplete").value = "";
     document.getElementById("price").value = "";
     document.getElementById("description").value = "";
-    document.getElementById("preview").style.display = "none";
+    // document.getElementById("preview")?.style?.display = "none";
     showModal("Parking space added successfully!");
   } catch (error) {
     console.error("Submission error:", error);

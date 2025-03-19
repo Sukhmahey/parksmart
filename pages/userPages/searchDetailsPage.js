@@ -14,11 +14,9 @@ const renderData = (spaceData) => {
   }
 
   // Create a div element for the background image
-  const imgElement = document.createElement("div");
+  const imgElement = document.createElement("img");
   imgElement.classList.add("slider-image");
-  imgElement.style.backgroundImage = spaceData?.imageUrl
-    ? `url(${spaceData.imageUrl})`
-    : "url('https://via.placeholder.com/600x300')";
+  imgElement.src = spaceData?.imgURL ?? "";
 
   // Insert the image before the button
   const nextButton = imageSlider.querySelector(".next");
@@ -38,7 +36,10 @@ const renderData = (spaceData) => {
   <div class="card">
     <h1>${spaceData?.title || "House Owner Parking"}</h1>
 
-    <p class="description">Our parking rental offers secure, convenient, and accessible spaces, designed for reliability in any situation.</p>
+    <p class="description">${
+      spaceData?.description ||
+      "Our parking rental offers secure, convenient, and accessible spaces, designed for reliability in any situation."
+    }</p>
 
     <p class="subtitle">
       <div class="address-container subtitle">
