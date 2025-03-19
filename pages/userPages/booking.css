@@ -5,14 +5,14 @@ body {
   background-color: #f0f0f0; /* Light gray background */
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* align-items: center; */
+  /* min-height: 100vh; */
 }
 
 header {
-  width: 100%;
+  /* width: 100%; */
   text-align: left;
   padding: 10px 20px;
   background-color: white;
@@ -114,4 +114,25 @@ footer a {
   border-radius: 50%; /* Make icons circular */
   background-color: #007bff; /* Blue background for icons */
   padding: 5px; /* Add padding inside the icon circles */
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logoContainer {
+  flex: 2;
+}
+
+.profileIcon {
+  width: 35px;
+}
+
+.logoContainer {
+  cursor: pointer;
 }
