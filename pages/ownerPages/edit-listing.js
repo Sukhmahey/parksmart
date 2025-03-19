@@ -12,6 +12,8 @@ let longitudeValue;
 let latitudeValue;
 let AddressChanged;
 
+let dataFetched = {};
+
 function getListingIdFromUrl() {
   const params = new URLSearchParams(window.location.search);
   console.log(params.id);
@@ -23,6 +25,7 @@ async function populateForm(listingId) {
 
   try {
     const data = await fetchListingData(listingId);
+    dataFetched = data;
     currentListingId = listingId;
     existingImageUrl = data.image || "";
     // Existing image handling
@@ -36,6 +39,17 @@ async function populateForm(listingId) {
     document.getElementById("name").value = data.title || "";
     document.getElementById("autocomplete").value = data.address || "";
     document.getElementById("description").value = data.description || "";
+
+    if (data?.imgURL && data.imgURL != "") {
+      const picEle = document.getElementById("parkingSpotImage");
+      const imageElement = document.createElement("img");
+
+      console.log("imageElement", imageElement);
+      imageElement.src = data.imgURL || "";
+      picEle.appendChild(imageElement);
+      picEle.style.display = "block";
+    }
+
     document.getElementById("price").value = data.price_per_hour || "";
     document.getElementById("preview").src = existingImageUrl;
 
@@ -122,6 +136,7 @@ async function handleFormSubmission(e) {
         isAvailable: isAvailable,
         availability: availability,
         image: imageUrl || existingImageUrl,
+        imgURL: dataFetched?.imgURL || "",
         longitude: longitudeValue,
         latitude: latitudeValue,
       };
@@ -133,6 +148,7 @@ async function handleFormSubmission(e) {
         price_per_hour: parseFloat(
           document.getElementById("price")?.value.trim() || ""
         ),
+        imgURL: dataFetched?.imgURL || "",
         isAvailable: isAvailable,
         availability: availability,
         image: imageUrl || existingImageUrl,
@@ -352,15 +368,15 @@ document
   .getElementById("cameraButton")
   ?.addEventListener("click", handleCameraCapture);
 
-document.getElementById("fileInput").addEventListener("change", (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      document.getElementById("preview").src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
+document?.getElementById("fileInput")?.addEventListener("change", (event) => {
+  // const file = event.target.files[0];
+  // if (file) {
+  //   const reader = new FileReader();
+  //   reader.onload = (e) => {
+  //     document.getElementById("preview").src = e.target.result;
+  //   };
+  //   reader.readAsDataURL(file);
+  // }
 });
 
 async function handleImageUpload() {
