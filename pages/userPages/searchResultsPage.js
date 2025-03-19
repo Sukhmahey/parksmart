@@ -282,7 +282,7 @@ const calculateDistance = (obj1, obj2) => {
 
 // Navigation
 document.getElementById("logo").addEventListener("click", function () {
-  window.location.href = "/";
+  window.location.href = "/pages/userPages/homepage.html";
 });
 
 // Helper functions

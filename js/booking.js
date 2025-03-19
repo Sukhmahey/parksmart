@@ -29,5 +29,5 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.getElementById("logo").addEventListener("click", function () {
-  window.location.href = "/";
+  window.location.href = "/pages/userPages/homepage.html";
 });

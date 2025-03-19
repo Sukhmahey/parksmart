@@ -448,3 +448,7 @@ img {
   color: #666;
   margin-left: 8px;
 }
+
+* {
+  font-family: "Poppins", sans-serif;
+}
