@@ -11,7 +11,7 @@ const spaceId = getQueryParam("spaceId");
 const userId = localStorage.getItem("userId");
 
 document.getElementById("logo").addEventListener("click", function () {
-  window.location.href = "/";
+  window.location.href = "/pages/userPages/homepage.html";
 });
 
 if (!spaceId || !userId) {

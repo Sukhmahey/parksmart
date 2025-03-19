@@ -136,3 +136,7 @@ header {
 .logoContainer {
   cursor: pointer;
 }
+
+* {
+  font-family: "Poppins", sans-serif;
+}
