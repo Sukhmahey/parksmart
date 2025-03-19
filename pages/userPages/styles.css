@@ -700,3 +700,11 @@ footer {
   max-width: 50px;
   max-height: 50px;
 }
+
+.profileIcon {
+  width: 35px;
+}
+
+.logoContainer {
+  cursor: pointer;
+}

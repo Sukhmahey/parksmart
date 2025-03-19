@@ -116,7 +116,9 @@ async function addBooking(
   end_time,
   total_price,
   license_plate,
-  color
+  color,
+  name = "",
+  address = ""
 ) {
   try {
     const bookingRef = doc(collection(db, "bookings"));
@@ -139,6 +141,8 @@ async function addBooking(
       color,
       status: "confirmed",
       created_at: Timestamp.now(),
+      name,
+      address,
     });
 
     console.log("Booking added successfully:", bookingRef.id);
