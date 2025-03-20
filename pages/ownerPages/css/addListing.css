@@ -452,3 +452,41 @@ img {
 * {
   font-family: "Poppins", sans-serif;
 }
+
+/* Add to your CSS file */
+.media-buttons {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.camera-controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+#cameraFeed {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+}
+
+#preview {
+  max-width: 400px;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #45a049;
+}
