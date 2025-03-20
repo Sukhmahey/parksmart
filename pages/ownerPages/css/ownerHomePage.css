@@ -181,7 +181,8 @@ main h2 {
 /* Add Listing Button */
 .add-listing {
   display: block;
-  width: 100%;
+  width: auto;
+  margin: auto;
   padding: 15px;
   background-color: #48bb78;
   color: white;

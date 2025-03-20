@@ -33,7 +33,8 @@
         <a href="ownerHomePage.html" class="nav-back-btn">Back to Homepage</a>
       </div>
     </nav>
-    <div class="container">
+    <div class="listings">
+      <div class="container">
       <div class="section">
         <h2 class="section-title">Add Listing</h2>
 
@@ -68,7 +69,7 @@
           <input type="number" id="price" placeholder="Enter price in CAD" />
         </div>
 
-        <div class="upload-container">
+        <!-- <div class="upload-container">
           <div class="custom-upload">
             <input type="file" id="file-input" />
             <label for="file-input">Choose File</label>
@@ -84,9 +85,30 @@
           >
             Upload Image
           </button>
-        </div>
+        </div> -->
 
-        <div class="imgContainer" id="imgContainer"></div>
+        <div class="upload-container">
+          <div class="custom-upload">
+            <input type="file" id="file-input" />
+            <label for="file-input">Choose File</label>
+            <span class="file-name" id="file-name">No file chosen</span>
+          </div>
+          <div class="media-buttons">
+            <button type="button" id="cameraButton">Use Camera</button>
+          </div>
+        </div>
+        
+       
+        <video id="cameraFeed" style="display: none;"></video>
+        <canvas id="canvas" style="display: none;"></canvas>
+        <img id="preview" src="" alt="Image Preview" style="display: none;" />
+        
+        <div class="buttonContainer">
+          <button class="upload-button" id="upload-btn" onclick="uploadImage()" disabled>
+            Upload Image
+          </button>
+        </div>
+        <!-- <div class="imgContainer" id="imgContainer"></div> -->
 
         <!-- <div class="form-group">
           <label>Parking Spot Image</label>
