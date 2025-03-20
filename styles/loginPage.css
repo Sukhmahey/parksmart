@@ -266,7 +266,7 @@ input {
 #toggleSignupPasswordIcon {
   position: absolute;
   left: 80%; /* Adjust the position based on your design */
-  top: 51%; /* Adjust to match the signin field */
+  top: 72%; /* Adjust to match the signin field */
   transform: translateY(-50%);
   cursor: pointer;
   color: #888;
