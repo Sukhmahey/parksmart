@@ -293,68 +293,68 @@ let currentListingId = getListingIdFromUrl();
 
 let mediaStream = null;
 
-async function handleCameraCapture() {
-  try {
-    // Clear previous preview
-    const preview = document.getElementById("preview");
-    preview.style.display = "none";
+// async function handleCameraCapture() {
+//   try {
+//     // Clear previous preview
+//     const preview = document.getElementById("preview");
+//     preview.style.display = "none";
 
-    // Stop existing stream
-    if (mediaStream) {
-      mediaStream.getTracks().forEach((track) => track.stop());
-    }
+//     // Stop existing stream
+//     if (mediaStream) {
+//       mediaStream.getTracks().forEach((track) => track.stop());
+//     }
 
-    // Create camera controls
-    const controls = document.createElement("div");
-    controls.className = "camera-controls";
-    controls.innerHTML = `
-            <button type="button" id="captureBtn">Capture</button>
-            <button type="button" id="stopBtn">Stop Camera</button>
-        `;
-    document.querySelector(".media-buttons").appendChild(controls);
+//     // Create camera controls
+//     const controls = document.createElement("div");
+//     controls.className = "camera-controls";
+//     controls.innerHTML = `
+//             <button type="button" id="captureBtn">Capture</button>
+//             <button type="button" id="stopBtn">Stop Camera</button>
+//         `;
+//     document.querySelector(".media-buttons").appendChild(controls);
 
-    // Get camera access
-    mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
-    });
+//     // Get camera access
+//     mediaStream = await navigator.mediaDevices.getUserMedia({
+//       video: { facingMode: "environment" },
+//     });
 
-    // Show video feed
-    const video = document.getElementById("cameraFeed");
-    video.style.display = "block";
-    video.srcObject = mediaStream;
+//     // Show video feed
+//     const video = document.getElementById("cameraFeed");
+//     video.style.display = "block";
+//     video.srcObject = mediaStream;
 
-    // Play video feed
-    try {
-      await video.play();
-    } catch (err) {
-      console.log("Video play error:", err);
-    }
+//     // Play video feed
+//     try {
+//       await video.play();
+//     } catch (err) {
+//       console.log("Video play error:", err);
+//     }
 
-    // Capture handler
-    document.getElementById("captureBtn").onclick = () => {
-      const canvas = document.getElementById("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext("2d").drawImage(video, 0, 0);
+//     // Capture handler
+//     document.getElementById("captureBtn").onclick = () => {
+//       const canvas = document.getElementById("canvas");
+//       canvas.width = video.videoWidth;
+//       canvas.height = video.videoHeight;
+//       canvas.getContext("2d").drawImage(video, 0, 0);
 
-      preview.src = canvas.toDataURL("image/jpeg");
-      preview.style.display = "block";
-      video.style.display = "none";
-    };
+//       preview.src = canvas.toDataURL("image/jpeg");
+//       preview.style.display = "block";
+//       video.style.display = "none";
+//     };
 
-    // Stop handler
-    document.getElementById("stopBtn").onclick = () => {
-      mediaStream.getTracks().forEach((track) => track.stop());
-      video.style.display = "none";
-      controls.remove();
-      mediaStream = null;
-    };
-  } catch (error) {
-    console.error("Camera error:", error);
-    showModal("Camera error", true);
-    if (mediaStream) mediaStream.getTracks().forEach((track) => track.stop());
-  }
-}
+//     // Stop handler
+//     document.getElementById("stopBtn").onclick = () => {
+//       mediaStream.getTracks().forEach((track) => track.stop());
+//       video.style.display = "none";
+//       controls.remove();
+//       mediaStream = null;
+//     };
+//   } catch (error) {
+//     console.error("Camera error:", error);
+//     showModal("Camera error", true);
+//     if (mediaStream) mediaStream.getTracks().forEach((track) => track.stop());
+//   }
+// }
 document
   .getElementById("cameraButton")
   ?.addEventListener("click", handleCameraCapture);
@@ -414,22 +414,66 @@ function sanitizeFileName(fileName) {
     .toLowerCase();
 }
 
+// async function uploadImage() {
+//   const file = fileInput.files[0];
+//   if (!file) {
+//     alert("Please select an image first.");
+//     return;
+//   }
+
+//   const sanitizedFileName = sanitizeFileName(`${Date.now()}_${file.name}`);
+
+//   const { data, error } = await supabase.storage
+//     .from("images")
+//     .upload(sanitizedFileName, file);
+
+//   if (error) {
+//     console.error(error);
+//     alert("Error uploading file");
+//     return;
+//   }
+
+//   // Get public URL
+//   const { data: publicUrlData } = await supabase.storage
+//     .from("images")
+//     .getPublicUrl(data.path);
+
+//   uploadedImageUrl = publicUrlData.publicUrl;
+
+//   // Update preview with the new URL
+//   const preview = document.getElementById("preview");
+//   preview.src = uploadedImageUrl;
+//   preview.style.display = "block";
+
+//   showModal('Image uploaded successfully!',false, true);
+// //   alert("Image uploaded successfully!");
+// }
+
 async function uploadImage() {
-  const file = fileInput.files[0];
-  if (!file) {
-    alert("Please select an image first.");
+  const preview = document.getElementById("preview");
+  let file;
+
+  // Check for camera image first
+  if (preview.src.startsWith('data:')) {
+    file = dataURLtoFile(preview.src, `camera_${Date.now()}.jpg`);
+  } 
+  // Then check file input
+  else if (fileInput.files.length > 0) {
+    file = fileInput.files[0];
+  }
+  else {
+    showModal("Please select an image or take a photo first", true);
     return;
   }
 
-  const sanitizedFileName = sanitizeFileName(`${Date.now()}_${file.name}`);
-
+  const fileName = `${Date.now()}_${file.name}`;
   const { data, error } = await supabase.storage
     .from("images")
-    .upload(sanitizedFileName, file);
+    .upload(sanitizeFileName(fileName), file);
 
   if (error) {
     console.error(error);
-    alert("Error uploading file");
+    showModal("Error uploading image", true);
     return;
   }
 
@@ -439,15 +483,10 @@ async function uploadImage() {
     .getPublicUrl(data.path);
 
   uploadedImageUrl = publicUrlData.publicUrl;
-
-  // Update preview with the new URL
-  const preview = document.getElementById("preview");
   preview.src = uploadedImageUrl;
-  preview.style.display = "block";
-
-  showModal('Image uploaded successfully!',false, true);
-//   alert("Image uploaded successfully!");
+  showModal('Image uploaded successfully!',false,true);
 }
+
 
 window.uploadImage = uploadImage; // For inline event handlers
 
@@ -474,6 +513,17 @@ function validateAvailability(availability) {
 
 document.addEventListener("DOMContentLoaded", async () => {
   initializeGeoapify();
+  document.getElementById("cameraButton")?.addEventListener('click', handleCameraCapture);
+  // File input changes
+    document.getElementById("fileInput")?.addEventListener('change', function(e) {
+      if (this.files?.length > 0) {
+        document.getElementById("fileName").textContent = this.files[0].name;
+        const preview = document.getElementById("preview");
+        preview.src = URL.createObjectURL(this.files[0]);
+        preview.style.display = 'block';
+      }});
+
+      document.getElementById("uploadButton")?.addEventListener('click', uploadImage);
 
   if (currentListingId) {
     await populateForm(currentListingId);
@@ -614,3 +664,68 @@ modalStyle.innerHTML = `
     #modalButton { margin-top: 10px; padding: 8px 16px; cursor: pointer; }
 `;
 document.head.appendChild(modalStyle);
+
+
+function dataURLtoFile(dataurl, filename) {
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) u8arr[n] = bstr.charCodeAt(n);
+  return new File([u8arr], filename, { type: mime });
+}
+
+async function handleCameraCapture() {
+  const video = document.getElementById("cameraFeed");
+  const preview = document.getElementById("preview");
+  
+  try {
+    // Stop any existing streams
+    if (window.mediaStream) {
+      window.mediaStream.getTracks().forEach(track => track.stop());
+    }
+
+    // Create camera controls
+    const controls = document.createElement('div');
+    controls.className = 'camera-controls';
+    controls.innerHTML = `
+      <button class="capture-btn">Capture</button>
+      <button class="close-btn">Close</button>
+    `;
+
+    document.querySelector('.media-buttons').appendChild(controls);
+
+    // Get camera access
+    window.mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" }
+    });
+
+    video.srcObject = window.mediaStream;
+    video.style.display = 'block';
+    await video.play();
+
+    // Capture handler
+    controls.querySelector('.capture-btn').addEventListener('click', () => {
+      const canvas = document.getElementById("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      
+      preview.src = canvas.toDataURL('image/jpeg');
+      preview.style.display = 'block';
+      video.style.display = 'none';
+      uploadBtn.disabled = false;
+    });
+
+    // Close handler
+    controls.querySelector('.close-btn').addEventListener('click', () => {
+      video.style.display = 'none';
+      window.mediaStream.getTracks().forEach(track => track.stop());
+      controls.remove();
+    });
+
+  } catch (error) {
+    showModal(`Camera error: ${error.message}`, true);
+  }
+}

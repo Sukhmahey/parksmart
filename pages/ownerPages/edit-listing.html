@@ -60,20 +60,36 @@
 
             <div class="form-group" id="parkingSpotImage">
                 
-                <!-- Replace the existing parkingSpotImage div with this -->
+               
 
     <label>Parking Spot Image</label>
     <div class="upload-container">
+        <div class="custom-upload">
+            <input type="file" id="fileInput" accept="image/*">
+            <label for="fileInput">Choose File</label>
+            <span class="file-name" id="fileName">No file chosen</span>
+        </div>
+        <div class="media-buttons">
+            <button type="button" id="cameraButton">Use Camera</button>
+        </div>
+    </div>
+    
+    <!-- Camera elements -->
+    <video id="cameraFeed" style="display: none;"></video>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <img id="preview" src="" alt="Image Preview" style="display: none;">
+    <!-- <div class="upload-container">
         <div class="custom-upload">
             <input type="file" id="fileInput" accept="image/*" />
             <label for="fileInput">Choose File</label>
             <span class="file-name" id="fileName">No file chosen</span>
         </div>
-    </div>
+    </div> -->
     <div class="buttonContainer">
-        <button type="button" class="upload-button" id="uploadButton" onclick="uploadImage()">
-            Upload Image
-        </button>
+        
+<button type="button" class="upload-button" id="uploadButton">
+    Upload Image
+</button>
     </div><br>
     <div class="imgContainer" id="imgContainer"></div>
 

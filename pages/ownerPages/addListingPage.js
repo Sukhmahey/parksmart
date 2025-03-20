@@ -15,6 +15,19 @@ const supabaseKey =
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 let uploadedImageUrl = null;
+
+// Camera handler functions
+function dataURLtoFile(dataurl, filename) {
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
+}
 console.log("uploadedImageUrl", uploadedImageUrl);
 
 const fileInput = document.getElementById("file-input");
@@ -38,29 +51,64 @@ function sanitizeFileName(fileName) {
     .toLowerCase(); // Optionally, convert to lowercase
 }
 
-async function uploadImage(e) {
-  const file = fileInput.files[0];
+async function uploadImage() {
+  let file;
+  const preview = document.getElementById("preview");
+
+  // Check for camera image first
+  if (preview.src && preview.src.startsWith('data:')) {
+    file = dataURLtoFile(preview.src, `camera_${Date.now()}.jpg`);
+  } else {
+    file = fileInput.files[0];
+  }
 
   if (!file) {
     alert("Please select an image first.");
     return;
   }
 
+  // Rest of your existing upload logic remains the same
   const fileName = `${Date.now()}_${file.name}`;
 
   const { data, error } = await supabase.storage
     .from("images")
     .upload(sanitizeFileName(fileName), file, {});
 
-  console.log("data", data);
   if (error) {
     console.error(error);
     alert("Error uploading file");
   } else {
     alert("File uploaded successfully");
     displayImage(data?.path);
+    // Reset camera preview
+    preview.src = '';
+    preview.style.display = 'none';
   }
 }
+
+// async function uploadImage(e) {
+//   const file = fileInput.files[0];
+
+//   if (!file) {
+//     alert("Please select an image first.");
+//     return;
+//   }
+
+//   const fileName = `${Date.now()}_${file.name}`;
+
+//   const { data, error } = await supabase.storage
+//     .from("images")
+//     .upload(sanitizeFileName(fileName), file, {});
+
+//   console.log("data", data);
+//   if (error) {
+//     console.error(error);
+//     alert("Error uploading file");
+//   } else {
+//     alert("File uploaded successfully");
+//     displayImage(data?.path);
+//   }
+// }
 
 async function displayImage(filePath) {
   console.log("here", filePath);
@@ -259,49 +307,49 @@ const handleImage = async () => {
   return preview?.src;
 };
 
-async function handleCameraCapture() {
-  let stream;
-  try {
-    const video = document.getElementById("cameraFeed");
-    const canvas = document.getElementById("canvas");
-    const preview = document.getElementById("preview");
+// async function handleCameraCapture() {
+//   let stream;
+//   try {
+//     const video = document.getElementById("cameraFeed");
+//     const canvas = document.getElementById("canvas");
+//     const preview = document.getElementById("preview");
 
-    const controls = document.createElement("div");
-    controls.className = "media-buttons";
-    controls.innerHTML = `
-            <button type="button" id="snapBtn">Capture</button>
-            <button type="button" id="closeBtn">Close Camera</button>
-        `;
+//     const controls = document.createElement("div");
+//     controls.className = "media-buttons";
+//     controls.innerHTML = `
+//             <button type="button" id="snapBtn">Capture</button>
+//             <button type="button" id="closeBtn">Close Camera</button>
+//         `;
 
-    video.parentNode.insertBefore(controls, video.nextSibling);
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
-    });
+//     video.parentNode.insertBefore(controls, video.nextSibling);
+//     stream = await navigator.mediaDevices.getUserMedia({
+//       video: { facingMode: "environment" },
+//     });
 
-    video.style.display = "block";
-    video.srcObject = stream;
-    await video.play();
+//     video.style.display = "block";
+//     video.srcObject = stream;
+//     await video.play();
 
-    // Capture handler
-    document.getElementById("snapBtn").addEventListener("click", () => {
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext("2d").drawImage(video, 0, 0);
-      preview.src = canvas.toDataURL("image/jpeg", 0.8);
-      preview.style.display = "block";
-    });
+//     // Capture handler
+//     document.getElementById("snapBtn").addEventListener("click", () => {
+//       canvas.width = video.videoWidth;
+//       canvas.height = video.videoHeight;
+//       canvas.getContext("2d").drawImage(video, 0, 0);
+//       preview.src = canvas.toDataURL("image/jpeg", 0.8);
+//       preview.style.display = "block";
+//     });
 
-    // Cleanup handler
-    document.getElementById("closeBtn").addEventListener("click", () => {
-      stream.getTracks().forEach((track) => track.stop());
-      video.style.display = "none";
-      controls.remove();
-    });
-  } catch (error) {
-    return showModal(`Camera error: ${error.message}`, true);
-    if (stream) stream.getTracks().forEach((track) => track.stop());
-  }
-}
+//     // Cleanup handler
+//     document.getElementById("closeBtn").addEventListener("click", () => {
+//       stream.getTracks().forEach((track) => track.stop());
+//       video.style.display = "none";
+//       controls.remove();
+//     });
+//   } catch (error) {
+//     return showModal(`Camera error: ${error.message}`, true);
+//     if (stream) stream.getTracks().forEach((track) => track.stop());
+//   }
+// }
 
 const handleFormSubmission = async (e) => {
   e.preventDefault();
@@ -384,14 +432,7 @@ if (document.getElementById("fileInput")) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const cameraButton = document.getElementById("cameraButton");
-  if (cameraButton) {
-    cameraButton.addEventListener("click", handleCameraCapture);
-  } else {
-    console.error("Camera button not found in DOM!");
-  }
-});
+
 
 document
   .getElementById("cameraButton")
@@ -466,3 +507,69 @@ modalStyle.innerHTML = `
     #modalButton { margin-top: 10px; padding: 8px 16px; cursor: pointer; }
 `;
 document.head.appendChild(modalStyle);
+
+// Camera handler functions
+function dataURLtoFile(dataurl, filename) {
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
+}
+
+async function handleCameraCapture() {
+  const video = document.getElementById("cameraFeed");
+  const canvas = document.getElementById("canvas");
+  const preview = document.getElementById("preview");
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ 
+      video: { facingMode: "environment" } 
+    });
+    
+    video.srcObject = stream;
+    video.style.display = 'block';
+    await video.play();
+
+    // Create capture controls
+    const controls = document.createElement('div');
+    controls.className = 'camera-controls';
+    controls.innerHTML = `
+      <button type="button" class="capture-btn">Capture</button>
+      <button type="button" class="close-btn">Close</button>
+    `;
+
+    // Add controls to media buttons container
+    document.querySelector('.media-buttons').appendChild(controls);
+
+    // Capture handler
+    controls.querySelector('.capture-btn').addEventListener('click', () => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      preview.src = canvas.toDataURL('image/jpeg');
+      preview.style.display = 'block';
+      video.style.display = 'none';
+      stream.getTracks().forEach(track => track.stop());
+      controls.remove();
+      uploadBtn.disabled = false;
+    });
+
+    // Close handler
+    controls.querySelector('.close-btn').addEventListener('click', () => {
+      video.style.display = 'none';
+      stream.getTracks().forEach(track => track.stop());
+      controls.remove();
+    });
+
+  } catch (error) {
+    alert(`Camera error: ${error.message}`);
+  }
+}
+
+// Add event listener for camera button
+document.getElementById('cameraButton').addEventListener('click', handleCameraCapture);
