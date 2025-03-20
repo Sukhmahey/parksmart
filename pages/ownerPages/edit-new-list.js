@@ -1,3 +1,10 @@
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const supabaseUrl = "https://uilvkvvhtlcluutiflwk.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpbHZrdnZodGxjbHV1dGlmbHdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzNDA0MjIsImV4cCI6MjA1NzkxNjQyMn0.Ay2oFoNhYSzf6eChcFfI13ChJNjtDiFMlTViUfROl0o";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+let uploadedImageUrl = null; // Store the uploaded image URL from Supabase
 import { fetchListingData, updateListing } from "../../js/crud.js";
 const daysOfWeek = [
   "monday",
@@ -101,74 +108,54 @@ async function populateForm(listingId) {
   }
 }
 
+
 async function handleFormSubmission(e) {
-  e.preventDefault();
-
-  if (!validateForm()) return;
-
-  const submitBtn = document.querySelector(".update-btn");
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Saving...";
-
-  try {
-    const isAvailable = document.getElementById("availabilityToggle").checked;
-    let availability;
-
-    if (isAvailable) {
-      availability = getAvailabilityData();
-      if (!availability) {
+    e.preventDefault();
+    if (!validateForm()) return;
+  
+    const submitBtn = document.querySelector(".update-btn");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Saving...";
+  
+    try {
+      const isAvailable = document.getElementById("availabilityToggle").checked;
+      let availability = isAvailable ? getAvailabilityData() : null;
+      if (isAvailable && !availability) {
         submitBtn.disabled = false;
         submitBtn.textContent = "Update Listing";
         return;
       }
-    } else {
-      availability = null;
-    }
 
-    const imageUrl = await handleImageUpload();
-
-    let formData;
-
-    if (AddressChanged) {
-      formData = {
-        title: document.getElementById("name")?.value.trim() || "",
-        address: document.getElementById("autocomplete")?.value.trim() || "",
-        description: document.getElementById("description")?.value.trim() || "",
-        price_per_hour: parseFloat(
-          document.getElementById("price")?.value.trim() || ""
-        ),
+      // Use existing coordinates if address wasn't changed
+      const finalLongitude = AddressChanged ? longitudeValue : dataFetched.longitude;
+      const finalLatitude = AddressChanged ? latitudeValue : dataFetched.latitude;
+  
+      // Use the uploadedImageUrl if available
+      const imageUrl = uploadedImageUrl || dataFetched.imgURL;
+  
+      const formData = {
+        title: document.getElementById("name").value.trim(),
+        address: document.getElementById("autocomplete").value.trim(),
+        description: document.getElementById("description").value.trim(),
+        price_per_hour: parseFloat(document.getElementById("price").value.trim()),
         isAvailable: isAvailable,
         availability: availability,
-        // image: imageUrl || existingImageUrl,
-        imgURL: dataFetched?.imgURL || "",
-        longitude: longitudeValue,
-        latitude: latitudeValue,
+        imgURL: imageUrl,
+        longitude: finalLongitude,
+        latitude: finalLatitude,
       };
-    } else {
-      formData = {
-        title: document.getElementById("name")?.value.trim() || "",
-        address: document.getElementById("autocomplete")?.value.trim() || "",
-        description: document.getElementById("description")?.value.trim() || "",
-        price_per_hour: parseFloat(
-          document.getElementById("price")?.value.trim() || ""
-        ),
-        imgURL: dataFetched?.imgURL || "",
-        isAvailable: isAvailable,
-        availability: availability,
-        image: imageUrl || existingImageUrl,
-      };
+  
+      await updateListing(currentListingId, formData);
+      showModal("Listing updated successfully!");
+    } catch (error) {
+      console.error("Error updating listing:", error);
+      showModal(`Error updating listing: ${error.message}`, true);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Update Listing";
     }
-
-    await updateListing(currentListingId, formData);
-    showModal("Listing updated successfully!");
-  } catch (error) {
-    console.error("Error updating listing:", error);
-    showModal(`Error updating listing`, true);
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Update Listing";
-  }
 }
+
 
 function convertTo12HourFormat(time24) {
   let [hours, minutes] = time24.split(":");
@@ -372,18 +359,18 @@ document
   .getElementById("cameraButton")
   ?.addEventListener("click", handleCameraCapture);
 
-document?.getElementById("fileInput")?.addEventListener("change", (event) => {
-  preview.style.display = "block";
+// document?.getElementById("fileInput")?.addEventListener("change", (event) => {
+//   preview.style.display = "block";
 
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      document.getElementById("preview").src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-});
+//   const file = event.target.files[0];
+//   if (file) {
+//     const reader = new FileReader();
+//     reader.onload = (e) => {
+//       document.getElementById("preview").src = e.target.result;
+//     };
+//     reader.readAsDataURL(file);
+//   }
+// });
 
 // async function handleImageUpload() {
 //   // If new image was captured (from camera or file)
@@ -405,6 +392,65 @@ document?.getElementById("fileInput")?.addEventListener("change", (event) => {
 
 //   return existingImageUrl;
 // }
+
+const fileInput = document.getElementById("fileInput");
+const uploadBtn = document.getElementById("uploadButton");
+const fileName = document.getElementById("fileName");
+
+fileInput.addEventListener("change", function (e) {
+  if (this.files && this.files.length > 0) {
+    fileName.textContent = this.files[0].name;
+    // uploadBtn.disabled = false;
+  } else {
+    fileName.textContent = "No file chosen";
+    uploadBtn.disabled = true;
+  }
+});
+
+function sanitizeFileName(fileName) {
+  return fileName
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-\.]+/g, "")
+    .toLowerCase();
+}
+
+async function uploadImage() {
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("Please select an image first.");
+    return;
+  }
+
+  const sanitizedFileName = sanitizeFileName(`${Date.now()}_${file.name}`);
+
+  const { data, error } = await supabase.storage
+    .from("images")
+    .upload(sanitizedFileName, file);
+
+  if (error) {
+    console.error(error);
+    alert("Error uploading file");
+    return;
+  }
+
+  // Get public URL
+  const { data: publicUrlData } = await supabase.storage
+    .from("images")
+    .getPublicUrl(data.path);
+
+  uploadedImageUrl = publicUrlData.publicUrl;
+
+  // Update preview with the new URL
+  const preview = document.getElementById("preview");
+  preview.src = uploadedImageUrl;
+  preview.style.display = "block";
+
+  showModal('Image uploaded successfully!',false, true);
+//   alert("Image uploaded successfully!");
+}
+
+window.uploadImage = uploadImage; // For inline event handlers
+
 async function handleImageUpload() {
   const preview = document.getElementById("preview");
   if (preview.src.startsWith("data:image")) {
@@ -491,7 +537,7 @@ document
   .querySelector(".update-btn")
   .addEventListener("click", handleFormSubmission);
 
-function showModal(message, isError = false) {
+function showModal(message, isError = false, isMsg=false) {
   let modal = document.getElementById("messageModal");
   let overlay = document.querySelector(".modal-overlay");
   if (!overlay) {
@@ -527,7 +573,18 @@ function showModal(message, isError = false) {
       overlay.classList.remove("show");
       modal.classList.remove("show");
     };
-  } else {
+  }
+  else if (isMsg) {
+    modal.classList.add("show");
+    modalButton.textContent = "Close";
+    modalButton.onclick = () => {
+      overlay.classList.remove("show");
+      modal.classList.remove("show");
+    };
+  }
+  
+  else {
+    
     modal.classList.remove("error");
     modalButton.textContent = "Go to Homepage";
     modalButton.onclick = () => {
