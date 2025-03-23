@@ -191,6 +191,10 @@ const resetAllMarkers = () => {
   });
 };
 
+const goBack = () => {
+  window.history.back();
+};
+
 const createOverlayFunction = (
   parkingSpot = {},
   marker,
@@ -281,7 +285,7 @@ const calculateDistance = (obj1, obj2) => {
 };
 
 // Navigation
-document.getElementById("logo").addEventListener("click", function () {
+document.getElementById("logo")?.addEventListener("click", function () {
   window.location.href = "/pages/userPages/homepage.html";
 });
 
@@ -548,3 +552,5 @@ searchBtn.addEventListener("click", (e) => {
 
   fetchParkingSpots({ lat: queryLatitude, lng: queryLongitude });
 });
+
+window.goBack = goBack;
