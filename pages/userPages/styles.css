@@ -359,6 +359,7 @@ header {
   padding: 10px 20px;
   background: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 999;
 }
 
 #imageSlider {
@@ -499,6 +500,33 @@ footer {
 }
 
 #back-btn:hover::before {
+  transform: translateX(-4px); /* Smooth back animation */
+}
+
+#back-btn-header {
+  display: none;
+  align-items: center;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: #3abbe3;
+  transition: color 0.3s ease-in-out;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+#back-btn-header::before {
+  content: "←";
+  margin-right: 8px;
+  font-size: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+#back-btn-header:hover {
+  color: #7d3c98; /* Slightly lighter purple */
+}
+
+#back-btn-header:hover::before {
   transform: translateX(-4px); /* Smooth back animation */
 }
 
@@ -708,4 +736,116 @@ footer {
 
 .logoContainer {
   cursor: pointer;
+}
+
+/* Mobile View  Search Results */
+.back-button-searchResult {
+  display: none !important;
+}
+
+@media (max-width: 480px) {
+  html,
+  body {
+    width: 100%;
+  }
+
+  /* Header */
+
+  .logoContainer {
+    display: none;
+  }
+
+  .back-button-searchResult {
+    display: block !important;
+    padding: 0 !important;
+  }
+
+  #back-btn-header {
+    display: inline-block;
+  }
+
+  .back-button-details {
+    display: none !important;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    align-items: start;
+    a {
+      margin-top: 16px;
+    }
+  }
+  .searchBoxContainer {
+    flex-direction: column;
+  }
+
+  .searchBoxContainer {
+    width: 100%;
+  }
+
+  .searchInputContainer {
+    width: 100%;
+  }
+
+  .searchInputContainer input {
+    padding: 8px;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  #datetime {
+    width: calc(100% - 16px);
+    margin: 8px;
+  }
+
+  .mapOuterContainer {
+    flex-direction: column;
+    justify-content: start;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-top: 16px;
+    box-shadow: inset -10px 0 10px rgba(0, 0, 0, 0.2);
+  }
+
+  gmp-map {
+    order: 1;
+    width: 100%;
+    min-width: 10px !important;
+    height: 50%;
+  }
+
+  aside {
+    order: 2;
+    width: 100%;
+  }
+
+  .parking-list {
+    flex-direction: row;
+  }
+
+  .parking-spot {
+    width: 320px;
+  }
+
+  .back-button-searchResult {
+    padding-inline: 0;
+  }
+
+  /* Details Page  */
+
+  .outerContainer {
+    flex-direction: column;
+    margin-top: 16px;
+  }
+
+  .parking-details {
+    margin-top: 16px;
+  }
+
+  .image-slider {
+    margin: auto !important;
+  }
 }

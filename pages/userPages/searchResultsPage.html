@@ -22,10 +22,16 @@
     <script defer type="module" src="searchResultsPage.js"></script>
   </head>
   <body>
-    <header>
+    <header class="desktopHeader">
       <div class="logoContainer" id="logo">
         <img src="Assets/Logo-FullSize.svg" alt="ParkSmart Logo" />
       </div>
+      <a
+        href="#"
+        id="back-btn"
+        onclick="goBack()"
+        class="back-button-searchResult"
+      ></a>
       <div class="headerRight">
         <form
           class="searchBoxContainer"
@@ -41,24 +47,24 @@
             />
           </div>
           <input type="datetime-local" id="datetime" name="datetime" />
-          <button type="submit" id="searchBtn">
-            <img src="Assets/search.svg" alt="Search Icon" />
-          </button>
-          <button type="submit" id="filterBtn">
-            <img src="Assets/filter.svg" alt="Filter Icon" />
-            <!-- <i class="fa-solid fa-filter"></i> -->
-          </button>
+          <div class="headerButtonContainer">
+            <button type="submit" id="searchBtn">
+              <img src="Assets/search.svg" alt="Search Icon" />
+            </button>
+            <button type="submit" id="filterBtn">
+              <img src="Assets/filter.svg" alt="Filter Icon" />
+            </button>
+            <div class="filter-box" id="filterBox">
+              <label>Sort by:</label>
+              <select id="sort-options">
+                <option value="distance">Sort by Distance</option>
+                <option value="price">Sort by Price</option>
+              </select>
+              <label>Search radius:</label>
+              <input id="radius" type="number" value="25" />
 
-          <div class="filter-box" id="filterBox">
-            <label>Sort by:</label>
-            <select id="sort-options">
-              <option value="distance">Sort by Distance</option>
-              <option value="price">Sort by Price</option>
-            </select>
-            <label>Search radius:</label>
-            <input id="radius" type="number" value="25" />
-
-            <button id="filterBoxbtn">Filter</button>
+              <button id="filterBoxbtn">Filter</button>
+            </div>
           </div>
         </form>
       </div>
@@ -69,6 +75,54 @@
           alt="Profile Icon"
       /></a>
     </header>
+
+    <!-- <heade class="mobileHeader">
+   
+      <a href="#" id="back-btn" onclick="goBack()" class="back-button"></a>
+      <div class="headerRight">
+        <form
+          class="searchBoxContainer"
+          id="searchBoxContainer"
+          autocomplete="off"
+        >
+          <div class="searchInputContainer">
+            <input
+              type="text"
+              id="location"
+              name="location"
+              placeholder="Search for Parking Location"
+            />
+          </div>
+          <input type="datetime-local" id="datetime" name="datetime" />
+          <div class="headerButtonContainer">
+            <button type="submit" id="searchBtn">
+              <img src="Assets/search.svg" alt="Search Icon" />
+            </button>
+            <button type="submit" id="filterBtn">
+              <img src="Assets/filter.svg" alt="Filter Icon" />
+            </button>
+            <div class="filter-box" id="filterBox">
+              <label>Sort by:</label>
+              <select id="sort-options">
+                <option value="distance">Sort by Distance</option>
+                <option value="price">Sort by Price</option>
+              </select>
+              <label>Search radius:</label>
+              <input id="radius" type="number" value="25" />
+
+              <button id="filterBoxbtn">Filter</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <a href="userSettings.html"
+        ><img
+          class="profileIcon"
+          src="Assets/avatar-svg.svg"
+          alt="Profile Icon"
+      /></a>
+    </header> -->
+
     <main>
       <div class="mapOuterContainer">
         <aside class="sidebar">
