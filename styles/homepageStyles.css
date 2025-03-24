@@ -24,7 +24,7 @@
 }
 
 .mainSectionContainer {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: auto;
 }
 .profileiconContainer {
@@ -36,7 +36,7 @@
   margin-top: 0;
 }
 .image-container {
-  width: 400px; /* Set the visible size */
+  width: 500px; /* Set the visible size */
   height: 300px;
   overflow: hidden; /* Crop the zoomed-in image */
   display: flex;
@@ -106,7 +106,7 @@ h1 span {
 }
 
 .instructions {
-  max-width: 1400px;
+  max-width: 1100px;
   margin: 7rem auto;
   box-shadow: #38a9e2 0px 0px 10px 0px;
   padding: 1rem 0;
@@ -114,6 +114,7 @@ h1 span {
 }
 .instructionsImage {
   border-radius: 10px;
+  width: 200px;
 }
 
 h2,
@@ -159,4 +160,49 @@ h2,
 
 * {
   font-family: "Poppins", sans-serif;
+}
+
+button{
+  cursor: pointer;
+}
+
+
+/* Hide .image-container on mobile */
+@media (max-width: 768px) {
+  .mainSectionContainer {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center; /* Center align vertically */
+    align-items: center; /* Center align horizontally */
+    text-align: center; /* Center text */
+  }
+ 
+
+  .image-container {
+    display: none; /* Hide the container */
+  }
+
+  /* Make instructions vertical on mobile */
+  .instructionsContainer {
+    display: flex;
+    flex-direction: column; /* Stack the cards vertically */
+    align-items: center; /* Center the cards horizontally */
+    justify-content: center; /* Center the content vertically */
+    text-align: center;
+    gap: 3rem;
+  }
+
+  /* .instructionsCard {
+    margin-bottom: 20px; /* Add spacing between cards */
+    .instructions{
+      max-width: 400px;
+    }
+
+  .instructionsImage {
+    width:270px ; /* Make images responsive */
+    height: auto;
+  }
+  .instructionsCard p{
+    margin-top: 1rem;
+  }
 }

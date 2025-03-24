@@ -18,17 +18,25 @@ header a {
 }
 
 .headerRight a {
-  margin: 0 1rem;
-  color: white;
+color: #176f9c;;
   border: none;
-
+font-size: 17px;
   text-decoration: none;
   text-align: center;
 }
 
-.headericon {
+.headerRight a:hover {
   background-color: #176f9c;
+  color: white;
+}
+
+.headericon {
+  /* background-color: #176f9c; */
   padding: 0.5rem 0;
+}
+
+.headericon a{
+  color: black;
 }
 .headerRight {
   display: flex;

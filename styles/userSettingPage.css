@@ -1,11 +1,13 @@
+/* General Styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: Arial, sans-serif;
+h1{
+  text-align: center; 
+  margin-bottom: 3rem;
 }
 h2 {
   text-align: center;
@@ -22,6 +24,7 @@ h2 {
   margin: auto;
   margin-bottom: 2rem;
 }
+
 label {
   font-weight: bold;
   display: block;
@@ -35,21 +38,25 @@ input {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 .buttons {
   display: flex;
   gap: 10px;
   margin-top: 15px;
 }
+
 button {
   padding: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
+
 .edit-btn {
   background-color: #007bff;
   color: white;
 }
+
 .save-btn {
   background-color: #28a745;
   color: white;
@@ -58,4 +65,33 @@ button {
 
 * {
   font-family: "Poppins", sans-serif;
+}
+
+/* Mobile View (Vertical layout) */
+@media (max-width: 768px) {
+  .settingsContainer {
+    width: 70%;
+    max-width: 100%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+
+  .settingsWrapper {
+    display: block; /* Stack the forms vertically on mobile */
+    margin-top: 20px;
+
+  }
+}
+
+/* Desktop View (Side by side layout) */
+@media (min-width: 769px) {
+  .settingsWrapper {
+    display: flex;
+    justify-content: space-between; /* Create space between the forms */
+    gap: 5px;
+  }
+
+  .settingsContainer {
+    width: 48%; /* Each form container will take 48% of the space */
+  }
 }

@@ -14,7 +14,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../../styles/userSettingsPage.css" />
+    <!-- <link rel="stylesheet" href="../../styles/userSettingsPage.css" /> -->
     <link rel="stylesheet" href="../../styles/userSettingPage.css" />
     <script type="module" src="userSettings.js"></script>
   </head>
@@ -24,55 +24,54 @@
       <div class="logoContainer" id="logo">
         <img src="Assets/Logo-FullSize.svg" alt="ParkSmart Logo" />
       </div>
-
-      <!-- <a href="userSettings.html"
-        ><img
-          class="profileIcon"
-          src="Assets/avatar-svg.svg"
-          alt="Profile Icon"
-      /></a> -->
+      
     </header>
     <main>
-      <h2>Account Settings</h2>
-      <div class="settingsContainer">
-        <label for="firstName">First Name</label>
-        <input type="text" id="firstName" value="John" readonly />
-
-        <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" value="Doe" readonly />
-
-        <label for="email">Email</label>
-        <input type="email" id="email" value="john.doe@example.com" readonly />
-
-        <label for="phone">Phone Number</label>
-        <input type="text" id="phone" value="+1234567890" readonly />
-
-        <div class="buttons">
-          <button class="edit-btn">Edit</button>
-          <button class="save-btn">Save</button>
+      <h1>My Profile</h1>
+      <div class="settingsWrapper">
+       
+        <div class="settingsContainer">
+          <h2>Account Settings</h2>
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" value="John" readonly />
+    
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" value="Doe" readonly />
+    
+          <label for="email">Email</label>
+          <input type="email" id="email" value="john.doe@example.com" readonly />
+    
+          <label for="phone">Phone Number</label>
+          <input type="text" id="phone" value="+1234567890" readonly />
+    
+          <div class="buttons">
+            <button class="edit-btn">Edit</button>
+            <button class="save-btn">Save</button>
+          </div>
         </div>
-      </div>
-
-      <h2>Default Car Settings</h2>
-      <div class="settingsContainer">
-        <label for="license">License Plate</label>
-        <input type="text" id="license" value="XYZ-1234" readonly />
-
-        <label for="color">Car Color</label>
-        <input type="text" id="color" value="Red" readonly />
-
-        <label for="country">Country</label>
-        <input type="text" id="country" value="Canada" readonly />
-
-        <label for="province">Province</label>
-        <input type="text" id="province" value="British Columbia" readonly />
-
-        <div class="buttons">
-          <button class="edit-btn">Edit</button>
-          <button class="save-btn">Save</button>
+    
+        <div class="settingsContainer">
+          <h2>Car Settings</h2>
+          <label for="license">License Plate</label>
+          <input type="text" id="license" value="XYZ-1234" readonly />
+    
+          <label for="color">Car Color</label>
+          <input type="text" id="color" value="Red" readonly />
+    
+          <label for="country">Country</label>
+          <input type="text" id="country" value="Canada" readonly />
+    
+          <label for="province">Province</label>
+          <input type="text" id="province" value="British Columbia" readonly />
+    
+          <div class="buttons">
+            <button class="edit-btn">Edit</button>
+            <button class="save-btn">Save</button>
+          </div>
         </div>
       </div>
     </main>
+    
     <footer>
       <h3>Contact Us</h3>
       <p>Email: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
