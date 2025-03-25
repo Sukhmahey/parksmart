@@ -3,6 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
@@ -249,6 +250,23 @@ main h2 {
   background: gray;
   color: white;
 }
+footer {
+  background: linear-gradient(to right, #42b97c, #38a9e2);
+  padding: 1rem;
+  margin-top: 5rem;
+  width: 100%;
+  /* text-align: center; */
+}
+
+footer p {
+  margin: 0.5rem 0;
+}
+.socialMediaContainer img {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+
 
 /* Mobile Responsiveness */
 @media screen and (max-width: 768px) {

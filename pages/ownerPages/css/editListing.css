@@ -24,15 +24,16 @@
 }
 
 .nav-back-btn {
-  padding: 8px 16px;
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  
+
   cursor: pointer;
-  transition: background-color 0.3s;
-  text-decoration: none;
   display: inline-block;
+  padding: 0.3rem 4rem;
+  background-color: #176f9c;
+  color: white;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background-color 0.3s;
 }
 
 .nav-back-btn:hover {
@@ -66,6 +67,7 @@ body {
   padding: 30px;
   margin-bottom: 30px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgb(56, 169, 226);
 }
 
 .section-title {
@@ -150,7 +152,7 @@ body {
 
  #cameraButton {
   padding: 10px 20px;
-  background-color: #4a90e2;
+  background-color: #176f9c;
   color: white;
   border: none;
   border-radius: 6px;
@@ -228,7 +230,7 @@ input:checked + .slider:before {
 }
 
 /* Availability Section */
-.day-container {
+/* .day-container {
   background-color: #f8fafc;
   border-radius: 6px;
   padding: 20px;
@@ -251,6 +253,28 @@ input:checked + .slider:before {
   align-items: center;
   gap: 8px;
   min-width: 120px;
+} */
+
+
+
+.day-row {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+  padding: 10px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  flex-wrap: nowrap; 
+}
+
+.day-checkbox {
+  display: flex !important;
+  align-items: center;
+  gap: 5px; 
+  flex-shrink: 0; 
+  white-space: nowrap; 
+  min-width: 3rem;
 }
 
 .time-inputs {
@@ -301,15 +325,17 @@ input:checked + .slider:before {
 /* Submit Button */
 .update-btn {
   width: 100%;
-  padding: 15px;
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  
+
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s;
+
+  padding: 0.9rem 4rem;
+  background-color: #176f9c;
+  color: white;
+  border-radius: 20px;
 }
 
 .update-btn:hover {
@@ -496,10 +522,10 @@ input:checked + .slider:before {
 
 .upload-button {
   padding: 12px 24px;
-  background-color: #007bff;
+  background-color: #176f9c;
+  border-radius: 15px;
   color: white;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
   align-self: center;
@@ -523,6 +549,21 @@ input:checked + .slider:before {
 
 img {
   width: 100%;
+}
+footer {
+  background: linear-gradient(to right, #42b97c, #38a9e2);
+  padding: 1rem;
+  margin-top: 5rem;
+  width: 100%;
+  /* text-align: center; */
+}
+
+footer p {
+  margin: 0.5rem 0;
+}
+.socialMediaContainer img {
+  max-width: 50px;
+  max-height: 50px;
 }
 
 * {
