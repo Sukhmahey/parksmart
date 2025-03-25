@@ -151,10 +151,11 @@ const fetchParkingSpots = async (boundLocation) => {
         return {
           ...parkingSpace,
           distance: distance,
-          isAvailableNow: isWithinConstraint(
-            dateTimeInput.value,
-            parkingSpace?.availability
-          ),
+          isAvailableNow:
+            isWithinConstraint(
+              dateTimeInput.value,
+              parkingSpace?.availability
+            ) || true,
         };
       }
     );
@@ -188,6 +189,10 @@ const resetAllMarkers = () => {
     }
     marker.appendChild(pin.element);
   });
+};
+
+const goBack = () => {
+  window.history.back();
 };
 
 const createOverlayFunction = (
@@ -280,8 +285,8 @@ const calculateDistance = (obj1, obj2) => {
 };
 
 // Navigation
-document.getElementById("logo").addEventListener("click", function () {
-  window.location.href = "/";
+document.getElementById("logo")?.addEventListener("click", function () {
+  window.location.href = "/pages/userPages/homepage.html";
 });
 
 // Helper functions
@@ -350,7 +355,7 @@ const renderListOfSpaces = (
     createOverlayFunction(
       parkingSpot,
       marker,
-      parkingSpot.imageUrl,
+      parkingSpot.imgURL,
       parkingSpot.address
     );
 
@@ -360,11 +365,10 @@ const renderListOfSpaces = (
     parkingSpotElement.id = `${parkingSpot?.space_id}-space`;
 
     // Create element for Image
-    const spotImage = document.createElement("div");
+    console.log("parkingSpot?.imageURL", parkingSpot?.imgURL);
+    const spotImage = document.createElement("img");
     spotImage.classList.add("spot-image");
-    spotImage.style.backgroundImage = parkingSpot?.imageUrl
-      ? `url(${parkingSpot?.imageUrl})`
-      : "";
+    spotImage.src = parkingSpot?.imgURL ?? "";
 
     // Container for Info
     const spotInfo = document.createElement("div");
@@ -392,7 +396,7 @@ const renderListOfSpaces = (
     spotDetailsBtn.textContent = `Go To Details`;
 
     spotDetailsBtn.addEventListener("click", () => {
-      window.location.href = `/pages/userPages/searchDetailsPage.html?spaceId=${parkingSpot?.space_id}`;
+      window.location.href = `/pages/userPages/searchDetailsPage.html?spaceId=${parkingSpot?.space_id}&dateTime=${queryDate}`;
     });
 
     // Append elements to the spot-info div
@@ -548,3 +552,5 @@ searchBtn.addEventListener("click", (e) => {
 
   fetchParkingSpots({ lat: queryLatitude, lng: queryLongitude });
 });
+
+window.goBack = goBack;

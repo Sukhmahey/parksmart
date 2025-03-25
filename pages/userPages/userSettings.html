@@ -1,85 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Find and book parking spots easily with ParkSmart. Hassle-free parking wherever you go!">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Find and book parking spots easily with ParkSmart. Hassle-free parking wherever you go!"
+    />
+    <link rel="icon" href="./Assets/fevicon.svg" type="image/svg+xml" />
     <title>ParkSmart - Home</title>
-    <link rel="stylesheet" href="../../index-header.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../styles/userSettingPage.css">
-<script type="module" src="userSettings.js"></script>
-       
-</head>
+    <link rel="stylesheet" href="../../index-header.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- <link rel="stylesheet" href="../../styles/userSettingsPage.css" /> -->
+    <link rel="stylesheet" href="../../styles/userSettingPage.css" />
+    <script type="module" src="userSettings.js"></script>
+  </head>
 
-<body>
+  <body>
     <header>
-        <div class="logoContainer">
-            <img src="Assets/ParkSmartLogo.png" alt="ParkSmart Logo">
-        </div>
-        <div class="headerRight">
-            <a href="">Become a Host</a>
-            <img class="profileIcon" src="Assets/avatar.png" alt="Profile Icon">
-        </div>
-        </div>
+      <div class="logoContainer" id="logo">
+        <img src="Assets/Logo-FullSize.svg" alt="ParkSmart Logo" />
+      </div>
+      
     </header>
     <main>
-        <h2>Account Settings</h2>
+      <h1>My Profile</h1>
+      <div class="settingsWrapper">
+       
         <div class="settingsContainer">
-            <label for="firstName">First Name</label>
-            <input type="text" id="firstName" value="John" readonly>
-
-            <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" value="Doe" readonly>
-
-            <label for="email">Email</label>
-            <input type="email" id="email" value="john.doe@example.com" readonly>
-
-            <label for="phone">Phone Number</label>
-            <input type="text" id="phone" value="+1234567890" readonly>
-
-            <label for="password">Password</label>
-            <input type="password" id="password" value="password123" readonly>
-
-            <div class="buttons">
-                <button class="edit-btn" onclick="toggleEdit('account')">Edit</button>
-                <button class="save-btn" onclick="saveChanges('account')">Save</button>
-            </div>
+          <h2>Account Settings</h2>
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" value="John" readonly />
+    
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" value="Doe" readonly />
+    
+          <label for="email">Email</label>
+          <input type="email" id="email" value="john.doe@example.com" readonly />
+    
+          <label for="phone">Phone Number</label>
+          <input type="text" id="phone" value="+1234567890" readonly />
+    
+          <div class="buttons">
+            <button class="edit-btn">Edit</button>
+            <button class="save-btn">Save</button>
+          </div>
         </div>
-
-        <h2>Default Car Settings</h2>
+    
         <div class="settingsContainer">
-            <label for="license">License Plate</label>
-            <input type="text" id="license" value="XYZ-1234" readonly>
-
-            <label for="color">Car Color</label>
-            <input type="text" id="color" value="Red" readonly>
-
-            <label for="country">Country</label>
-            <input type="text" id="country" value="Canada" readonly>
-
-            <label for="province">Province</label>
-            <input type="text" id="province" value="British Columbia" readonly>
-
-            <div class="buttons">
-                <button class="edit-btn" onclick="toggleEdit('car')">Edit</button>
-                <button class="save-btn" onclick="saveChanges('car')">Save</button>
-            </div>
+          <h2>Car Settings</h2>
+          <label for="license">License Plate</label>
+          <input type="text" id="license" value="XYZ-1234" readonly />
+    
+          <label for="color">Car Color</label>
+          <input type="text" id="color" value="Red" readonly />
+    
+          <label for="country">Country</label>
+          <input type="text" id="country" value="Canada" readonly />
+    
+          <label for="province">Province</label>
+          <input type="text" id="province" value="British Columbia" readonly />
+    
+          <div class="buttons">
+            <button class="edit-btn">Edit</button>
+            <button class="save-btn">Save</button>
+          </div>
         </div>
+      </div>
     </main>
-       <footer>
-        <h3>Contact Us</h3>
-        <p>Email: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
-        <div class="socialMediaContainer">
-        <img src="Assets/vecteezy_facebook-logo-png-facebook-icon-transparent-png_18930698.png" alt="">
-        <img src="Assets/vecteezy_instagram-logo-png-instagram-icon-transparent_18930415.png" alt="">
-        <img src="Assets/vecteezy_twitter-new-logo-twitter-icons-new-twitter-logo-x-2023-x_31737215.png" alt="">
-        </div>
-        <p>&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
+    
+    <footer>
+      <h3>Contact Us</h3>
+      <p>Email: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
+      <div class="socialMediaContainer">
+        <img
+          src="Assets/vecteezy_facebook-logo-png-facebook-icon-transparent-png_18930698.png"
+          alt=""
+        />
+        <img
+          src="Assets/vecteezy_instagram-logo-png-instagram-icon-transparent_18930415.png"
+          alt=""
+        />
+        <img
+          src="Assets/vecteezy_twitter-new-logo-twitter-icons-new-twitter-logo-x-2023-x_31737215.png"
+          alt=""
+        />
+      </div>
+      <p>&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
     </footer>
-</body>
-
+  </body>
 </html>

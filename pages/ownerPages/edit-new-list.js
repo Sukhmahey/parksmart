@@ -1,3 +1,10 @@
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const supabaseUrl = "https://uilvkvvhtlcluutiflwk.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpbHZrdnZodGxjbHV1dGlmbHdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzNDA0MjIsImV4cCI6MjA1NzkxNjQyMn0.Ay2oFoNhYSzf6eChcFfI13ChJNjtDiFMlTViUfROl0o";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+let uploadedImageUrl = null; // Store the uploaded image URL from Supabase
 import { fetchListingData, updateListing } from "../../js/crud.js";
 const daysOfWeek = [
   "monday",
@@ -101,74 +108,54 @@ async function populateForm(listingId) {
   }
 }
 
+
 async function handleFormSubmission(e) {
-  e.preventDefault();
-
-  if (!validateForm()) return;
-
-  const submitBtn = document.querySelector(".update-btn");
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Saving...";
-
-  try {
-    const isAvailable = document.getElementById("availabilityToggle").checked;
-    let availability;
-
-    if (isAvailable) {
-      availability = getAvailabilityData();
-      if (!availability) {
+    e.preventDefault();
+    if (!validateForm()) return;
+  
+    const submitBtn = document.querySelector(".update-btn");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Saving...";
+  
+    try {
+      const isAvailable = document.getElementById("availabilityToggle").checked;
+      let availability = isAvailable ? getAvailabilityData() : null;
+      if (isAvailable && !availability) {
         submitBtn.disabled = false;
         submitBtn.textContent = "Update Listing";
         return;
       }
-    } else {
-      availability = null;
-    }
 
-    const imageUrl = await handleImageUpload();
-
-    let formData;
-
-    if (AddressChanged) {
-      formData = {
-        title: document.getElementById("name")?.value.trim() || "",
-        address: document.getElementById("autocomplete")?.value.trim() || "",
-        description: document.getElementById("description")?.value.trim() || "",
-        price_per_hour: parseFloat(
-          document.getElementById("price")?.value.trim() || ""
-        ),
+      // Use existing coordinates if address wasn't changed
+      const finalLongitude = AddressChanged ? longitudeValue : dataFetched.longitude;
+      const finalLatitude = AddressChanged ? latitudeValue : dataFetched.latitude;
+  
+      // Use the uploadedImageUrl if available
+      const imageUrl = uploadedImageUrl || dataFetched.imgURL;
+  
+      const formData = {
+        title: document.getElementById("name").value.trim(),
+        address: document.getElementById("autocomplete").value.trim(),
+        description: document.getElementById("description").value.trim(),
+        price_per_hour: parseFloat(document.getElementById("price").value.trim()),
         isAvailable: isAvailable,
         availability: availability,
-        // image: imageUrl || existingImageUrl,
-        imgURL: dataFetched?.imgURL || "",
-        longitude: longitudeValue,
-        latitude: latitudeValue,
+        imgURL: imageUrl,
+        longitude: finalLongitude,
+        latitude: finalLatitude,
       };
-    } else {
-      formData = {
-        title: document.getElementById("name")?.value.trim() || "",
-        address: document.getElementById("autocomplete")?.value.trim() || "",
-        description: document.getElementById("description")?.value.trim() || "",
-        price_per_hour: parseFloat(
-          document.getElementById("price")?.value.trim() || ""
-        ),
-        imgURL: dataFetched?.imgURL || "",
-        isAvailable: isAvailable,
-        availability: availability,
-        image: imageUrl || existingImageUrl,
-      };
+  
+      await updateListing(currentListingId, formData);
+      showModal("Listing updated successfully!");
+    } catch (error) {
+      console.error("Error updating listing:", error);
+      showModal(`Error updating listing: ${error.message}`, true);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Update Listing";
     }
-
-    await updateListing(currentListingId, formData);
-    showModal("Listing updated successfully!");
-  } catch (error) {
-    console.error("Error updating listing:", error);
-    showModal(`Error updating listing`, true);
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Update Listing";
-  }
 }
+
 
 function convertTo12HourFormat(time24) {
   let [hours, minutes] = time24.split(":");
@@ -306,84 +293,84 @@ let currentListingId = getListingIdFromUrl();
 
 let mediaStream = null;
 
-async function handleCameraCapture() {
-  try {
-    // Clear previous preview
-    const preview = document.getElementById("preview");
-    preview.style.display = "none";
+// async function handleCameraCapture() {
+//   try {
+//     // Clear previous preview
+//     const preview = document.getElementById("preview");
+//     preview.style.display = "none";
 
-    // Stop existing stream
-    if (mediaStream) {
-      mediaStream.getTracks().forEach((track) => track.stop());
-    }
+//     // Stop existing stream
+//     if (mediaStream) {
+//       mediaStream.getTracks().forEach((track) => track.stop());
+//     }
 
-    // Create camera controls
-    const controls = document.createElement("div");
-    controls.className = "camera-controls";
-    controls.innerHTML = `
-            <button type="button" id="captureBtn">Capture</button>
-            <button type="button" id="stopBtn">Stop Camera</button>
-        `;
-    document.querySelector(".media-buttons").appendChild(controls);
+//     // Create camera controls
+//     const controls = document.createElement("div");
+//     controls.className = "camera-controls";
+//     controls.innerHTML = `
+//             <button type="button" id="captureBtn">Capture</button>
+//             <button type="button" id="stopBtn">Stop Camera</button>
+//         `;
+//     document.querySelector(".media-buttons").appendChild(controls);
 
-    // Get camera access
-    mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
-    });
+//     // Get camera access
+//     mediaStream = await navigator.mediaDevices.getUserMedia({
+//       video: { facingMode: "environment" },
+//     });
 
-    // Show video feed
-    const video = document.getElementById("cameraFeed");
-    video.style.display = "block";
-    video.srcObject = mediaStream;
+//     // Show video feed
+//     const video = document.getElementById("cameraFeed");
+//     video.style.display = "block";
+//     video.srcObject = mediaStream;
 
-    // Play video feed
-    try {
-      await video.play();
-    } catch (err) {
-      console.log("Video play error:", err);
-    }
+//     // Play video feed
+//     try {
+//       await video.play();
+//     } catch (err) {
+//       console.log("Video play error:", err);
+//     }
 
-    // Capture handler
-    document.getElementById("captureBtn").onclick = () => {
-      const canvas = document.getElementById("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext("2d").drawImage(video, 0, 0);
+//     // Capture handler
+//     document.getElementById("captureBtn").onclick = () => {
+//       const canvas = document.getElementById("canvas");
+//       canvas.width = video.videoWidth;
+//       canvas.height = video.videoHeight;
+//       canvas.getContext("2d").drawImage(video, 0, 0);
 
-      preview.src = canvas.toDataURL("image/jpeg");
-      preview.style.display = "block";
-      video.style.display = "none";
-    };
+//       preview.src = canvas.toDataURL("image/jpeg");
+//       preview.style.display = "block";
+//       video.style.display = "none";
+//     };
 
-    // Stop handler
-    document.getElementById("stopBtn").onclick = () => {
-      mediaStream.getTracks().forEach((track) => track.stop());
-      video.style.display = "none";
-      controls.remove();
-      mediaStream = null;
-    };
-  } catch (error) {
-    console.error("Camera error:", error);
-    showModal("Camera error", true);
-    if (mediaStream) mediaStream.getTracks().forEach((track) => track.stop());
-  }
-}
+//     // Stop handler
+//     document.getElementById("stopBtn").onclick = () => {
+//       mediaStream.getTracks().forEach((track) => track.stop());
+//       video.style.display = "none";
+//       controls.remove();
+//       mediaStream = null;
+//     };
+//   } catch (error) {
+//     console.error("Camera error:", error);
+//     showModal("Camera error", true);
+//     if (mediaStream) mediaStream.getTracks().forEach((track) => track.stop());
+//   }
+// }
 document
   .getElementById("cameraButton")
   ?.addEventListener("click", handleCameraCapture);
 
-document?.getElementById("fileInput")?.addEventListener("change", (event) => {
-  preview.style.display = "block";
+// document?.getElementById("fileInput")?.addEventListener("change", (event) => {
+//   preview.style.display = "block";
 
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      document.getElementById("preview").src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-});
+//   const file = event.target.files[0];
+//   if (file) {
+//     const reader = new FileReader();
+//     reader.onload = (e) => {
+//       document.getElementById("preview").src = e.target.result;
+//     };
+//     reader.readAsDataURL(file);
+//   }
+// });
 
 // async function handleImageUpload() {
 //   // If new image was captured (from camera or file)
@@ -405,6 +392,104 @@ document?.getElementById("fileInput")?.addEventListener("change", (event) => {
 
 //   return existingImageUrl;
 // }
+
+const fileInput = document.getElementById("fileInput");
+const uploadBtn = document.getElementById("uploadButton");
+const fileName = document.getElementById("fileName");
+
+fileInput.addEventListener("change", function (e) {
+  if (this.files && this.files.length > 0) {
+    fileName.textContent = this.files[0].name;
+    // uploadBtn.disabled = false;
+  } else {
+    fileName.textContent = "No file chosen";
+    uploadBtn.disabled = true;
+  }
+});
+
+function sanitizeFileName(fileName) {
+  return fileName
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-\.]+/g, "")
+    .toLowerCase();
+}
+
+// async function uploadImage() {
+//   const file = fileInput.files[0];
+//   if (!file) {
+//     alert("Please select an image first.");
+//     return;
+//   }
+
+//   const sanitizedFileName = sanitizeFileName(`${Date.now()}_${file.name}`);
+
+//   const { data, error } = await supabase.storage
+//     .from("images")
+//     .upload(sanitizedFileName, file);
+
+//   if (error) {
+//     console.error(error);
+//     alert("Error uploading file");
+//     return;
+//   }
+
+//   // Get public URL
+//   const { data: publicUrlData } = await supabase.storage
+//     .from("images")
+//     .getPublicUrl(data.path);
+
+//   uploadedImageUrl = publicUrlData.publicUrl;
+
+//   // Update preview with the new URL
+//   const preview = document.getElementById("preview");
+//   preview.src = uploadedImageUrl;
+//   preview.style.display = "block";
+
+//   showModal('Image uploaded successfully!',false, true);
+// //   alert("Image uploaded successfully!");
+// }
+
+async function uploadImage() {
+  const preview = document.getElementById("preview");
+  let file;
+
+  // Check for camera image first
+  if (preview.src.startsWith('data:')) {
+    file = dataURLtoFile(preview.src, `camera_${Date.now()}.jpg`);
+  } 
+  // Then check file input
+  else if (fileInput.files.length > 0) {
+    file = fileInput.files[0];
+  }
+  else {
+    showModal("Please select an image or take a photo first", true);
+    return;
+  }
+
+  const fileName = `${Date.now()}_${file.name}`;
+  const { data, error } = await supabase.storage
+    .from("images")
+    .upload(sanitizeFileName(fileName), file);
+
+  if (error) {
+    console.error(error);
+    showModal("Error uploading image", true);
+    return;
+  }
+
+  // Get public URL
+  const { data: publicUrlData } = await supabase.storage
+    .from("images")
+    .getPublicUrl(data.path);
+
+  uploadedImageUrl = publicUrlData.publicUrl;
+  preview.src = uploadedImageUrl;
+  showModal('Image uploaded successfully!',false,true);
+}
+
+
+window.uploadImage = uploadImage; // For inline event handlers
+
 async function handleImageUpload() {
   const preview = document.getElementById("preview");
   if (preview.src.startsWith("data:image")) {
@@ -428,6 +513,17 @@ function validateAvailability(availability) {
 
 document.addEventListener("DOMContentLoaded", async () => {
   initializeGeoapify();
+  document.getElementById("cameraButton")?.addEventListener('click', handleCameraCapture);
+  // File input changes
+    document.getElementById("fileInput")?.addEventListener('change', function(e) {
+      if (this.files?.length > 0) {
+        document.getElementById("fileName").textContent = this.files[0].name;
+        const preview = document.getElementById("preview");
+        preview.src = URL.createObjectURL(this.files[0]);
+        preview.style.display = 'block';
+      }});
+
+      document.getElementById("uploadButton")?.addEventListener('click', uploadImage);
 
   if (currentListingId) {
     await populateForm(currentListingId);
@@ -491,7 +587,7 @@ document
   .querySelector(".update-btn")
   .addEventListener("click", handleFormSubmission);
 
-function showModal(message, isError = false) {
+function showModal(message, isError = false, isMsg=false) {
   let modal = document.getElementById("messageModal");
   let overlay = document.querySelector(".modal-overlay");
   if (!overlay) {
@@ -527,7 +623,18 @@ function showModal(message, isError = false) {
       overlay.classList.remove("show");
       modal.classList.remove("show");
     };
-  } else {
+  }
+  else if (isMsg) {
+    modal.classList.add("show");
+    modalButton.textContent = "Close";
+    modalButton.onclick = () => {
+      overlay.classList.remove("show");
+      modal.classList.remove("show");
+    };
+  }
+  
+  else {
+    
     modal.classList.remove("error");
     modalButton.textContent = "Go to Homepage";
     modalButton.onclick = () => {
@@ -557,3 +664,68 @@ modalStyle.innerHTML = `
     #modalButton { margin-top: 10px; padding: 8px 16px; cursor: pointer; }
 `;
 document.head.appendChild(modalStyle);
+
+
+function dataURLtoFile(dataurl, filename) {
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) u8arr[n] = bstr.charCodeAt(n);
+  return new File([u8arr], filename, { type: mime });
+}
+
+async function handleCameraCapture() {
+  const video = document.getElementById("cameraFeed");
+  const preview = document.getElementById("preview");
+  
+  try {
+    // Stop any existing streams
+    if (window.mediaStream) {
+      window.mediaStream.getTracks().forEach(track => track.stop());
+    }
+
+    // Create camera controls
+    const controls = document.createElement('div');
+    controls.className = 'camera-controls';
+    controls.innerHTML = `
+      <button class="capture-btn">Capture</button>
+      <button class="close-btn">Close</button>
+    `;
+
+    document.querySelector('.media-buttons').appendChild(controls);
+
+    // Get camera access
+    window.mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" }
+    });
+
+    video.srcObject = window.mediaStream;
+    video.style.display = 'block';
+    await video.play();
+
+    // Capture handler
+    controls.querySelector('.capture-btn').addEventListener('click', () => {
+      const canvas = document.getElementById("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      
+      preview.src = canvas.toDataURL('image/jpeg');
+      preview.style.display = 'block';
+      video.style.display = 'none';
+      uploadBtn.disabled = false;
+    });
+
+    // Close handler
+    controls.querySelector('.close-btn').addEventListener('click', () => {
+      video.style.display = 'none';
+      window.mediaStream.getTracks().forEach(track => track.stop());
+      controls.remove();
+    });
+
+  } catch (error) {
+    showModal(`Camera error: ${error.message}`, true);
+  }
+}

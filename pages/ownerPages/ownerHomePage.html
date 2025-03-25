@@ -1,43 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      href="../userPages/Assets/fevicon.svg"
+      type="image/svg+xml"
+    />
     <title>Parking Listings</title>
-    <link rel="stylesheet" href="css/ownerHomePage.css">
+    <link rel="stylesheet" href="css/styles_ownerHomePage.css" />
     <script type="module" src="ownerHomePage.js" defer></script>
-</head>
-<body>
+
+    
+  </head>
+  <body>
     <header>
-        <div class="icon">
-            <img src="Assets/ParkSmartLogo.png" alt="">
-        </div>
-        <h1>Hello User,</h1>
-        <div class="buttons">
-            <button>Switch to User</button>
-            <button>Bookings</button>
-        </div>
+      <div class="icon">
+        <img src="../userPages/Assets/Logo-FullSize.svg" alt="" />
+      </div>
+      <h1>Hello, <span id="username"></span> 😀</h1>
+      <div class="buttons">
+        <a href="../userPages/homepage.html">Switch to User</a>
+        <a href="./bookingHistory.html">Bookings</a>
+      </div>
     </header>
     <div class="container">
-        
-        
-        <main>
-            <h2>Listings</h2>
-            <div class="listings" id="listings">
-                <button class="removeAll">&#128465; Remove All</button>
-                <div id="listingarea">
-
-                </div>
-                
-            </div>
-            <a class="add-listing-a" href="addListingPage.html">
-                <button class="add-listing">Add New Listings</button>
-            </a>
-            
-
-            
-
-        </main>
+      <main>
+        <h2>Your Listings</h2>
+        <div class="listings" id="listings">
+          <!-- <button class="removeAll">&#128465; Remove All</button> -->
+          <div id="listingarea"></div>
+          <div id="noListings">
+            <p>No listings available.</p>
+          </div>
+        </div>
+        <a class="add-listing-a" href="addListingPage.html">
+          <button class="add-listing">Add New Listings</button>
+        </a>
+      </main>
     </div>
-</body>
+  </body>
 </html>

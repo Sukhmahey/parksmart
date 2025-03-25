@@ -12,16 +12,18 @@ if (signUpForm) {
     const lastName = document.getElementById("signupLastName").value;
     const email = document.getElementById("signupEmail").value;
     const password = document.getElementById("signupPassword").value;
-    const phoneNumber = document.getElementById("signupPhoneNumber").value; // Add this field in your form
-    const isSpaceOwner = document.getElementById("isSpaceOwner").checked;
-    const role = isSpaceOwner ? "spaceOwner" : "user";
+    const phoneNumber = document.getElementById("signupPhoneNumber").value; 
+
+    
 
     try {
       // Sign up the user
-      const user = await signUp(firstName, lastName, email, password, role);
+      const user = await signUp(email, password);
+      // const user = await signUp(firstName, lastName, email, password, role);
+
       localStorage.setItem("userId", user.uid);
       // Add user information to Firestore
-      await addUser(user.uid, firstName, lastName, email, phoneNumber, password, role);
+      await addUser(user.uid, firstName, lastName, email, phoneNumber, password);
 
       // After successful sign up, log the user in
       await signIn(email, password);

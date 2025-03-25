@@ -10,12 +10,17 @@ function getQueryParam(param) {
 const spaceId = getQueryParam("spaceId");
 const userId = localStorage.getItem("userId");
 
+document.getElementById("logo").addEventListener("click", function () {
+  window.location.href = "/pages/userPages/homepage.html";
+});
+
 if (!spaceId || !userId) {
   alert("Invalid access. Missing space or user ID.");
   window.location.href = "../userPages/homepage.html";
 }
 
 const parkingSpace = await getParkingSpaceById(spaceId);
+console.log("parkingSpace", parkingSpace);
 async function populateCheckoutDetails() {
   try {
     if (!parkingSpace) {
@@ -25,9 +30,11 @@ async function populateCheckoutDetails() {
     }
 
     // Populate parking space details
-    document.querySelector(
-      ".image-placeholder"
-    ).style.backgroundImage = `url(${parkingSpace.image})`;
+    // document.querySelector(
+    //   ".image-placeholder"
+    // ).style.backgroundImage = `url(${parkingSpace.image})`;
+    document.querySelector(".image-placeholder").src =
+      parkingSpace?.imgURL ?? "";
     document.querySelector("h2").textContent = parkingSpace.title;
     document.querySelector(".parking-info p:nth-child(2)").textContent =
       parkingSpace.address;
@@ -99,7 +106,10 @@ document.querySelector("form").addEventListener("submit", async (e) => {
       endTime,
       parseFloat(totalPrice),
       license,
-      color
+      color,
+      parkingSpace?.title || "",
+      parkingSpace?.address || "",
+      parkingSpace?.imgURL || ""
     );
 
     localStorage.setItem(

@@ -2,7 +2,7 @@
 /* Always set the map height explicitly to define the size of the div */
 gmp-map {
   height: 100%;
-  width: 80%;
+  width: 60%;
   min-width: 550px;
 }
 
@@ -11,6 +11,11 @@ main {
   height: 100%;
   margin: 24px;
   padding: 0;
+}
+
+body {
+  padding: 0px;
+  margin: 0px;
 }
 
 .mapOuterContainer {
@@ -24,7 +29,7 @@ main {
 .sidebar {
   display: flex;
   flex-direction: column;
-  width: 35%;
+  width: 40%;
   border-radius: 8px;
   min-width: 320px;
   margin-right: 20px;
@@ -109,6 +114,11 @@ main {
   background-color: #0056b3;
 }
 
+#searchBtn img {
+  width: 16px;
+  color: white;
+}
+
 /* Parking Spot Cards */
 .parking-list {
   display: flex;
@@ -141,7 +151,7 @@ main {
   flex: 2;
   min-width: 80px;
   height: 100%;
-  background: gray;
+  /* background: gray; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -241,10 +251,27 @@ main {
     background-color: white;
 
     img {
-      width: 32px;
-      height: 32px;
+      width: 16px;
+      height: 16px;
     }
   }
+}
+
+.searchBoxContainer button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.searchBoxContainer button img {
+  width: 16px;
+  height: 16px;
+}
+
+#filterBtn img {
+  width: 18px;
+  width: 18px;
 }
 
 .searchInputContainer {
@@ -263,23 +290,6 @@ main {
   border: 1px solid;
   padding: 8px;
   border-radius: 4px;
-}
-
-button {
-  background-color: #007bff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button img {
-  width: 16px;
-  height: 16px;
-}
-
-button:hover {
-  background-color: #0056b3;
 }
 
 #logo {
@@ -329,6 +339,7 @@ button:hover {
   background-color: #248c4a;
   padding: 8px;
   border-radius: 8px;
+  color: white;
 }
 
 #filterBtn {
@@ -337,6 +348,10 @@ button:hover {
 
 /* =----------------------------SearchDetailPage CSS -------------------------------- */
 
+#searchDetailsPage {
+  background-color: #f6f7f9;
+}
+
 header {
   display: flex;
   justify-content: space-between;
@@ -344,13 +359,14 @@ header {
   padding: 10px 20px;
   background: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 999;
 }
 
 #imageSlider {
   position: relative;
   width: 100%;
-  max-width: 600px; /* Adjust as needed */
-  height: 300px;
+  max-width: 400px;
+  height: 400px;
   overflow: hidden;
 }
 
@@ -386,46 +402,11 @@ header {
   cursor: pointer;
 }
 
-.image-slider {
-  text-align: center;
-  position: relative;
-  margin: 20px auto;
-  width: 60%;
-}
-
-.image-slider img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-.next {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.parking-details {
-  background: #fff;
-  padding: 20px;
-  margin: 20px auto 20px auto;
-  width: 100%;
-  max-width: 1200px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  border: #38a9e2 solid 2px;
-  margin-bottom: 20px;
-}
-
 .booking input {
   margin-left: 10px;
 }
 
-button {
+.parking-spot button {
   padding: 10px 15px;
   margin: 10px 5px;
   cursor: pointer;
@@ -435,7 +416,7 @@ button {
   border-radius: 5px;
 }
 
-button:hover {
+.parking-spot button:hover {
   background: #248c4a;
 }
 
@@ -447,8 +428,259 @@ footer {
   margin-top: 20px;
 }
 
-/* Suggestions */
+.price {
+  background: #28a745;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: inline-block;
+}
 
+.features {
+  list-style: none;
+  padding: 0;
+}
+
+.features li {
+  margin: 5px 0;
+}
+
+.outerContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  margin: auto;
+}
+
+#searchDetailsPage main {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.parking-details {
+  display: flex;
+  justify-content: center;
+  min-width: 368px;
+}
+
+.image-slider {
+  border: 1px solid black;
+  border-radius: 8px;
+  margin-right: 16px;
+  max-width: 400px;
+  margin-left: 32px;
+}
+
+.image-slider img {
+  width: 100%;
+}
+
+#back-btn {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: #3abbe3;
+  transition: color 0.3s ease-in-out;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+#back-btn::before {
+  content: "←";
+  margin-right: 8px;
+  font-size: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+#back-btn:hover {
+  color: #7d3c98; /* Slightly lighter purple */
+}
+
+#back-btn:hover::before {
+  transform: translateX(-4px); /* Smooth back animation */
+}
+
+#back-btn-header {
+  display: none;
+  align-items: center;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: #3abbe3;
+  transition: color 0.3s ease-in-out;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+#back-btn-header::before {
+  content: "←";
+  margin-right: 8px;
+  font-size: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+#back-btn-header:hover {
+  color: #7d3c98; /* Slightly lighter purple */
+}
+
+#back-btn-header:hover::before {
+  transform: translateX(-4px); /* Smooth back animation */
+}
+
+/* ---------------Specs------------------- */
+.price-section {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.daily-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.per-day {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: normal;
+}
+
+.total-price {
+  display: block;
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.specs-container {
+  margin-bottom: 20px;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.spec-header {
+  color: #666;
+  font-size: 0.8rem;
+  flex: 1;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 4px;
+}
+
+.spec-item {
+  flex: 1;
+  font-size: 0.8rem;
+  color: #333;
+}
+
+.description {
+  color: #444;
+  font-size: 0.8rem;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.book-btn {
+  display: block;
+  background: #28a745;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: fit-content;
+  text-align: center;
+  font-size: 16px;
+}
+
+.book-btn:hover {
+  background: #218838;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  max-width: 420px;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.availability-section {
+  margin: 8px 0;
+  h3 {
+    margin: 0;
+  }
+}
+
+.availability-day {
+  color: #444;
+  /* font-size: 0.9rem; */
+  margin: 8px 0;
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  line-height: 1.4;
+  text-transform: capitalize;
+  padding: 4px;
+  border: 1px #444 solid;
+  border-radius: 4px;
+}
+
+.divider {
+  height: 1px;
+  background: #eee;
+  margin: 4px 0;
+}
+
+.subtitle {
+  color: #666;
+  /* font-size: 0.9rem; */
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.address-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.copy-btn {
+  background: #3aade3;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: white;
+  transition: all 0.2s;
+  margin-left: 12px;
+}
+
+.copy-btn:hover {
+  background: white;
+  color: #3aade3;
+  border: 1px solid #3aade3;
+}
+
+.copy-btn:active {
+  transform: scale(0.95);
+}
+
+/* Suggestions */
 #suggestions {
   max-height: 200px;
   overflow-y: auto;
@@ -479,5 +711,141 @@ footer {
 
   span {
     font-weight: bold;
+  }
+}
+
+/* Footer */
+
+footer {
+  background: linear-gradient(to right, #42b97c, #38a9e2);
+  padding: 1rem;
+  /* width: 100vw; */
+  margin-top: 32px;
+  /* position: sticky;
+  bottom: 0; */
+}
+
+.socialMediaContainer img {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.profileIcon {
+  width: 35px;
+}
+
+.logoContainer {
+  cursor: pointer;
+}
+
+/* Mobile View  Search Results */
+.back-button-searchResult {
+  display: none !important;
+}
+
+@media (max-width: 480px) {
+  html,
+  body {
+    width: 100%;
+  }
+
+  /* Header */
+
+  .logoContainer {
+    display: none;
+  }
+
+  .back-button-searchResult {
+    display: block !important;
+    padding: 0 !important;
+  }
+
+  #back-btn-header {
+    display: inline-block;
+  }
+
+  .back-button-details {
+    display: none !important;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    align-items: start;
+    a {
+      margin-top: 16px;
+    }
+  }
+  .searchBoxContainer {
+    flex-direction: column;
+  }
+
+  .searchBoxContainer {
+    width: 100%;
+  }
+
+  .searchInputContainer {
+    width: 100%;
+  }
+
+  .searchInputContainer input {
+    padding: 8px;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  #datetime {
+    width: calc(100% - 16px);
+    margin: 8px;
+  }
+
+  .mapOuterContainer {
+    flex-direction: column;
+    justify-content: start;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-top: 16px;
+    box-shadow: inset -10px 0 10px rgba(0, 0, 0, 0.2);
+  }
+
+  gmp-map {
+    order: 1;
+    width: 100%;
+    min-width: 10px !important;
+    height: 50%;
+  }
+
+  aside {
+    order: 2;
+    width: 100%;
+  }
+
+  .parking-list {
+    flex-direction: row;
+  }
+
+  .parking-spot {
+    width: 320px;
+  }
+
+  .back-button-searchResult {
+    padding-inline: 0;
+  }
+
+  /* Details Page  */
+
+  .outerContainer {
+    flex-direction: column;
+    margin-top: 16px;
+  }
+
+  .parking-details {
+    margin-top: 16px;
+  }
+
+  .image-slider {
+    margin: auto !important;
   }
 }

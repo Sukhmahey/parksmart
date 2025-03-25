@@ -15,28 +15,31 @@ async function addUser(
   lastName,
   email,
   phoneNumber,
-  password,
-  role
+  password
 ) {
   const userRef = doc(db, "users", userId); // Use userId (UID) as the document ID
   await setDoc(userRef, {
-    user_id: userId,
+    user_id: userRef.id,
     firstName,
     lastName,
     email,
     phoneNumber,
     password,
-    role,
     createdAt: new Date(),
+    account_id: userId,
   });
 
+  console.log("User added:", userId);
   return userId;
 }
 // function to add parking space / owner side
 async function addParkingSpace(
   user_id,
   title,
+  owner_name,
   address,
+  description,
+  imgURL,
   price_per_hour,
   image,
   longitude,
@@ -49,7 +52,10 @@ async function addParkingSpace(
     space_id: parkingRef.id,
     user_id,
     title,
+    owner_name,
     address,
+    description,
+    imgURL,
     price_per_hour,
     image,
     longitude,
@@ -59,6 +65,7 @@ async function addParkingSpace(
     created_at: new Date(),
     updated_at: new Date(),
   });
+  // console.log("Parking space added:", parkingRef.id);
 }
 
 // function to populate parking space details / owner side
@@ -66,16 +73,7 @@ async function getParkingSpaces() {
   const snapshot = await getDocs(collection(db, "parking_spaces"));
   const dataObj = [];
   snapshot.forEach((doc) => {
-    dataObj.push(doc.data());
-  });
-
-  return dataObj;
-}
-
-async function getOwnerBookingHistory() {
-  const snapshot = await getDocs(collection(db, "owner_history"));
-  const dataObj = [];
-  snapshot.forEach((doc) => {
+    console.log(doc.id, "=>", doc.data());
     dataObj.push(doc.data());
   });
 
@@ -107,6 +105,7 @@ async function fetchListingData(listingId) {
 async function updateListing(listingId, updatedData) {
   const docRef = doc(db, "parking_spaces", listingId);
   await updateDoc(docRef, updatedData);
+  console.log("Listing updated:", listingId);
 }
 
 async function addBooking(
@@ -117,7 +116,11 @@ async function addBooking(
   end_time,
   total_price,
   license_plate,
-  color
+  color,
+  name = "",
+  address = "",
+  imgURL = ""
+
 ) {
   try {
     const bookingRef = doc(collection(db, "bookings"));
@@ -140,7 +143,12 @@ async function addBooking(
       color,
       status: "confirmed",
       created_at: Timestamp.now(),
+      name,
+      address,
+      imgURL
     });
+
+    console.log("Booking added successfully:", bookingRef.id);
   } catch (error) {
     console.error("Error adding booking:", error);
     throw error;
@@ -231,6 +239,28 @@ async function updateUser(user_id, newData) {
   console.log("User updated:", user_id);
 }
 
+// Get user by id
+async function getUserById(user_id) {
+  try {
+    if (!db) {
+      throw new Error("Firestore DB is not initialized!");
+    }
+
+    const userRef = doc(db, "users", user_id);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      // console.log("User found:", userSnap.data());
+      return userSnap.data();
+    } else {
+      // console.error("No such user with ID:", user_id);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error in getUserById:", error);
+  }
+}
+
 // DELETE: Remove Data
 async function deleteUser(user_id) {
   const userRef = doc(db, "users", user_id);
@@ -256,6 +286,13 @@ async function getBooking(booking_id) {
   }
 }
 
+async function getUsersR() {
+  const snapshot = await getDocs(collection(db, "users"));
+  snapshot.forEach((doc) => {
+    console.log("User ID:", doc.id, "=>", doc.data());
+  });
+}
+
 // Export functions for use
 export {
   addUser,
@@ -270,5 +307,5 @@ export {
   fetchListingData,
   updateListing,
   deleteParkingSpace,
-  getOwnerBookingHistory,
+  getUserById,
 };

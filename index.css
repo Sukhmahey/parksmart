@@ -100,7 +100,6 @@ h4 {
   font-weight: 400;
 }
 
-
 /*header */
 header {
   display: flex;
@@ -117,18 +116,20 @@ header a {
 
 .headerRight a {
   margin: 0 1rem;
-  background-color: #176F9C;
+  background-color: #176f9c;
   color: white;
   border: none;
   padding: 0.5rem 0;
   text-decoration: none;
   text-align: center;
 }
-.headerRight{
+.headerRight {
   display: flex;
 }
-.profileIcon{
-width: 2rem;
-height: 2rem;
+.profileIcon {
+  width: 35px;
 }
 
+* {
+  font-family: "Poppins", sans-serif;
+}

@@ -1,152 +1,208 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-
-
 .searchInputContainer {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .searchIcon {
-    position: absolute;
-    right: 35px; /* Adjust based on your preference */
-    pointer-events: none; 
+  position: absolute;
+  right: 35px; /* Adjust based on your preference */
+  pointer-events: none;
 }
-.searchIcon  img {
-    width: 30px;
+.searchIcon img {
+  width: 30px;
 }
 
 .searchInputContainer input {
-    padding-left: 30px; /* Add some padding to the left so the text doesn’t overlap the icon */
+  padding-left: 30px; /* Add some padding to the left so the text doesn’t overlap the icon */
 }
 
 .mainSectionContainer {
-    max-width: 1000px;
-    margin: auto;
+  max-width: 1100px;
+  margin: auto;
+}
+.profileiconContainer {
+  width: 40px;
+  margin-top: 0;
 }
 
+.profileIcon {
+  margin-top: 0;
+}
 .image-container {
-    width: 400px; /* Set the visible size */
-    height: 300px;
-    overflow: hidden; /* Crop the zoomed-in image */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-   
-  }
-  
-  .heroImage {
-    width: 85%;  
-    height: 85%;
-    object-fit: cover;
-    /* transform: scale(1.2); */
-    border-radius: 20px;
-  }
-  
-  .image-text {
-    margin-top: 10px; /* Add space below the image */
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-  }
-  
+  width: 500px; /* Set the visible size */
+  height: 300px;
+  overflow: hidden; /* Crop the zoomed-in image */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heroText {
+  padding-left: 16px;
+}
+
+.heroImage {
+  width: 85%;
+  height: 85%;
+  object-fit: cover;
+  /* transform: scale(1.2); */
+  border-radius: 20px;
+}
+
+.image-text {
+  margin-top: 10px; /* Add space below the image */
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
 
 h1 span {
-    color: #42B97C;
+  color: #42b97c;
 }
-.instructions h3{
-   color: #38A9E2;
+.instructions h3 {
+  color: #38a9e2;
 }
 
 .mainSectionContainer {
-    display: flex;
-    margin-top: 5rem;
-    justify-content: space-between;
+  display: flex;
+  margin-top: 5rem;
+  justify-content: space-between;
 }
 
 .searchBox form input {
-    width: 350px; /* Same width for both inputs */
-    height: 50px;
-    padding: 0.5rem 2rem 0.5rem 1rem;
-    box-sizing: border-box;
+  width: 350px; /* Same width for both inputs */
+  height: 50px;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  box-sizing: border-box;
 }
 
 .searchBox button {
-    width: 250px;
-    height: 40px;
-    background-color: #38A9E2;
-    color: white;
-    border: none;
+  width: 250px;
+  height: 40px;
+  background-color: #38a9e2;
+  color: white;
+  border: none;
 }
 
 .searchBox input,
 .searchBox button {
-    margin: 0.5rem;
-    border-radius: 20px;
+  margin: 0.5rem;
+  border-radius: 20px;
 }
 
 .searchBoxContainer {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .instructions {
-    max-width: 1400px;
-    margin: 7rem auto ;
-    box-shadow: #38A9E2 0px 0px 10px 0px;
-    padding: 1rem 0;
-    border-radius: 30px;
+  max-width: 1100px;
+  margin: 7rem auto;
+  box-shadow: #38a9e2 0px 0px 10px 0px;
+  padding: 1rem 0;
+  border-radius: 30px;
 }
-.instructionsImage{
-    border-radius: 10px;
+.instructionsImage {
+  border-radius: 10px;
+  width: 200px;
 }
 
-h2, .instructions h3{
-    text-align: center;
-    margin-bottom: 1rem;
+h2,
+.instructions h3 {
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .instructionsContainer {
-    display: flex;
-    gap: 10rem;
-    justify-content: center;
+  display: flex;
+  gap: 10rem;
+  justify-content: center;
 }
 
 .instructions p {
-    text-align: center;
+  text-align: center;
 }
 
-
 #suggestions {
-    max-height: 200px;
-    overflow-y: auto;
-    position: absolute;
-    background-color: #42B97C;
-    width: 80%;
-    z-index: 9999;
-    top: 55px; 
-    left: 30px;
-    color: white;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  background-color: #42b97c;
+  width: 80%;
+  z-index: 9999;
+  top: 55px;
+  left: 30px;
+  color: white;
 }
 
 .suggestion-item {
-    padding: 8px;
-    cursor: pointer;
+  padding: 8px;
+  cursor: pointer;
 }
 
 .suggestion-item:hover {
-    background-color: #f0f0f0;
-    color: black;
+  background-color: #f0f0f0;
+  color: black;
+}
+.headericon {
+  background-color: none;
+}
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+button{
+  cursor: pointer;
 }
 
 
+/* Hide .image-container on mobile */
+@media (max-width: 768px) {
+  .mainSectionContainer {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center; /* Center align vertically */
+    align-items: center; /* Center align horizontally */
+    text-align: center; /* Center text */
+  }
+ 
 
+  .image-container {
+    display: none; /* Hide the container */
+  }
 
+  /* Make instructions vertical on mobile */
+  .instructionsContainer {
+    display: flex;
+    flex-direction: column; /* Stack the cards vertically */
+    align-items: center; /* Center the cards horizontally */
+    justify-content: center; /* Center the content vertically */
+    text-align: center;
+    gap: 3rem;
+  }
+
+  /* .instructionsCard {
+    margin-bottom: 20px; /* Add spacing between cards */
+    .instructions{
+      max-width: 400px;
+    }
+
+  .instructionsImage {
+    width:270px ; /* Make images responsive */
+    height: auto;
+  }
+  .instructionsCard p{
+    margin-top: 1rem;
+  }
+}
