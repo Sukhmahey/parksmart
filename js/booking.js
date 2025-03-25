@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  // Update booking information
   document.getElementById("parkingTitle").textContent =
     bookingData.parkingTitle;
   document.getElementById("parkingLocation").textContent =
@@ -23,11 +24,21 @@ document.addEventListener("DOMContentLoaded", () => {
   ).textContent = `${bookingData.duration} hours`;
   document.getElementById("totalPrice").textContent = bookingData.totalPrice;
 
+  // Add this block to set the parking image
+  const parkingImage = document.getElementById("parkingImage");
+  if (bookingData.imgURL) {
+    parkingImage.src = bookingData.imgURL;
+    parkingImage.style.display = "block"; // Make sure it's visible
+  } else {
+    parkingImage.style.display = "none"; // Hide if no image
+  }
+
+  // Event listeners
   document.getElementById("backToHome").addEventListener("click", () => {
     window.location.href = "../userPages/homepage.html";
   });
-});
 
-document.getElementById("logo").addEventListener("click", function () {
-  window.location.href = "/pages/userPages/homepage.html";
+  document.getElementById("logo").addEventListener("click", () => {
+    window.location.href = "/pages/userPages/homepage.html";
+  });
 });

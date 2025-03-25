@@ -1,84 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Booking Detail</title>
-    <link rel="icon" href="./Assets/fevicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./booking.css" />
-    <link rel="stylesheet" href="../../index-header.css">
-    <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    rel="stylesheet"
-  />
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Booking Confirmation | ParkSmart</title>
+  <link rel="icon" href="../../Assets/fevicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../../index-header.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./booking.css" />
   </head>
 
-  <body>
-    <header>
-      <div class="logoContainer" id="logo">
-        <img src="Assets/Logo-FullSize.svg" alt="ParkSmart Logo" />
+<body>
+  <header class="main-header">
+    <div class="logoContainer" id="logo">
+      <img src="Assets/Logo-FullSize.svg" alt="ParkSmart Logo" class="logo-img" />
       </div>
-
-      <a href="userSettings.html"
-        ><img
-          class="profileIcon"
-          src="Assets/avatar-svg.svg"
-          alt="Profile Icon"
-      /></a>
+    <a href="userSettings.html" class="profile-link">
+      <img class="profileIcon" src="Assets/avatar-svg.svg" alt="Profile Icon" />
+    </a>
     </header>
+<main class="main-content">
     <div class="container">
-      <h1>Booking Confirmed! 🎉</h1>
+      <h1 class="confirmation-title">Booking Confirmed! 🎉</h1>
+      <p class="confirmation-message">Your booking has been successfully placed.</p>
 
-      <p>Your booking has been successfully placed.</p>
+      <section class="booking-info">
+        <img id="parkingImage" class="parking-image" alt="Parking spot image" />
+        <!-- <img id="parkingImage" class="parking-image" alt="Parking spot image" style="display: none;" /> -->
+        <h2 id="parkingTitle" class="parking-title">Parking spot name</h2>
+        <p id="parkingLocation" class="parking-location">Parking spot location</p>
+        <p class="owner-info"><strong>Owned by:</strong> <span id="ownerName">Owner Name</span></p>
+        <p class="contact-info"><strong>Owner Contact:</strong> <span id="ownerContact">Contact</span></p>
+      </section>
 
-      <div class="booking-info">
-        <h2 id="parkingTitle">Parking spot name</h2>
-        <p id="parkingLocation">Parking spot location</p>
-        <p><strong>Owned by:</strong> <span id="ownerName">Owner Name</span></p>
-        <p>
-          <strong>Owner Contact:</strong> <span id="ownerContact">Contact</span>
-        </p>
-      </div>
-
-      <div class="booking-details">
-        <p>
+      <section class="booking-details">
+        <p class="detail-item">
           <strong>Parking Date:</strong>
           <span id="parkingDate">06/20/2025</span>
         </p>
-        <p>
+        <p class="detail-item">
           <strong>Parking Time:</strong>
           <span id="parkingTime">2:30pm - 4:30pm</span>
         </p>
-        <p>
+        <p class="detail-item">
           <strong>Parking Duration:</strong>
           <span id="parkingDuration">2 hours</span>
         </p>
-        <p><strong>Total:</strong> $<span id="totalPrice">0.00</span></p>
-      </div>
-
-      <button id="backToHome">Back to Home</button>
-    </div>
-      <footer>
-        <h3>Contact Us</h3>
-        <p>Email: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
-        <div class="socialMediaContainer">
-          <img
-            src="Assets/vecteezy_facebook-logo-png-facebook-icon-transparent-png_18930698.png"
-            alt=""
-          />
-          <img
-            src="Assets/vecteezy_instagram-logo-png-instagram-icon-transparent_18930415.png"
-            alt=""
-          />
-          <img
-            src="Assets/vecteezy_twitter-new-logo-twitter-icons-new-twitter-logo-x-2023-x_31737215.png"
-            alt=""
-          />
+        <p class="detail-item">
+          <strong>Total:</strong> $<span id="totalPrice">0.00</span>
+        </p>
+        </section>
+        
+        <button id="backToHome" class="home-btn">Back to Home</button>
         </div>
-        <p>&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
-      </footer>
-   
+  </main>
 
-    <script type="module" src="../../js/booking.js"></script>
+  <footer class="main-footer">
+    <h3 class="footer-title">Contact Us</h3>
+    <p class="footer-contact">Email: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
+    <div class="socialMediaContainer">
+      <img src="./Assets/vecteezy_facebook-logo-png-facebook-icon-transparent-png_18930698.png" alt="Facebook" />
+      <img src="./Assets/vecteezy_instagram-logo-png-instagram-icon-transparent_18930415.png" alt="Instagram" />
+      <img src="Assets/vecteezy_twitter-new-logo-twitter-icons-new-twitter-logo-x-2023-x_31737215.png" alt="Twitter/X" />
+      </div>
+    <p class="copyright">&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
+    </footer>
+
+  <script type="module" src="../../js/booking.js"></script>
   </body>
+
 </html>
