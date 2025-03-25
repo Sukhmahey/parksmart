@@ -1,37 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="icon"
-      href="../userPages/Assets/fevicon.svg"
-      type="image/svg+xml"
-    />
-    <title>Booking History</title>
-    <link rel="stylesheet" href="styles.css" />
-    <!-- <script src="owner-history.js" defer></script> -->
-    <script src="bookingHistory.js" defer></script>
-    <link rel="stylesheet" href="css/bookinghistory.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h2>Booking History</h2>
-      <div class="filter-container">
-        <div class="search-container">
-          <input
-            type="text"
-            id="searchInput"
-            class="search-input"
-            placeholder="Search by name, location, date, or time..."
-          />
-          <button id="searchButton" class="search-button">Search</button>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../../index-header.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <title>Booking History</title>
+  <link rel="stylesheet" href="styles-Booking-history.css">
+  <script src="bookingHistory.js" type="module" defer></script>
+  <script src="dummydata.js" type="module" defer></script>
+</head>
+<body>
+
+    <header>
+        <div class="logoContainer">
+          <img src="Assets/ParkSmartLogo.png" alt="ParkSmart Logo" />
         </div>
-        <button id="filterButton" class="filter-button">
-          Filter: Newest to Oldest
-        </button>
-      </div>
-      <ul id="bookingList" class="booking-list"></ul>
+        <div class="headerRight">
+        </div>
+      </header>
+
+
+  <!-- New simple header placed above the container -->
+  <div class="page-header">
+    <button class="back-arrow">←</button>
+    <h2 class="booking-history-title">Booking History</h2>
+  </div>
+  
+  <div class="container">
+    <!-- Tabs for Current/History -->
+    <div class="tab-container">
+      <div class="tab">Current Booking</div>
+      <div class="tab active">Booking History</div>
     </div>
-  </body>
+    
+    <div class="filter-container">
+      <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by name, location, date, or time...">
+        <button id="searchButton" class="search-button">Search</button>
+      </div>
+      <button id="filterButton" class="filter-button">Filter: Newest to Oldest</button>
+    </div>
+    <ul id="bookingList" class="booking-list"></ul>
+    
+    <!-- Modal for booking details -->
+    <div id="bookingModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div class="modal-header">
+          <button class="back-button">←</button>
+          <h3>Booking Details</h3>
+        </div>
+        <div class="booking-info">
+          <img id="modalImage" src="" alt="Parking spot">
+          <div id="bookingDetails">
+            <!-- This will be populated dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <h3>Contact Us</h3>
+    <p>Email: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
+    <div class="socialMediaContainer">
+      <img
+        src="Assets/vecteezy_facebook-logo-png-facebook-icon-transparent-png_18930698.png"
+        alt=""
+      />
+      <img
+        src="Assets/vecteezy_instagram-logo-png-instagram-icon-transparent_18930415.png"
+        alt=""
+      />
+      <img
+        src="Assets/vecteezy_twitter-new-logo-twitter-icons-new-twitter-logo-x-2023-x_31737215.png"
+        alt=""
+      />
+    </div>
+    <p>&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
+  </footer>
+  
+  <script>
+    // Basic JavaScript to handle tab switching and back button functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('.tab');
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          tabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+      
+      // Add back button functionality
+      const backArrow = document.querySelector('.back-arrow');
+      backArrow.addEventListener('click', function() {
+        console.log('Back button clicked');
+        // Uncomment the line below if you want to navigate back
+        // window.history.back();
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab');
+    const filterContainer = document.querySelector('.filter-container');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            // Show filter only when "Booking History" is active
+            if (this.textContent.trim() === 'Booking History') {
+                filterContainer.style.display = 'flex';
+            } else {
+                filterContainer.style.display = 'none';
+            }
+        });
+    });
+
+    // Ensure the correct initial state (show filter only if "Booking History" is active)
+    if (document.querySelector('.tab.active').textContent.trim() !== 'Booking History') {
+        filterContainer.style.display = 'none';
+    }
+});
+
+  </script>
+</body>
 </html>
