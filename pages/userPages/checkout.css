@@ -213,7 +213,7 @@ body {
 .main-footer {
   background: linear-gradient(to right, #42b97c, #38a9e2);
   padding: 1.5rem;
-  text-align: center;
+  /* text-align: center; */
   color: var(--white);
 }
 
@@ -232,7 +232,7 @@ body {
 
 .social-media {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   gap: 15px;
   margin: 1rem 0;
 }
