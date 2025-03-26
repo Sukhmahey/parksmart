@@ -134,7 +134,9 @@ const fetchParkingSpots = async (boundLocation) => {
     parkingSpaceArrayUnsorted = parkingSpotsArray;
   }
 
-  let locationCoords = boundLocation ?? userCurrentLocation;
+  let locationCoords =
+    boundLocation || { lat: queryLatitude, lng: queryLongitude } ||
+    userCurrentLocation;
 
   if (!locationCoords?.lat) {
     renderListOfSpaces([]);
