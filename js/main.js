@@ -62,7 +62,6 @@ const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", async () => {
     await logout();
-    alert("Logged out successfully!");
-    window.location.href = "../pages/userPages/loginPage.html";
+    window.location.href = "../../index.html";
   });
 }

@@ -25,6 +25,19 @@ font-size: 17px;
   text-align: center;
 }
 
+.nav-links a {
+  color: #176f9c;;
+  border: none;
+font-size: 17px;
+  text-decoration: none;
+  text-align: center;
+}
+.nav-links a:hover {
+  background-color: #176f9c;
+  color: white;
+}
+
+
 .headerRight a:hover {
   background-color: #176f9c;
   color: white;

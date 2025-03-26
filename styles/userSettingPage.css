@@ -25,6 +25,13 @@ h2 {
   margin-bottom: 2rem;
 }
 
+.logOutContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px; /* Optional: Add spacing above the button */
+}
+
 label {
   font-weight: bold;
   display: block;
@@ -52,9 +59,13 @@ button {
   cursor: pointer;
 }
 
-.edit-btn {
+.edit-btn , #changePasswordBtn {
   background-color: #007bff;
   color: white;
+}
+
+.edit-btn:hover, #changePasswordBtn:hover {
+  background-color: green;
 }
 
 .save-btn {
@@ -63,35 +74,64 @@ button {
   display: none;
 }
 
+#savePasswordBtn{
+  background-color: #007bff;
+  color: white;
+  margin-top: 1rem;
+}
+
+#savePasswordBtn:hover {
+  background-color: green;
+  color: white;
+}
+
 * {
   font-family: "Poppins", sans-serif;
 }
 
-/* Mobile View (Vertical layout) */
-@media (max-width: 768px) {
-  .settingsContainer {
-    width: 70%;
-    max-width: 100%;
-    margin: 0 auto;
-    margin-bottom: 20px;
-  }
+#logoutBtn , #cancelPasswordBtn {
+  background-color: red;
+  color: white;
+ }
+ #logoutBtn:hover , #cancelPasswordBtn:hover  {
+  background-color: green;
+ }
 
-  .settingsWrapper {
-    display: block; /* Stack the forms vertically on mobile */
-    margin-top: 20px;
 
-  }
+ #togglePasswordIcon {
+  position: absolute;
+  left: 75%;
+  top: 64.5%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #888;
+  z-index: 10;
 }
 
-/* Desktop View (Side by side layout) */
-@media (min-width: 769px) {
-  .settingsWrapper {
-    display: flex;
-    justify-content: space-between; /* Create space between the forms */
-    gap: 5px;
-  }
-
-  .settingsContainer {
-    width: 48%; /* Each form container will take 48% of the space */
-  }
+#togglePasswordIcon:hover {
+  color: #333;
 }
+
+#signupPassword {
+  padding-right: 40px; /* Ensure there is enough space for the icon */
+  position: relative;
+}
+
+#toggleConfirmPasswordIcon {
+  position: absolute;
+  left: 75%; /* Adjust the position based on your design */
+  top: 72.5%; /* Adjust to match the signin field */
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #888;
+  z-index: 10;
+}
+
+#toggleSignupPasswordIcon:hover {
+  color: #333;
+}
+
+ 
+
+
+

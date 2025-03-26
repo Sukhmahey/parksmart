@@ -14,9 +14,14 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <!-- <link rel="stylesheet" href="../../styles/userSettingsPage.css" /> -->
     <link rel="stylesheet" href="../../styles/userSettingPage.css" />
-    <script type="module" src="userSettings.js"></script>
+    <script type="module" src="userSettings.js" defer></script>
+    <script type="module" src="../../js/main.js" defer></script>
   </head>
 
   <body>
@@ -43,33 +48,37 @@
     
           <label for="phone">Phone Number</label>
           <input type="text" id="phone" value="+1234567890" readonly />
+
+
+<!-- Password Fields (hidden by default) -->
+<div id="passwordFields" style="display: none;">
+  <label for="newPassword">New Password</label>
+  <input type="password" id="newPassword" placeholder="New Password" />
+  <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
+  <label for="confirmPassword">Confirm Password</label>
+  <input type="password" id="confirmPassword" placeholder="Confirm Password" />
+  <i class="fa-solid fa-eye" id="toggleConfirmPasswordIcon"></i>
+  <button id="savePasswordBtn">Save Password</button>
+  <button id="cancelPasswordBtn">Cancel</button>
+
+</div>
+
     
           <div class="buttons">
-            <button class="edit-btn">Edit</button>
+            <button class="edit-btn">Edit Details</button>
             <button class="save-btn">Save</button>
+            <button id="changePasswordBtn" type="button">Change Password</button>
+            
           </div>
         </div>
-    
-        <div class="settingsContainer">
-          <h2>Car Settings</h2>
-          <label for="license">License Plate</label>
-          <input type="text" id="license" value="XYZ-1234" readonly />
-    
-          <label for="color">Car Color</label>
-          <input type="text" id="color" value="Red" readonly />
-    
-          <label for="country">Country</label>
-          <input type="text" id="country" value="Canada" readonly />
-    
-          <label for="province">Province</label>
-          <input type="text" id="province" value="British Columbia" readonly />
-    
-          <div class="buttons">
-            <button class="edit-btn">Edit</button>
-            <button class="save-btn">Save</button>
-          </div>
-        </div>
+
+<div class="logOutContainer">
+      <button id="logoutBtn"> Log Out</button>
+    </div>
+       
       </div>
+
+      
     </main>
     
     <footer>

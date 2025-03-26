@@ -283,6 +283,10 @@ input {
 }
 
 @media (max-width: 768px) {
+
+ .heroText h2{
+    margin-top: 5rem;
+  }
 .container{
   max-width: 500px;
 }
