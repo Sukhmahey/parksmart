@@ -14,6 +14,7 @@ let queryLatitude;
 let queryLongitude;
 let querylocation;
 let queryDate;
+let userId = null;
 
 window.onload = function () {
   initValues();
@@ -25,6 +26,7 @@ const initValues = () => {
   queryLongitude = params.get("longitude");
   queryLatitude = params.get("latitude");
   queryDate = params.get("date");
+  userId = localStorage.getItem("userId");
 
   document.getElementById("location").value = querylocation;
   document.getElementById("datetime").value = queryDate;
@@ -132,6 +134,14 @@ const fetchParkingSpots = async (boundLocation) => {
     parkingSpaceArrayUnsorted = await getParkingSpaces();
   } else {
     parkingSpaceArrayUnsorted = parkingSpotsArray;
+  }
+
+  if (userId) {
+    parkingSpaceArrayUnsorted = parkingSpaceArrayUnsorted.filter(
+      (parkingSpace) => {
+        return parkingSpace?.user_id !== userId;
+      }
+    );
   }
 
   let locationCoords =
