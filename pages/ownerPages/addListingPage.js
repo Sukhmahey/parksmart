@@ -8,6 +8,7 @@ let longitudeValue;
 let latitudeValue;
 let ownerId = localStorage.getItem("userId");
 let username = localStorage.getItem("username");
+const prelabel = document.getElementById('pre-labels');
 
 const supabaseUrl = "https://uilvkvvhtlcluutiflwk.supabase.co";
 const supabaseKey =
@@ -515,6 +516,7 @@ async function handleCameraCapture() {
   const video = document.getElementById("cameraFeed");
   const canvas = document.getElementById("canvas");
   const preview = document.getElementById("preview");
+  prelabel.style.display = 'none';
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -529,9 +531,14 @@ async function handleCameraCapture() {
     const controls = document.createElement('div');
     controls.className = 'camera-controls';
     controls.innerHTML = `
-      <button type="button" class="capture-btn">Capture</button>
-      <button type="button" class="close-btn">Close</button>
+      <label class="capture-btn"><img src="Assets/aperture.svg" class="icons-media"><br>Capture</label>
+      <label class="close-btn"><img src="Assets/camera-slash.svg" class="icons-media"><br>Stop Camera</label>
     `;
+
+    // controls.innerHTML = `
+    //   <button type="button" class="capture-btn"><img src="Assets/aperture.svg" class="icons-media"></button>
+    //   <button type="button" class="close-btn"><img src="Assets/camera-slash.svg" class="icons-media"></button>
+    // `;
 
     // Add controls to media buttons container
     document.querySelector('.media-buttons').appendChild(controls);
@@ -546,12 +553,14 @@ async function handleCameraCapture() {
       video.style.display = 'none';
       stream.getTracks().forEach(track => track.stop());
       controls.remove();
+      prelabel.style.display = 'flex';
       uploadBtn.disabled = false;
     });
 
     // Close handler
     controls.querySelector('.close-btn').addEventListener('click', () => {
       video.style.display = 'none';
+      prelabel.style.display = 'flex';
       stream.getTracks().forEach(track => track.stop());
       controls.remove();
     });
