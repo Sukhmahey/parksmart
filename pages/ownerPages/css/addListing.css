@@ -134,18 +134,16 @@ body {
 }
 
 #cameraButton {
-  padding: 10px 20px;
-  background-color: #176f9c;
-  color: white;
+  /* padding: 10px 20px; */
+  /* background-color: #176f9c; */
+ 
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  
 }
 
-#cameraButton:hover {
-  background-color: #357abd;
-}
+
 
 /* Toggle Switch */
 .toggle-container {
@@ -407,43 +405,57 @@ img {
 }
 
 .upload-container {
-  max-width: 400px;
+  max-width: 500px;
   margin: 2rem auto;
   padding: 2rem;
   border: 2px dashed #ccc;
   border-radius: 10px;
   text-align: center;
   background-color: #f9f9f9;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+#pre-labels
+{
+  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content:space-between;
+  align-content: space-between;
+  gap: 2rem;
+  
 }
 
-.custom-upload {
+/* .custom-upload {
   position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
   margin-bottom: 1rem;
-}
+} */
 
-.custom-upload input[type="file"] {
+/* .custom-upload input[type="file"] {
   opacity: 0;
   width: 0.1px;
   height: 0.1px;
   position: absolute;
-}
+} */
 
-.custom-upload label {
-  display: block;
-  padding: 12px 24px;
-  background-color: #4caf50;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
+/* .custom-upload label {
+  /* display: block; */
+  /* padding: 12px 24px; */
+  /* background-color: #4caf50; */
+  /* color: white; */
+  /* border-radius: 5px; */
+  /* cursor: pointer; */
+  /* transition: background-color 0.3s; */
+/* }  */
 
-.custom-upload label:hover {
-  background-color: #45a049;
-}
+
 
 .buttonContainer {
   display: flex;
@@ -470,12 +482,12 @@ img {
   background-color: #0056b3;
 }
 
-.file-name {
+/* .file-name {
   display: block;
   margin-top: 1rem;
   color: #666;
   margin-left: 8px;
-}
+} */
 
 * {
   font-family: "Poppins", sans-serif;
@@ -483,27 +495,30 @@ img {
 
 /* Add to your CSS file */
 .media-buttons {
-  margin-top: 1rem;
+  
   display: flex;
   gap: 1rem;
 }
 
 .camera-controls {
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  
 }
 
 #cameraFeed {
   width: 100%;
   max-width: 400px;
   border-radius: 8px;
+  margin: 2rem auto;
 }
 
 #preview {
   max-width: 400px;
   border-radius: 8px;
-  margin-top: 1rem;
+  margin: 2rem auto;
 }
 
 button {
@@ -537,3 +552,19 @@ footer p {
 * {
   font-family: "Poppins", sans-serif;
 }
+.icons-media
+{
+  width: 3rem;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  border: 2px solid black;
+  
+  
+}
+
+
+
+
+
+
+

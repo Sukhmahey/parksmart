@@ -4,6 +4,8 @@ const supabaseUrl = "https://uilvkvvhtlcluutiflwk.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpbHZrdnZodGxjbHV1dGlmbHdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzNDA0MjIsImV4cCI6MjA1NzkxNjQyMn0.Ay2oFoNhYSzf6eChcFfI13ChJNjtDiFMlTViUfROl0o";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+const prelabel = document.getElementById('pre-labels');
+
 let uploadedImageUrl = null; // Store the uploaded image URL from Supabase
 import { fetchListingData, updateListing } from "../../js/crud.js";
 const daysOfWeek = [
@@ -51,6 +53,7 @@ async function populateForm(listingId) {
     if (data?.imgURL && data.imgURL != "") {
       const picEle = document.getElementById("parkingSpotImage");
       const imageElement = document.createElement("img");
+      imageElement.className = "img-existing-one";
       const preview = document.getElementById("preview");
     preview.src = data.imgURL;
     // preview.style.display = "block";
@@ -400,7 +403,7 @@ const fileName = document.getElementById("fileName");
 fileInput.addEventListener("change", function (e) {
   if (this.files && this.files.length > 0) {
     fileName.textContent = this.files[0].name;
-    // uploadBtn.disabled = false;
+    uploadBtn.disabled = false;
   } else {
     fileName.textContent = "No file chosen";
     uploadBtn.disabled = true;
@@ -495,8 +498,10 @@ async function handleImageUpload() {
   if (preview.src.startsWith("data:image")) {
     return preview.src;
   }
+  
   const fileInput = document.getElementById("fileInput");
   if (fileInput.files.length > 0) {
+    uploadBtn.disabled = false;
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = (e) => resolve(e.target.result);
@@ -679,7 +684,7 @@ function dataURLtoFile(dataurl, filename) {
 async function handleCameraCapture() {
   const video = document.getElementById("cameraFeed");
   const preview = document.getElementById("preview");
-  
+  prelabel.style.display = 'none';
   try {
     // Stop any existing streams
     if (window.mediaStream) {
@@ -690,8 +695,8 @@ async function handleCameraCapture() {
     const controls = document.createElement('div');
     controls.className = 'camera-controls';
     controls.innerHTML = `
-      <button class="capture-btn">Capture</button>
-      <button class="close-btn">Close</button>
+      <label class="capture-btn"><img src="Assets/aperture.svg" class="icons-media"><br>Capture</label>
+      <label class="close-btn"><img src="Assets/camera-slash.svg" class="icons-media"><br>Stop Camera</label>
     `;
 
     document.querySelector('.media-buttons').appendChild(controls);
@@ -715,6 +720,8 @@ async function handleCameraCapture() {
       preview.src = canvas.toDataURL('image/jpeg');
       preview.style.display = 'block';
       video.style.display = 'none';
+      controls.remove();
+      prelabel.style.display = 'flex';
       uploadBtn.disabled = false;
     });
 
@@ -722,6 +729,7 @@ async function handleCameraCapture() {
     controls.querySelector('.close-btn').addEventListener('click', () => {
       video.style.display = 'none';
       window.mediaStream.getTracks().forEach(track => track.stop());
+      prelabel.style.display = 'flex';
       controls.remove();
     });
 

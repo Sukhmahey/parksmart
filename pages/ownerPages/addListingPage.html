@@ -86,15 +86,19 @@
             Upload Image
           </button>
         </div> -->
-
+        <label for="upload-container" style="font-size: 14px; font-weight: 600;color: #4a5568;margin-bottom: 8px;">Add an image</label>
         <div class="upload-container">
-          <div class="custom-upload">
-            <input type="file" id="file-input" />
-            <label for="file-input">Choose File</label>
-            <span class="file-name" id="file-name">No file chosen</span>
-          </div>
           <div class="media-buttons">
-            <button type="button" id="cameraButton">Use Camera</button>
+            <span id="pre-labels">
+              <div class="custom-upload">
+                <input type="file" id="file-input" hidden/>
+                <label for="file-input" ><img src="Assets/cloud-upload-alt.svg" class="icons-media"><br>Choose Image</label>
+                <span class="file-name" id="file-name" hidden></span>
+              </div> 
+              <label id="cameraButton"><img src="Assets/circle-camera.svg" class="icons-media"><br>Camera</label>
+            </span>
+          
+
           </div>
         </div>
         
