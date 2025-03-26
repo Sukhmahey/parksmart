@@ -104,7 +104,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
         imgURL: space.imgURL || "",
       })
     );
-    alert("Booking confirmed!");
+    // alert("Booking confirmed!");
     window.location.href = "../userPages/booking.html";
   } catch (error) {
     console.error("Error booking:", error);
