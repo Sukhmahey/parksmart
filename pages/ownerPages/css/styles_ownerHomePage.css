@@ -69,16 +69,17 @@ header h1 {
 
 header a {
   padding: 0.3rem 4rem;
-  background-color: #176f9c;
+  /* background-color: #176f9c; */
   
-  color: white;
+  color: #176f9c;
   border-radius: 20px;
   text-decoration: none;
   transition: background-color 0.3s;
 }
 
 header a:hover {
-  background-color: #357abd;
+  background-color: #176f9c;
+  color: #fff;
 }
 
 a {

@@ -37,15 +37,16 @@ body {
   cursor: pointer;
   display: inline-block;
   padding: 0.3rem 4rem;
-  background-color: #176f9c;
-  color: white;
+  /* background-color: #176f9c; */
+  color: #176f9c ;
   border-radius: 20px;
   text-decoration: none;
   transition: background-color 0.3s;
 }
 
 .nav-back-btn:hover {
-  background-color: #357abd;
+  background-color: #176f9c;
+  color: #fff;
 }
 
 .container {
@@ -558,8 +559,18 @@ footer p {
   border-radius: 1rem;
   padding: 0.5rem;
   border: 2px solid black;
+  fill: white;
+  background-color: #186E9C;
   
-  
+}
+.icons-media-stop
+{
+  width: 3rem;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  border: 2px solid black;
+  fill: white;
+  background-color: red;
 }
 
 
