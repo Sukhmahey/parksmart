@@ -255,6 +255,10 @@ button{
   .hamburger-menu i {
     font-size: 24px;
   }
+  .searchBox form input{
+    width: 350px;
+  }
+
 }
 
 @media (min-width: 769px) {

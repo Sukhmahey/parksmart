@@ -18,9 +18,14 @@ header {
   margin-top: 2rem;
   font-size: 2rem;
   font-family: "Inter", sans-serif;
-  margin-bottom: 0.8rem;
+  margin-bottom: 2rem;
   font-weight: 400;
 }
+h2 span{
+  color: #42b97c;
+  font-size: 2rem;
+}
+
 
 .heroText h3 {
   margin-top: 0;
@@ -306,8 +311,14 @@ input {
 }
 
 
-
-
+form{
+  input{
+    border-radius: 10px;
+  }
+}
+button{
+  cursor: pointer;
+}
 /* 
 .signInBtn{
   margin-top: 1.6rem;
