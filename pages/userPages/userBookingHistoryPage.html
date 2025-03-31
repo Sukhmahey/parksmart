@@ -11,28 +11,43 @@
     <link rel="stylesheet" href="../../styles/userBookingHistory.css">
     <link rel="stylesheet" href="../../index-header.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/homepageStyles.css">
     <script type="module" src="userBookingHistoryPage.js" defer></script>
 </head>
 <body>
     <header>
         <div class="logoContainer">
-            <img src="Assets/Logo-FullSize.svg" alt="ParkSmart Logo">
+            <a href="../userPages/homepage.html"><img src="Assets/Logo-FullSize.svg" alt="ParkSmart Logo" /></a>
+          
         </div>
-        <div class="headerRight">
-            <!-- <button type="button">Switch To Owner</button>
-            <button type="button">Booking History</button> -->
-            <a href="">Switch To Owner</a>
-            <a href="homepage.html">Homepage</a>
-            <img class="profileIcon" src="Assets/avatar-svg.svg" alt="Profile Icon">
+  <!-- hamburger menu -->
+        <div class="hamburger-menu" onclick="toggleMenu()">
+          <i class="fas fa-bars"></i>
         </div>
-        </div>
+        <nav class="nav-links">
+          <a class="headericon" href="../ownerPages/ownerhomepage.html">Become a Host</a>
+          <a class="headericon" href="userBookingHistoryPage.html">Booking History</a>
+          <a class="profileiconContainer" href="userSettings.html">
+            <img class="profileIcon" src="Assets/avatar-svg.svg" alt="Profile Icon" />
+          </a>
+        </nav>
+      </header>
     </header>
     <main>
         <h1>Booking History</h1>
-        <section class="mainSection">
-
-            <div class="bookingContainer">
-                <div class="bookingCard">
+        <div class="bookingContainer" id="bookingContainer">
+            <div class="sortControls">
+                <label for="sortOrder">Sort by:</label>
+                <select id="sortOrder">
+                    <option value="latest">Latest</option>
+                    <option value="oldest">Oldest</option>
+                </select>
+            </div>
+  
+            
+        
+            
+                <!-- <div class="bookingCard">
                     <div class="bookingImage">
                         <img src="https://picsum.photos/100" alt="">
                     </div>
@@ -70,7 +85,7 @@
                         <p>parking Date</p>
                         <p>parking time</p>
                     </div>
-                </div>
+                </div> -->
 
             </div>
         </section>
@@ -88,5 +103,10 @@
 
 
 </body>
-
+<script>
+     function toggleMenu() {
+  const navLinks = document.querySelector('.nav-links');
+  navLinks.classList.toggle('active'); 
+}
+</script>
 </html>

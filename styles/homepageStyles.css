@@ -27,6 +27,10 @@
   max-width: 1100px;
   margin: auto;
 }
+
+.mainSectionContainer h1{
+  margin-left: 8px;
+}
 .profileiconContainer {
   width: 40px;
   margin-top: 0;
@@ -78,18 +82,24 @@ h1 span {
 }
 
 .searchBox form input {
-  width: 350px; /* Same width for both inputs */
+  width: 450px; /* Same width for both inputs */
   height: 50px;
   padding: 0.5rem 2rem 0.5rem 1rem;
   box-sizing: border-box;
 }
 
 .searchBox button {
-  width: 250px;
+  width: 200px;
   height: 40px;
   background-color: #38a9e2;
   color: white;
   border: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.searchBox button:hover {
+  background-color: #42b97c;
 }
 
 .searchBox input,
@@ -106,7 +116,7 @@ h1 span {
 }
 
 .instructions {
-  max-width: 1100px;
+  max-width: 1050px;
   margin: 7rem auto;
   box-shadow: #38a9e2 0px 0px 10px 0px;
   padding: 1rem 0;
