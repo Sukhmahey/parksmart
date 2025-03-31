@@ -26,6 +26,8 @@ const uploadBtn = document.getElementById("upload-btn");
 const fileName = document.getElementById("file-name");
 
 fileInput.addEventListener("change", function (e) {
+  preview.src = '';
+  preview.style.display = 'none';
   if (this.files && this.files.length > 0) {
     fileName.textContent = this.files[0].name;
     uploadBtn.disabled = false;
@@ -70,38 +72,29 @@ async function uploadImage() {
     showModal("Error uploading file",true);
   } else {
     showModal("File uploaded successfully",true);
-    displayImage(data?.path);
+    // displayImage(data?.path);
     // Reset camera preview
     preview.src = '';
     preview.style.display = 'none';
   }
+
+  if (data?.path) {
+    showModal("File uploaded successfully", true);
+    displayImage(data.path);
+    // Reset both camera preview and file input
+    preview.src = '';
+    preview.style.display = 'none';
+    fileInput.value = '';
+    fileName.textContent = "No file chosen";
+  }
 }
 
-// async function uploadImage(e) {
-//   const file = fileInput.files[0];
 
-//   if (!file) {
-//     alert("Please select an image first.");
-//     return;
-//   }
-
-//   const fileName = `${Date.now()}_${file.name}`;
-
-//   const { data, error } = await supabase.storage
-//     .from("images")
-//     .upload(sanitizeFileName(fileName), file, {});
-
-//   console.log("data", data);
-//   if (error) {
-//     console.error(error);
-//     alert("Error uploading file");
-//   } else {
-//     alert("File uploaded successfully");
-//     displayImage(data?.path);
-//   }
-// }
 
 async function displayImage(filePath) {
+  const imageElementContainer = document.getElementById("imgContainer");
+  imageElementContainer.innerHTML = '';
+
   console.log("here", filePath);
   const data = await supabase.storage.from("images").getPublicUrl(filePath); // Get the public URL of the file
 
@@ -117,9 +110,8 @@ async function displayImage(filePath) {
     return;
   }
 
-  // https://uilvkvvhtlcluutiflwk.supabase.co/storage/v1/object/public/images/1742347538558_pexels-stephanthem-753865.jpg
-
-  const imageElementContainer = document.getElementById("imgContainer");
+  
+  // const imageElementContainer = document.getElementById("imgContainer");
   const imageElement = document.createElement("img");
 
   if (data?.data?.publicUrl) {
@@ -128,6 +120,11 @@ async function displayImage(filePath) {
     imageElement.src = data?.data?.publicUrl || "";
     imageElementContainer.appendChild(imageElement);
   }
+
+  
+  imageElement.src = data?.data?.publicUrl || "";
+  imageElementContainer.appendChild(imageElement);
+
 }
 
 window.uploadImage = uploadImage;
@@ -298,49 +295,7 @@ const handleImage = async () => {
   return preview?.src;
 };
 
-// async function handleCameraCapture() {
-//   let stream;
-//   try {
-//     const video = document.getElementById("cameraFeed");
-//     const canvas = document.getElementById("canvas");
-//     const preview = document.getElementById("preview");
 
-//     const controls = document.createElement("div");
-//     controls.className = "media-buttons";
-//     controls.innerHTML = `
-//             <button type="button" id="snapBtn">Capture</button>
-//             <button type="button" id="closeBtn">Close Camera</button>
-//         `;
-
-//     video.parentNode.insertBefore(controls, video.nextSibling);
-//     stream = await navigator.mediaDevices.getUserMedia({
-//       video: { facingMode: "environment" },
-//     });
-
-//     video.style.display = "block";
-//     video.srcObject = stream;
-//     await video.play();
-
-//     // Capture handler
-//     document.getElementById("snapBtn").addEventListener("click", () => {
-//       canvas.width = video.videoWidth;
-//       canvas.height = video.videoHeight;
-//       canvas.getContext("2d").drawImage(video, 0, 0);
-//       preview.src = canvas.toDataURL("image/jpeg", 0.8);
-//       preview.style.display = "block";
-//     });
-
-//     // Cleanup handler
-//     document.getElementById("closeBtn").addEventListener("click", () => {
-//       stream.getTracks().forEach((track) => track.stop());
-//       video.style.display = "none";
-//       controls.remove();
-//     });
-//   } catch (error) {
-//     return showModal(`Camera error: ${error.message}`, true);
-//     if (stream) stream.getTracks().forEach((track) => track.stop());
-//   }
-// }
 
 const handleFormSubmission = async (e) => {
   e.preventDefault();
@@ -409,10 +364,30 @@ const handleFormSubmission = async (e) => {
 };
 
 // Event Listeners
-if (document.getElementById("fileInput")) {
-  document.getElementById("fileInput").addEventListener("change", (event) => {
+// if (document.getElementById("fileInput")) {
+//   document.getElementById("fileInput").addEventListener("change", (event) => {
+//     const file = event.target.files[0];
+//     if (!file) return;
+
+//     const reader = new FileReader();
+//     reader.onload = (e) => {
+//       document.getElementById("preview").src = e.target.result;
+//       document.getElementById("preview").style.display = "block";
+//     };
+//     reader.readAsDataURL(file);
+//   });
+// }
+
+// Corrected ID from "fileInput" to "file-input"
+if (document.getElementById("file-input")) {
+  document.getElementById("file-input").addEventListener("change", (event) => {
     const file = event.target.files[0];
     if (!file) return;
+
+    // Clear camera preview when a file is selected
+    const preview = document.getElementById("preview");
+    preview.src = '';
+    preview.style.display = 'none';
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -559,6 +534,10 @@ async function handleCameraCapture() {
       controls.remove();
       prelabel.style.display = 'flex';
       uploadBtn.disabled = false;
+
+      fileInput.value = '';
+    fileName.textContent = "No file chosen";
+    uploadBtn.disabled = false;
     });
 
     // Close handler

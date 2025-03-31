@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="css/addListing.css" />
     <script type="module" src="addListingPage.js" defer></script>
 
-    <!-- <script type="module" src="addL.js" defer></script> -->
+    
   </head>
   <body>
     <nav class="navbar">
@@ -52,7 +52,7 @@
           />
           <div id="suggestions"></div>
 
-          <!-- <input type="text" id="location" placeholder="Enter location"> -->
+         
         </div>
 
         <div class="form-group">
@@ -69,23 +69,7 @@
           <input type="number" id="price" placeholder="Enter price in CAD" />
         </div>
 
-        <!-- <div class="upload-container">
-          <div class="custom-upload">
-            <input type="file" id="file-input" />
-            <label for="file-input">Choose File</label>
-            <span class="file-name" id="file-name">No file chosen</span>
-          </div>
-        </div>
-        <div class="buttonContainer">
-          <button
-            class="upload-button"
-            id="upload-btn"
-            onclick="uploadImage()"
-            disabled
-          >
-            Upload Image
-          </button>
-        </div> -->
+       
         <label for="upload-container" style="font-size: 14px; font-weight: 600;color: #4a5568;margin-bottom: 8px;">Add an image</label>
         <div class="upload-container">
           <div class="media-buttons">
@@ -109,6 +93,8 @@
        
         <video id="cameraFeed" style="display: none;"></video>
         <canvas id="canvas" style="display: none;"></canvas>
+        <div class="imgContainer" id="imgContainer"></div>
+
         <img id="preview" src="" alt="Image Preview" style="display: none;" />
         
         <div class="buttonContainer">
@@ -116,31 +102,9 @@
             Upload Image
           </button>
         </div>
-        <!-- <div class="imgContainer" id="imgContainer"></div> -->
-
-        <!-- <div class="form-group">
-          <label>Parking Spot Image</label>
-          <input type="file" id="fileInput" accept="image/*" />
-          <div class="media-buttons">
-            <button id="cameraButton">Use Camera</button>
-          </div>
-          <img id="preview" src="" alt="Image Preview" style="display: none" />
-          <video id="cameraFeed"></video>
-          <canvas id="canvas" style="display: none"></canvas>
-        </div> -->
+       
       </div>
-      <!-- <div class="form-group"> -->
-      <!-- <label>Features</label>
-            <div class="features-group">
-                <label class="feature-item">
-                    <input type="checkbox" name="features" value="covered">
-                    Covered
-                </label>
-                <label class="feature-item">
-                    <input type="checkbox" name="features" value="ev_charging">
-                    EV Charging
-                </label>
-            </div> -->
+      
       <div class="form-group">
         <label>Available</label>
         <div class="toggle-container">
