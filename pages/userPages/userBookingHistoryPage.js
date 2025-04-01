@@ -1,68 +1,201 @@
 import { db } from "../../js/firebase.js";
-import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+} from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
+// DOM Elements
+const elements = {
+  bookingList: document.getElementById("bookingList"),
+  modal: document.getElementById("bookingModal"),
+  modalImage: document.getElementById("modalImage"),
+  bookingDetails: document.getElementById("bookingDetails"),
+  searchInput: document.getElementById("searchInput"),
+  searchButton: document.getElementById("searchButton"),
+  filterButton: document.getElementById("filterButton"),
+  closeButton: document.querySelector(".close-button"),
+  backButton: document.querySelector(".back-button"),
+  backArrow: document.querySelector(".back-arrow"),
+  tabs: document.querySelectorAll(".tab"),
+  filterContainer: document.querySelector(".filter-container"),
+};
+
+// Constants
+const defaultImageURL =
+  "https://cdn.pixabay.com/photo/2014/10/25/19/23/multi-storey-car-park-502959_1280.jpg";
+
+// State
+let oldestFirst = false;
+let cachedListings = [];
+
+// Utility Functions
+const formatTimestamp = (timestamp) => {
+  if (!timestamp?.seconds)
+    return { formattedDate: "N/A", formattedTime: "N/A" };
+
+  const date = new Date(timestamp.seconds * 1000);
+  return {
+    formattedDate: date.toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    }),
+    formattedTime: date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }),
+  };
+};
+
+const calculateDuration = (start, end) => {
+  if (!start?.seconds || !end?.seconds) return "N/A";
+  const durationHrs = ((end.seconds - start.seconds) / 3600).toFixed(1);
+  return `${durationHrs} Hours`;
+};
+
+// Modal Functions
+const showModal = () => (elements.modal.style.display = "block");
+const hideModal = () => (elements.modal.style.display = "none");
+
+const displayBookingDetails = (listing) => {
+  const start = formatTimestamp(listing.start_time);
+  const end = formatTimestamp(listing.end_time);
+
+  elements.modImage.src = listing.imgURL || defaultImageURL;
+  elements.bookingDetails.innerHTML = `
+    <h3>${listing.name || "Parking Space"}</h3>
+    <p>📍 ${listing.address || "Address not available"}</p>
+    <p>📅 Date: ${start.formattedDate}</p>
+    <p>⏰ Time: ${start.formattedTime} - ${end.formattedTime}</p>
+    <p>⏳ Duration: ${calculateDuration(
+      listing.start_time,
+      listing.end_time
+    )}</p>
+    <p>💰 Total: $${listing.price?.toFixed(2) || "0.00"}</p>
+  `;
+  showModal();
+};
+
+// Search and Filter
+const performSearch = () => {
+  const searchTerm = elements.searchInput.value.toLowerCase();
+  document.querySelectorAll(".booking-item").forEach((item) => {
+    item.style.display = item.textContent.toLowerCase().includes(searchTerm)
+      ? "flex"
+      : "none";
+  });
+};
+
+const toggleFilter = () => {
+  oldestFirst = !oldestFirst;
+  elements.filterButton.textContent = oldestFirst
+    ? "Filter: Oldest to Newest"
+    : "Filter: Newest to Oldest";
+  renderBookingList(cachedListings, oldestFirst);
+};
+
+// Render Functions
+const renderBookingList = (listings, reverse = false) => {
+  if (!elements.bookingList) return;
+
+  elements.bookingList.innerHTML = listings.length
+    ? ""
+    : `<p class="no-bookings">No bookings found</p>`;
+
+  const sorted = [...listings].sort((a, b) =>
+    reverse
+      ? a.start_time.seconds - b.start_time.seconds
+      : b.start_time.seconds - a.start_time.seconds
+  );
+
+  sorted.forEach((listing) => {
+    const start = formatTimestamp(listing.start_time);
+    const listItem = document.createElement("li");
+    listItem.className = "booking-item";
+    listItem.innerHTML = `
+      <img src="${listing.imgURL || defaultImageURL}" alt="Parking">
+      <div class="booking-details">
+        <h3>${listing.name || "Parking Space"}</h3>
+        <p>${listing.address || "Address not available"}</p>
+        <p>${start.formattedDate} • ${start.formattedTime}</p>
+      </div>
+      <div class="arrow">›</div>
+    `;
+    listItem.addEventListener("click", () => displayBookingDetails(listing));
+    elements.bookingList.appendChild(listItem);
+  });
+};
+
+// Data Fetching
+const getUserBookingHistory = async () => {
+  try {
     const userId = localStorage.getItem("userId");
-    const container = document.getElementById("bookingContainer");
+    if (!userId) throw new Error("User not logged in");
 
-    if (!userId) {
-        container.innerHTML = "<p>No booking history found.</p>";
-        return;
-    }
+    const q = query(
+      collection(db, "bookings"),
+      where("user_id", "==", userId),
+      orderBy("created_at", "desc")
+    );
 
-    try {
-        const bookingsRef = collection(db, "bookings");
-        const q = query(bookingsRef, where("user_id", "==", userId));
-        const querySnapshot = await getDocs(q);
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
+  }
+};
 
-        let bookings = [];
-        querySnapshot.forEach((doc) => {
-            bookings.push(doc.data());
-        });
+// Event Listeners
+const setupEventListeners = () => {
+  // Modal
+  elements.closeButton?.addEventListener("click", hideModal);
+  elements.backButton?.addEventListener("click", hideModal);
+  window.addEventListener(
+    "click",
+    (e) => e.target === elements.modal && hideModal()
+  );
 
-        if (bookings.length === 0) {
-            container.innerHTML = "<p>No booking history found.</p>";
-            return;
-        }
+  // Search
+  elements.searchButton?.addEventListener("click", performSearch);
+  elements.searchInput?.addEventListener(
+    "keyup",
+    (e) => e.key === "Enter" && performSearch()
+  );
 
-        const sortAndRender = (order = "latest") => {
-            const sorted = bookings.sort((a, b) => {
-                const dateA = a.start_time.toDate();
-                const dateB = b.start_time.toDate();
-                return order === "latest" ? dateB - dateA : dateA - dateB;
-            });
+  // Filter
+  elements.filterButton?.addEventListener("click", toggleFilter);
 
-            const cards = container.querySelectorAll(".bookingCard");
-            cards.forEach(card => card.remove());
+  // Tabs
+  elements.tabs?.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      elements.tabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+      elements.filterContainer.style.display =
+        tab.textContent.trim() === "Booking History" ? "flex" : "none";
+    });
+  });
 
-            sorted.forEach((booking) => {
-                const bookingCard = document.createElement("div");
-                bookingCard.classList.add("bookingCard");
-                bookingCard.innerHTML = `
-                    <div class="bookingImage">
-                        <img src="${booking.imgURL}" alt="Parking Spot Image">
-                    </div>
-                    <div class="bookingInfo">
-                        <h2>${booking.name}</h2>
-                        <p>Date: ${new Date(booking.start_time.toDate()).toLocaleDateString()}</p>
-                        <p>Time: ${new Date(booking.start_time.toDate()).toLocaleTimeString()} - ${new Date(booking.end_time.toDate()).toLocaleTimeString()}</p>
-                        <p>Status: ${booking.status}</p>
-                        <p>Total Price: $${booking.total_price}</p>
-                    </div>
-                `;
-                container.appendChild(bookingCard);
-            });
-        };
+  // Back arrow
+  elements.backArrow?.addEventListener("click", () => window.history.back());
+};
 
-        sortAndRender();
+// Initialization
+const init = async () => {
+  setupEventListeners();
 
-        const sortDropdown = document.getElementById("sortOrder");
-        sortDropdown.addEventListener("change", (e) => {
-            sortAndRender(e.target.value);
-        });
+  try {
+    cachedListings = await getUserBookingHistory();
+    renderBookingList(cachedListings);
+  } catch (error) {
+    elements.bookingList.innerHTML = `
+      <p class="error-message">Error loading bookings. Please try again.</p>
+    `;
+  }
+};
 
-    } catch (error) {
-        console.error("Error fetching booking history:", error);
-        container.innerHTML = "<p class='noBookingHistory'>Error loading booking history.</p>";
-    }
-});
+document.addEventListener("DOMContentLoaded", init);
