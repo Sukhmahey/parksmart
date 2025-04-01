@@ -495,9 +495,21 @@ input:checked + .slider:before {
   .time-inputs {
     flex-wrap: wrap; /* Allow inputs to go to the next line if needed */
   }
+  #pre-labels label,.camera-controls label
+{
+  font-size: 5px !important;
+}
+
+
+
 }
 
 @media screen and (max-width: 480px) {
+
+  .nav-back-btn
+  {
+    padding: 0.3rem 0.3rem;
+  }
   .container {
     padding: 10px;
   }
