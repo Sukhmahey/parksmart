@@ -46,12 +46,12 @@
             </div>
 
           <div class="form-group">
-            <label><strong>Parking Date:</strong></label>
+            <label><Parking Date:</label>
             <input type="date" id="parkingDate" required class="form-input" />
           </div>
 
           <div class="form-group time-group">
-            <label><strong>Parking Time:</strong></label>
+            <label>Parking Time:</label>
             <div class="time-inputs">
               <input type="time" id="startTime" required class="form-input" />
               <span class="to-span">to</span>
@@ -61,14 +61,14 @@
 
           <div class="form-group">
             <p class="duration-info">
-              <strong>Parking Duration:</strong>
+              Parking Duration:
               <span id="duration">0</span> hours
             </p>
           </div>
 
           <div class="form-group">
             <p class="total-info">
-              <strong>Total:</strong> $<span id="totalPrice">0.00</span>
+              Total: $<span id="totalPrice">0.00</span>
             </p>
           </div>
 
@@ -91,6 +91,57 @@
     </div>
     <p class="copyright">&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
     </footer>
+
+<!-- Confirmation Popup -->
+<div id="confirmPopup" class="popup-overlay">
+  <div class="popup-container">
+    <div class="popup-header">
+      <h3>Confirm Your Booking</h3>
+      <button id="closePopup" class="popup-close">&times;</button>
+    </div>
+    <div class="popup-content">
+      <div class="popup-booking-details">
+        <img id="popupParkingImage" src="" alt="Parking Space" class="popup-image">
+        <div class="popup-details">
+          <h4 id="popupParkingTitle"></h4>
+          <p id="popupParkingAddress"></p>
+          <div class="popup-detail-row">
+            <span>Date:</span>
+            <span id="popupParkingDate"></span>
+          </div>
+          <div class="popup-detail-row">
+            <span>Time:</span>
+            <span id="popupParkingTime"></span>
+          </div>
+          <div class="popup-detail-row">
+            <span>Duration:</span>
+            <span id="popupDuration"></span> hours
+          </div>
+          <div class="popup-detail-row total">
+            <span>Total:</span>
+            <span id="popupTotalPrice"></span>
+          </div>
+        </div>
+      </div>
+      <div class="popup-vehicle-info">
+        <p><strong>Vehicle Information</strong></p>
+        <div class="popup-detail-row">
+          <span>License:</span>
+          <span id="popupLicense"></span>
+        </div>
+        <div class="popup-detail-row">
+          <span>Color:</span>
+          <span id="popupColor"></span>
+        </div>
+      </div>
+    </div>
+    <div class="popup-actions">
+      <button id="cancelBooking" class="btn btn-secondary">Cancel</button>
+      <button id="confirmBooking" class="btn btn-primary">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+
     </body>
 
 </html>
