@@ -429,12 +429,26 @@ img {
   .day-row {
     grid-template-columns: 1fr; /* Stack elements on small screens */
   }
-
+  #pre-labels label,.camera-controls label
+  {
+    font-size: 5px !important;
+  }
+  label[for="file-input"]  svg
+  {
+    margin-bottom: -17px;
+  }
+  #cameraButton{
+    margin-top: -5px;
+  }
   .time-inputs {
     flex-wrap: wrap; /* Allow inputs to go to the next line if needed */
   }
 }
 @media screen and (max-width: 480px) {
+  .nav-back-btn
+  {
+    padding: 0.3rem 0.3rem;
+  }
   .container {
     padding: 10px;
   }
