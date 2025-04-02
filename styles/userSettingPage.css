@@ -101,7 +101,7 @@ button {
  #togglePasswordIcon {
   position: absolute;
   left: 60%;
-  top: 66.2%;
+  top: 71%;
   transform: translateY(-50%);
   cursor: pointer;
   color: #888;
@@ -120,7 +120,7 @@ button {
 #toggleConfirmPasswordIcon {
   position: absolute;
   left: 60%; /* Adjust the position based on your design */
-  top: 74.5%; /* Adjust to match the signin field */
+  top: 80%; /* Adjust to match the signin field */
   transform: translateY(-50%);
   cursor: pointer;
   color: #888;
