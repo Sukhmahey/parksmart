@@ -44,7 +44,9 @@ body {
 }
 
 .profile-link {
-  display: inline-block;
+display: flex;
+  justify-content: end;
+
 }
 
 .profileIcon {

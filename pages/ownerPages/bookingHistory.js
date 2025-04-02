@@ -11,7 +11,7 @@ import {
 async function getUserBookingHistory() {
   try {
     // Retrieve user_id from localStorage
-    const userId = localStorage.getItem("user_id");
+    const userId = localStorage.getItem("usserId");
 
     if (!userId) {
       console.error("User ID not found in localStorage.");
@@ -23,7 +23,7 @@ async function getUserBookingHistory() {
     // Query to get bookings where the user is the one who made the booking, sorted by created_at
     const q = query(
       bookingRef,
-      where("user_id", "==", userId),
+      where("userId", "==", userId),
       orderBy("created_at", "desc") // Ensure Firestore indexing allows this
     );
 
