@@ -12,7 +12,11 @@ const tabs = document.querySelectorAll(".tab");
 const filterContainer = document.querySelector(".filter-container");
 
 let cachedListings = [];
+<<<<<<< Updated upstream
 let oldestFirst = false; // Sorting toggle
+=======
+let oldestFirst = false;
+>>>>>>> Stashed changes
 
 const defaultImageURL = "https://cdn.pixabay.com/photo/2014/10/25/19/23/multi-storey-car-park-502959_1280.jpg";
 
@@ -78,10 +82,17 @@ function displayBookingDetails(listing) {
 function renderBookingList(listings, oldestFirst = false, showOnlyCurrent = false) {
   const currentTime = Date.now() / 1000; // Convert to seconds
 
+<<<<<<< Updated upstream
   // Filter bookings based on tab
   const filteredListings = listings.filter((listing) => {
     const startTime = listing.start_time?.seconds || 0;
     return showOnlyCurrent ? startTime >= currentTime : true;
+=======
+  // Filter bookings based on current tab
+  const filteredListings = listings.filter((listing) => {
+    const endTime = listing.end_time?.seconds || 0;
+    return showOnlyCurrent ? endTime >= currentTime : true;
+>>>>>>> Stashed changes
   });
 
   if (filteredListings.length === 0) {
@@ -96,7 +107,7 @@ function renderBookingList(listings, oldestFirst = false, showOnlyCurrent = fals
     return oldestFirst ? timeA - timeB : timeB - timeA;
   });
 
-  bookingList.innerHTML = ""; // Clear existing content
+  bookingList.innerHTML = "";
 
   sortedListings.forEach((listing) => {
     const start = formatTimestamp(listing.start_time);
