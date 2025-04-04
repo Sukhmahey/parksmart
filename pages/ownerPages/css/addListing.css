@@ -135,8 +135,6 @@ body {
 }
 
 #cameraButton {
-  /* padding: 10px 20px; */
-  /* background-color: #176f9c; */
  
   border: none;
   border-radius: 6px;
@@ -200,47 +198,6 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-/* Availability Section */
-/* .day-container {
-  background-color: #f8fafc;
-  border-radius: 6px;
-  padding: 20px;
-  border: 2px solid rgb(56, 169, 226);
-}
-
-.day-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 15px;
-  padding: 10px;
-  background-color: white;
-  border-radius: 6px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  flex-wrap: wrap;
-} */
-
-/* .day-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 120px;
-} */
-
-/* .time-inputs {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.time-inputs input[type="time"] {
-  padding: 8px;
-  border: 1px solid #e2e8f0;
-  border-radius: 4px;
-  width: 130px;
-} */
-
 
 /* Availability Section */
 .day-container {
@@ -253,7 +210,7 @@ input:checked + .slider:before {
 /* Grid Layout for Each Row */
 .day-row {
   display: grid;
-  grid-template-columns: 120px 1fr auto; /* Checkbox, Time Inputs, Extra Content */
+  grid-template-columns: 120px 1fr auto; 
   align-items: center;
   gap: 20px;
   margin-bottom: 15px;
@@ -264,12 +221,12 @@ input:checked + .slider:before {
   width: 100%;
 }
 
-/* Keep Time Inputs in One Line */
+
 .time-inputs {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: nowrap; /* Prevent wrapping */
+  flex-wrap: nowrap; 
 }
 
 /* Input Styling */
@@ -278,7 +235,7 @@ input:checked + .slider:before {
   border: 1px solid #e2e8f0;
   border-radius: 4px;
   
-  width: 130px; /* Fixed width to prevent wrapping */
+  width: 130px; 
 }
 
 
@@ -347,8 +304,8 @@ input:checked + .slider:before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Black tint */
-  display: none; /* Initially hidden */
+  background: rgba(0, 0, 0, 0.5); 
+  display: none; 
 }
 
 /* Show overlay when modal is open */
@@ -373,26 +330,6 @@ img {
 .uploadedImage {
   display: flex;
 }
-/* 
-.day-row {
-  display: flex;
-  align-items: center;
-  gap: 10px; 
-  padding: 10px;
-  background-color: white;
-  border-radius: 6px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  flex-wrap: nowrap; 
-}
-
-.day-checkbox {
-  display: flex !important;
-  align-items: center;
-  gap: 5px; 
-  flex-shrink: 0; 
-  white-space: nowrap; 
-  min-width: 3rem;
-} */
 
 
 /* Mobile Responsiveness */
@@ -410,24 +347,11 @@ img {
     font-size: 20px;
   }
 
-  /* .day-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .time-inputs {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .time-inputs input[type="time"] {
-    width: calc(50% - 20px);
-  } */
+  
 }
 @media (max-width: 600px) {
   .day-row {
-    grid-template-columns: 1fr; /* Stack elements on small screens */
+    grid-template-columns: 1fr; 
   }
   #pre-labels label,.camera-controls label
   {
@@ -441,7 +365,7 @@ img {
     margin-top: -5px;
   }
   .time-inputs {
-    flex-wrap: wrap; /* Allow inputs to go to the next line if needed */
+    flex-wrap: wrap;
   }
 }
 @media screen and (max-width: 480px) {
@@ -497,31 +421,6 @@ img {
   
 }
 
-/* .custom-upload {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-bottom: 1rem;
-} */
-
-/* .custom-upload input[type="file"] {
-  opacity: 0;
-  width: 0.1px;
-  height: 0.1px;
-  position: absolute;
-} */
-
-/* .custom-upload label {
-  /* display: block; */
-  /* padding: 12px 24px; */
-  /* background-color: #4caf50; */
-  /* color: white; */
-  /* border-radius: 5px; */
-  /* cursor: pointer; */
-  /* transition: background-color 0.3s; */
-/* }  */
-
 
 
 .buttonContainer {
@@ -549,18 +448,12 @@ img {
   background-color: #0056b3;
 }
 
-/* .file-name {
-  display: block;
-  margin-top: 1rem;
-  color: #666;
-  margin-left: 8px;
-} */
 
 * {
   font-family: "Poppins", sans-serif;
 }
 
-/* Add to your CSS file */
+
 .media-buttons {
   
   display: flex;
