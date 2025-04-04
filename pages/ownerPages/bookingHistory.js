@@ -4,42 +4,28 @@ import {
   getDocs,
   query,
   where,
-  orderBy,
 } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
 
-// Function to fetch the booking history of the current user
-async function getUserBookingHistory() {
+// Function to fetch owner listing history (only parking spaces added by the owner)
+async function getOwnerListingHistory(ownerId) {
   try {
-    // Retrieve user_id from localStorage
-    const userId = localStorage.getItem("usserId");
-
-    if (!userId) {
-      console.error("User ID not found in localStorage.");
-      return [];
-    }
-
-    const bookingRef = collection(db, "bookings");
-
-    // Query to get bookings where the user is the one who made the booking, sorted by created_at
-    const q = query(
-      bookingRef,
-      where("userId", "==", userId),
-      orderBy("created_at", "desc") // Ensure Firestore indexing allows this
-    );
+    const parkingRef = collection(db, "parking_spaces"); // Fetch from parking_spaces, not bookings
+    const q = query(parkingRef, where("user_id", "==", ownerId)); // Filter by owner ID
 
     const snapshot = await getDocs(q);
-    let bookings = [];
+
+    let listings = [];
 
     snapshot.forEach((doc) => {
-      bookings.push({ id: doc.id, ...doc.data() });
+      listings.push({ id: doc.id, ...doc.data() });
     });
 
-    console.log("Sorted User Booking History:", bookings);
-    return bookings;
+    console.log("Owner's Listing History:", listings);
+    return listings;
   } catch (error) {
-    console.error("Error fetching user booking history:", error);
+    console.error("Error fetching owner listing history:", error);
     throw error;
   }
 }
 
-export { getUserBookingHistory };
+export { getOwnerListingHistory };
