@@ -43,10 +43,11 @@ const cacheName = 'parkSmart-cache-v1';
 const assets = [
   '/pages/userPages/homepage.html', // Link to homepage HTML file
   '/styles/homepageStyles.css', // Link to homepage CSS file
-  '/pages/userPages/homepage.js',          // Link to homepage JS file
-  '/pages/userPages/Assets/ParkSmartLogo.png',         // Homepage image if used
-  '/pages/userPages/Assets/carpark3.avif',   // Any other homepage images
+  '/pages/userPages/homepage.js', // Link to homepage JS file
+  '/pages/userPages/Assets/ParkSmartLogo.png', // Homepage image if used
+  '/pages/userPages/Assets/carpark3.avif', // Any other homepage images
   '/pages/userPages/Assets/fevicon.svg',
+  '/offline.html' // Offline fallback page
 ];
 
 self.addEventListener('install', (event) => {
@@ -60,9 +61,15 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
-    })
+    fetch(event.request)
+      .then((response) => {
+        return response;
+      })
+      .catch(() => {
+        return caches.match(event.request).then((cachedResponse) => {
+          return cachedResponse || caches.match('/offline.html');
+        });
+      })
   );
 });
 
@@ -79,5 +86,4 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
-
 });
