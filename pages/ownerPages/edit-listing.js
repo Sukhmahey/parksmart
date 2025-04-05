@@ -28,15 +28,10 @@ async function populateForm(listingId) {
     dataFetched = data;
     currentListingId = listingId;
     existingImageUrl = data.imgURL || "";
-    // Existing image handling
-    // if (data.image) {
-    //   const preview = document.getElementById("preview");
-    //   preview.src = data.image;
-    //   preview.style.display = "block"; // Add this line
-    // }
+    
     
 
-    // Basic fields
+    //  fields
     document.getElementById("name").value = data.title || "";
     document.getElementById("autocomplete").value = data.address || "";
     document.getElementById("description").value = data.description || "";
@@ -385,26 +380,6 @@ document?.getElementById("fileInput")?.addEventListener("change", (event) => {
   }
 });
 
-// async function handleImageUpload() {
-//   // If new image was captured (from camera or file)
-//   if (document.getElementById("preview").src.startsWith("data:image")) {
-//     return document.getElementById("preview").src;
-//   }
-
-//   // If file input was used
-//   const fileInput = document.getElementById("fileInput");
-//   if (fileInput.files.length > 0) {
-//     return new Promise((resolve) => {
-//       const reader = new FileReader();
-//       reader.onload = (e) => {
-//         resolve(e.target.result);
-//       };
-//       reader.readAsDataURL(fileInput.files[0]);
-//     });
-//   }
-
-//   return existingImageUrl;
-// }
 async function handleImageUpload() {
   const preview = document.getElementById("preview");
   if (preview.src.startsWith("data:image")) {

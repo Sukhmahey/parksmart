@@ -1,0 +1,37 @@
+{
+    "name": "ParkSmart",
+    "short_name": "ParkSmart",
+    "description": "Park with Ease Anytime, Anywhere",
+    "start_url": "/pages/userPages/homepage.html",
+    "display": "fullscreen",
+    "background_color": "#ffffff",
+    "theme_color": "#42B97C",
+    "icons": [
+      {
+        "src": "/pages/userPages/Assets/ParkSmartLogo_192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/pages/userPages/Assets/ParkSmartLogo_512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "screenshots": [
+      {
+        "src": "/pages/userPages/Assets/Homepage_Desktop_1280x800.png",
+        "sizes": "1280x800",
+        "type": "image/jpg",
+        "platform": "desktop",
+        "form_factor": "wide"
+      },
+      {
+        "src": "/pages/userPages/Assets/Homepage_mobile_640png.png",
+        "sizes": "640x1136",
+        "type": "image/jpg",
+        "platform": "mobile"
+      }
+    ]
+  }
+  

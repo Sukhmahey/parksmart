@@ -39,16 +39,15 @@ fileInput.addEventListener("change", function (e) {
 
 function sanitizeFileName(fileName) {
   return fileName
-    .replace(/\s+/g, "-") // Replace spaces with hyphens
-    .replace(/[^\w\-\.]+/g, "") // Remove any non-alphanumeric characters except for dots and hyphens
-    .toLowerCase(); // Optionally, convert to lowercase
+    .replace(/\s+/g, "-") 
+    .replace(/[^\w\-\.]+/g, "") 
+    .toLowerCase(); 
 }
 
 async function uploadImage() {
   let file;
   const preview = document.getElementById("preview");
 
-  // Check for camera image first
   if (preview.src && preview.src.startsWith('data:')) {
     file = dataURLtoFile(preview.src, `camera_${Date.now()}.jpg`);
   } else {
@@ -60,7 +59,6 @@ async function uploadImage() {
     return;
   }
 
-  // Rest of your existing upload logic remains the same
   const fileName = `${Date.now()}_${file.name}`;
 
   const { data, error } = await supabase.storage
@@ -72,8 +70,7 @@ async function uploadImage() {
     showModal("Error uploading file",true);
   } else {
     showModal("File uploaded successfully",true);
-    // displayImage(data?.path);
-    // Reset camera preview
+   
     preview.src = '';
     preview.style.display = 'none';
   }
@@ -81,7 +78,6 @@ async function uploadImage() {
   if (data?.path) {
     showModal("File uploaded successfully", true);
     displayImage(data.path);
-    // Reset both camera preview and file input
     preview.src = '';
     preview.style.display = 'none';
     fileInput.value = '';
@@ -96,7 +92,7 @@ async function displayImage(filePath) {
   imageElementContainer.innerHTML = '';
 
   console.log("here", filePath);
-  const data = await supabase.storage.from("images").getPublicUrl(filePath); // Get the public URL of the file
+  const data = await supabase.storage.from("images").getPublicUrl(filePath); 
 
   if (data) {
     console.log("herererererer", data);
@@ -318,7 +314,6 @@ const handleFormSubmission = async (e) => {
     isAvailable: availableNow,
     availability: availability,
 
-    // features: features
   };
 
   if (uploadedImageUrl) {
@@ -347,7 +342,6 @@ const handleFormSubmission = async (e) => {
       formData.latitude,
       formData.isAvailable,
       formData.availability
-      // formData.features
     );
 
     // Reset form
@@ -355,7 +349,6 @@ const handleFormSubmission = async (e) => {
     document.getElementById("autocomplete").value = "";
     document.getElementById("price").value = "";
     document.getElementById("description").value = "";
-    // document.getElementById("preview")?.style?.display = "none";
     showModal("Parking space added successfully!");
   } catch (error) {
     console.error("Submission error:", error);
@@ -363,22 +356,6 @@ const handleFormSubmission = async (e) => {
   }
 };
 
-// Event Listeners
-// if (document.getElementById("fileInput")) {
-//   document.getElementById("fileInput").addEventListener("change", (event) => {
-//     const file = event.target.files[0];
-//     if (!file) return;
-
-//     const reader = new FileReader();
-//     reader.onload = (e) => {
-//       document.getElementById("preview").src = e.target.result;
-//       document.getElementById("preview").style.display = "block";
-//     };
-//     reader.readAsDataURL(file);
-//   });
-// }
-
-// Corrected ID from "fileInput" to "file-input"
 if (document.getElementById("file-input")) {
   document.getElementById("file-input").addEventListener("change", (event) => {
     const file = event.target.files[0];
@@ -514,10 +491,6 @@ async function handleCameraCapture() {
 </svg><br>Stop Camera</label>
     `;
 
-    // controls.innerHTML = `
-    //   <button type="button" class="capture-btn"><img src="Assets/aperture.svg" class="icons-media"></button>
-    //   <button type="button" class="close-btn"><img src="Assets/camera-slash.svg" class="icons-media"></button>
-    // `;
 
     // Add controls to media buttons container
     document.querySelector('.media-buttons').appendChild(controls);

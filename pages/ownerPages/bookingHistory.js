@@ -13,7 +13,6 @@ async function getOwnerListingHistory(ownerId) {
     const q = query(parkingRef, where("user_id", "==", ownerId));
 
     const snapshot = await getDocs(q);
-
     let listings = [];
 
     snapshot.forEach((doc) => {
@@ -29,3 +28,4 @@ async function getOwnerListingHistory(ownerId) {
 }
 
 export { getOwnerListingHistory };
+
