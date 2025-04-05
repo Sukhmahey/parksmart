@@ -1,15 +1,34 @@
-import { getParkingSpaces, deleteParkingSpace, getUserById } from "../../js/crud.js";
+import {
+  getParkingSpaces,
+  deleteParkingSpace,
+  getUserById,
+} from "../../js/crud.js";
 
 const listingarea = document.getElementById("listingarea");
 const noListings = document.getElementById("noListings");
 const currentUser = localStorage.getItem("userId");
 const userNm = await getUserById(currentUser);
 const username = document.getElementById("username");
-const smileys = ["😃", "😁","😇", "😊", "😆", "😄", "😎", "🤩", "🤗", "🥳", "🥸", "🤠"];
+const smileys = [
+  "😃",
+  "😁",
+  "😇",
+  "😊",
+  "😆",
+  "😄",
+  "😎",
+  "🤩",
+  "🤗",
+  "🥳",
+  "🥸",
+  "🤠",
+];
 const randomSmile = smileys[Math.floor(Math.random() * smileys.length)];
-username.textContent = userNm?.firstName || "" +" "+randomSmile;
+username.textContent = userNm?.firstName || "" + " " + randomSmile;
 
-
+document.getElementById("logo")?.addEventListener("click", function () {
+  window.location.href = "/pages/userPages/homepage.html";
+});
 
 localStorage.setItem("username", userNm?.firstName || "");
 
@@ -40,7 +59,7 @@ async function populateListings() {
         details.appendChild(name);
 
         const location = document.createElement("p");
-        location.textContent = "📍 "+space.address;
+        location.textContent = "📍 " + space.address;
         details.appendChild(location);
 
         const price = document.createElement("p");
@@ -48,20 +67,19 @@ async function populateListings() {
         details.appendChild(price);
 
         const availability = document.createElement("div");
-availability.classList.add("availability");
-let availabilityHTML = "<strong>Availability:</strong>";
-availabilityHTML += "<div class='availability-days'>";
-for (const [day, time] of Object.entries(space.availability || {})) {
-  availabilityHTML += `
+        availability.classList.add("availability");
+        let availabilityHTML = "<strong>Availability:</strong>";
+        availabilityHTML += "<div class='availability-days'>";
+        for (const [day, time] of Object.entries(space.availability || {})) {
+          availabilityHTML += `
     <div class="day-time">
       <span class="day">${day.charAt(0).toUpperCase() + day.slice(1)}</span>
       <span class="time">${time}</span>
     </div>`;
-}
-availabilityHTML += "</div>";
-availability.innerHTML = availabilityHTML;
-details.appendChild(availability);
-
+        }
+        availabilityHTML += "</div>";
+        availability.innerHTML = availabilityHTML;
+        details.appendChild(availability);
 
         const edit = document.createElement("button");
         edit.classList.add("edit");
