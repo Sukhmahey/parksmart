@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkSmart - Offline</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+              
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            align-items: center;
+        }
+
+        .logoContainer {
+            cursor: pointer;
+        }
+
+        .logoContainer img {
+            max-width: 180px;
+            height: auto;
+        }
+
+        header a {
+            width: 200px;
+            height: 35px;
+            border-radius: 20px;
+        }
+             
+        .greeting {
+            font-size: 18px;
+            font-weight: 500;
+        }
+             
+        .menu-icon {
+            font-size: 24px;
+        }
+             
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+             
+        .offline-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 85%;
+            border: 2px solid #38a9e2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+             
+        .offline-icon {
+            font-size: 70px;
+            color: #4a90e2;
+            margin-bottom: 20px;
+        }
+
+        .offline-icon svg {
+            width: 70px;
+            height: 70px;
+        }
+             
+        .offline-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+             
+        .offline-message {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #666;
+            margin-bottom: 25px;
+        }
+             
+        .retry-button {
+            background: #2d9bd2;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+             
+        .retry-button:hover {
+            background-color: #3a7bc8;
+        }
+             
+        .footer {
+            background: linear-gradient(to right, #42b97c, #38a9e2);
+            height: 10px;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        /* Mobile specific styles */
+        @media (max-width: 480px) {
+            header {
+                padding: 0.75rem;
+            }
+            
+            .logoContainer img {
+                max-width: 150px;
+            }
+            
+            .offline-container {
+                padding: 20px;
+                width: 85%;
+            }
+            
+            .offline-icon svg {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .offline-title {
+                font-size: 20px;
+                margin-bottom: 12px;
+            }
+            
+            .offline-message {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+            
+            .retry-button {
+                padding: 10px 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+     
+    <div class="content">
+        <div class="offline-container">
+            <div class="offline-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                    <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+                    <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+                    <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+                    <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                    <path d="M12 20h.01"></path>
+                </svg>
+            </div>
+            <h1 class="offline-title">You are currently offline</h1>
+            <p class="offline-message">Please reconnect to the internet for the full ParkSmart experience!</p>
+            <button class="retry-button">Try Again</button>
+        </div>
+    </div>
+     
+    <div class="footer"></div>
+
+    <script>
+        document.querySelector(".retry-button").addEventListener("click", () => {
+            location.reload(); // Reload the page to check if the internet is back
+        });
+        </script>
+        
+
+</body>
+</html>

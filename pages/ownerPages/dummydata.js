@@ -12,23 +12,23 @@ const tabs = document.querySelectorAll(".tab");
 const filterContainer = document.querySelector(".filter-container");
 
 let cachedListings = [];
-<<<<<<< Updated upstream
-let oldestFirst = false; // Sorting toggle
-=======
 let oldestFirst = false;
->>>>>>> Stashed changes
 
 const defaultImageURL = "https://cdn.pixabay.com/photo/2014/10/25/19/23/multi-storey-car-park-502959_1280.jpg";
 
 // Format Firestore Timestamp
 function formatTimestamp(timestamp) {
-  if (!timestamp || !timestamp.seconds) return { formattedDate: "N/A", formattedTime: "N/A" };
-
-  const date = new Date(timestamp.seconds * 1000);
-  return {
-    formattedDate: date.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
-    formattedTime: date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true }),
-  };
+  if (!timestamp) return { formattedDate: "N/A", formattedTime: "N/A" };
+  
+  if (timestamp.seconds) {
+    const date = new Date(timestamp.seconds * 1000);
+    return {
+      formattedDate: date.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }),
+      formattedTime: date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true }),
+    };
+  }
+  
+  return { formattedDate: "N/A", formattedTime: "N/A" };
 }
 
 // Show/hide modal
@@ -47,83 +47,67 @@ window.addEventListener("click", (event) => {
   if (event.target === modal) hideModal();
 });
 
-// Calculate duration between two timestamps
-function calculateDuration(start, end) {
-  if (!start || !end || !start.seconds || !end.seconds) return "N/A";
-
-  const durationMs = (end.seconds - start.seconds) * 1000;
-  const durationHrs = Math.round(durationMs / (1000 * 60 * 60));
-
-  return `${durationHrs} Hrs`;
-}
-
-// Display booking details in modal
+// Display parking space details in modal
 function displayBookingDetails(listing) {
-  const start = formatTimestamp(listing.start_time);
-  const end = formatTimestamp(listing.end_time);
+  // Use the image from the listing data
+  document.getElementById("modalImage").src = listing.imgURL || listing.image || defaultImageURL;
+  document.getElementById("modalImage").onerror = function() {
+    this.src = defaultImageURL;
+  };
 
-  document.getElementById("modalImage").src = listing.imgURL || defaultImageURL;
+  // Format created_at timestamp for display
+  const createdTime = formatTimestamp(listing.created_at);
+  
+  // Get availability information if present
+  let availabilityText = "N/A";
+  if (listing.availability && listing.availability.monday) {
+    availabilityText = listing.availability.monday;
+  }
 
   const bookingDetails = document.getElementById("bookingDetails");
   bookingDetails.innerHTML = `
-    <h3>${listing.name || "Parking Spot"}</h3>
+    <h3>${listing.title || "Parking Spot"}</h3>
     <p>${listing.address || "Unknown Location"}</p>
-    <p>Booked by: ${listing.booked_by || "Unknown"}</p>
-    <p>Date: ${start.formattedDate}</p>
-    <p>Time: ${start.formattedTime} - ${end.formattedTime}</p>
-    <p>Duration: ${calculateDuration(listing.start_time, listing.end_time)}</p>
-    <p>Total: $${listing.price || "N/A"}</p>
+    <p>Owner: ${listing.owner_name || "Unknown"}</p>
+    <p>Date: ${createdTime.formattedDate || "N/A"}</p>
+    <p>Available Hours: ${availabilityText}</p>
+    <p>Description: ${listing.description || "No description available"}</p>
+    <p>Total: $${listing.price_per_hour ? listing.price_per_hour.toFixed(2) + "/hour" : "N/A"}</p>
   `;
 
   showModal();
 }
 
-// Render booking list
+// Render booking list with the actual data structure
 function renderBookingList(listings, oldestFirst = false, showOnlyCurrent = false) {
-  const currentTime = Date.now() / 1000; // Convert to seconds
-
-<<<<<<< Updated upstream
-  // Filter bookings based on tab
-  const filteredListings = listings.filter((listing) => {
-    const startTime = listing.start_time?.seconds || 0;
-    return showOnlyCurrent ? startTime >= currentTime : true;
-=======
-  // Filter bookings based on current tab
-  const filteredListings = listings.filter((listing) => {
-    const endTime = listing.end_time?.seconds || 0;
-    return showOnlyCurrent ? endTime >= currentTime : true;
->>>>>>> Stashed changes
-  });
-
-  if (filteredListings.length === 0) {
-    bookingList.innerHTML = `<p>${showOnlyCurrent ? "No current bookings available." : "No bookings found."}</p>`;
+  if (!Array.isArray(listings) || listings.length === 0) {
+    bookingList.innerHTML = `<p>${showOnlyCurrent ? "No current listings available." : "No listings found."}</p>`;
     return;
   }
 
-  // Sort listings
-  const sortedListings = [...filteredListings].sort((a, b) => {
-    const timeA = a.start_time?.seconds || 0;
-    const timeB = b.start_time?.seconds || 0;
+  // Sort listings by created_at timestamp
+  const sortedListings = [...listings].sort((a, b) => {
+    const timeA = a.created_at?.seconds || 0;
+    const timeB = b.created_at?.seconds || 0;
     return oldestFirst ? timeA - timeB : timeB - timeA;
   });
 
   bookingList.innerHTML = "";
 
   sortedListings.forEach((listing) => {
-    const start = formatTimestamp(listing.start_time);
-    const end = formatTimestamp(listing.end_time);
+    const createdTime = formatTimestamp(listing.created_at);
 
     const listItem = document.createElement("li");
     listItem.classList.add("booking-item");
     listItem.style.cursor = "pointer";
 
     listItem.innerHTML = `
-      <img src="${listing.imgURL || defaultImageURL}" alt="Parking Image">
+      <img src="${listing.imgURL || listing.image || defaultImageURL}" alt="Parking Image" onerror="this.src='${defaultImageURL}'">
       <div class="booking-details">
-        <h3>${listing.name || "Parking Space"}</h3>
+        <h3>${listing.title || "Parking Space"}</h3>
         <p>${listing.address || "Unknown Location"}</p>
-        <p>${start.formattedDate}</p>
-        <p>${start.formattedTime} - ${end.formattedTime}</p>
+        <p>Added: ${createdTime.formattedDate}</p>
+        <p>$${listing.price_per_hour || 0}/hour</p>
       </div>
       <div class="arrow">></div>
     `;
@@ -176,12 +160,26 @@ tabs.forEach((tab) => {
 });
 
 // Initial Load
-getOwnerListingHistory(ownerId)
-  .then((listings) => {
-    cachedListings = listings;
-    renderBookingList(listings, oldestFirst, isCurrentBookingTab());
-  })
-  .catch((error) => {
-    console.error("Error loading booking history:", error);
-    bookingList.innerHTML = "<p>Error loading bookings. Please try again later.</p>";
-  });
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    getOwnerListingHistory(ownerId)
+      .then((listings) => {
+        if (!Array.isArray(listings)) {
+          console.error("Expected array of listings but received:", listings);
+          bookingList.innerHTML = "<p>Error: Invalid data format received. Please try again later.</p>";
+          return;
+        }
+        
+        console.log("Loaded listings:", listings);
+        cachedListings = listings;
+        renderBookingList(listings, oldestFirst, isCurrentBookingTab());
+      })
+      .catch((error) => {
+        console.error("Error loading booking history:", error);
+        bookingList.innerHTML = "<p>Error loading bookings. Please try again later.</p>";
+      });
+  } catch (e) {
+    console.error("Critical error during initialization:", e);
+    bookingList.innerHTML = "<p>Failed to initialize booking history. Please refresh the page.</p>";
+  }
+});

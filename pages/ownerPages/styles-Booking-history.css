@@ -1,86 +1,3 @@
-<<<<<<< Updated upstream
-/* Main Content Only - Excluding Header/Footer */
-.page-header {
-  display: flex;
-  align-items: center;
-  padding: 15px 20px;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.back-arrow {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  margin-right: 15px;
-  cursor: pointer;
-  color: var(--primary-color);
-}
-
-.booking-history-title {
-  margin: 0;
-  font-size: 1.3rem;
-  color: #333;
-}
-
-.container {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 0 20px;
-}
-
-.tab-container {
-  display: flex;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 20px;
-}
-
-.tab {
-  padding: 12px 20px;
-  cursor: pointer;
-  font-weight: 500;
-  color: #666;
-  border-bottom: 3px solid transparent;
-}
-
-.tab.active {
-  color: var(--primary-color);
-  border-bottom-color: var(--primary-color);
-}
-
-.filter-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  margin-bottom: 25px;
-  flex-wrap: wrap;
-}
-
-.search-container {
-  flex: 1;
-  min-width: 250px;
-  display: flex;
-}
-
-.search-input {
-  flex: 1;
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px 0 0 5px;
-  font-size: 0.95rem;
-}
-
-.search-button {
-  padding: 0 15px;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-=======
 /* Reset and Base Styles */
 * {
   margin: 0;
@@ -208,26 +125,10 @@ header {
   border: none;
   border-radius: 5px;
   font-size: 14px;
->>>>>>> Stashed changes
 }
 
 .filter-button {
   padding: 10px 15px;
-<<<<<<< Updated upstream
-  background: white;
-  border: 1px solid var(--primary-color);
-  color: var(--primary-color);
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  white-space: nowrap;
-}
-
-.booking-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-=======
   background-color: #38A9E2;
   color: white;
   border: none;
@@ -240,34 +141,11 @@ header {
 .booking-list {
   list-style: none;
   padding: 0 15px;
->>>>>>> Stashed changes
 }
 
 .booking-item {
   display: flex;
   align-items: center;
-<<<<<<< Updated upstream
-  padding: 15px;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: white;
-}
-
-.booking-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  border-color: var(--primary-color);
-}
-
-.booking-item img {
-  width: 80px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 5px;
-=======
   background: white;
   padding: 15px;
   margin-bottom: 15px;
@@ -280,32 +158,10 @@ header {
   height: 70px;
   object-fit: cover;
   border-radius: 8px;
->>>>>>> Stashed changes
   margin-right: 15px;
 }
 
 .booking-details {
-<<<<<<< Updated upstream
-  flex: 1;
-}
-
-.booking-details h3 {
-  margin: 0 0 5px 0;
-  font-size: 1rem;
-  color: #333;
-}
-
-.booking-details p {
-  margin: 3px 0;
-  font-size: 0.85rem;
-  color: #666;
-}
-
-.arrow {
-  font-size: 1.5rem;
-  color: #999;
-  margin-left: 10px;
-=======
   flex-grow: 1;
 }
 
@@ -325,7 +181,6 @@ header {
   font-size: 20px;
   color: #aaa;
   cursor: pointer;
->>>>>>> Stashed changes
 }
 
 /* Modal Styles */
@@ -337,28 +192,6 @@ header {
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.5);
-<<<<<<< Updated upstream
-  z-index: 100;
-}
-
-.modal-content {
-  background: white;
-  margin: 5% auto;
-  padding: 25px;
-  border-radius: 10px;
-  max-width: 500px;
-  width: 90%;
-  position: relative;
-}
-
-.close-button {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #999;
-=======
   z-index: 1000;
 }
 
@@ -373,7 +206,6 @@ header {
   max-height: 90%;
   overflow-y: auto;
   border: 4px solid #38A9E2;
->>>>>>> Stashed changes
 }
 
 .modal-header {
@@ -382,20 +214,6 @@ header {
   margin-bottom: 20px;
 }
 
-<<<<<<< Updated upstream
-.modal-header h3 {
-  flex: 1;
-  text-align: center;
-  margin: 0;
-}
-
-.back-button {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: var(--primary-color);
-=======
 .back-button {
   background: none;
   border: none;
@@ -416,80 +234,23 @@ header {
 .booking-info {
   display: flex;
   flex-direction: column;
->>>>>>> Stashed changes
 }
 
 .booking-info img {
   width: 100%;
-<<<<<<< Updated upstream
-  height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
-=======
   height: 180px;
   object-fit: cover;
   border-radius: 10px;
->>>>>>> Stashed changes
   margin-bottom: 20px;
 }
 
 #bookingDetails h3 {
-<<<<<<< Updated upstream
-  margin: 0 0 10px 0;
-  font-size: 1.2rem;
-=======
   font-size: 18px;
   margin-bottom: 10px;
->>>>>>> Stashed changes
 }
 
 #bookingDetails p {
   margin: 8px 0;
-<<<<<<< Updated upstream
-  font-size: 0.95rem;
-  color: #555;
-}
-
-/* Messages */
-.no-bookings, .error-message {
-  text-align: center;
-  padding: 30px;
-  color: #666;
-  font-size: 1rem;
-}
-
-.error-message {
-  color: #e74c3c;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .filter-container {
-    flex-direction: column;
-  }
-  
-  .search-container {
-    width: 100%;
-  }
-  
-  .booking-item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .booking-item img {
-    width: 100%;
-    height: auto;
-    max-height: 150px;
-    margin-bottom: 15px;
-  }
-  
-  .modal-content {
-    margin: 10% auto;
-    padding: 20px;
-  }
-}
-=======
   font-size: 15px;
 }
 
@@ -518,7 +279,7 @@ header {
     border-radius: 10px;
     padding: 20px;
     margin-top: 20px;
-    height: 660px; /* keep fixed height on larger screens too */
+    height: 670px; /* keep fixed height on larger screens too */
     overflow-y: auto;
   }
 
@@ -545,24 +306,3 @@ header {
     bottom: 10rem;
   }
 }
-
-footer {
-  background: linear-gradient(to right, #42b97c, #38a9e2);
-  padding: 1rem;
-  margin-top: 5rem;
-  width: 100%;
-  /* text-align: center; */
-}
-
-footer p {
-  margin: 0.5rem 0;
-}
-.socialMediaContainer img {
-  max-width: 50px;
-  max-height: 50px;
-}
-
-* {
-  font-family: "Poppins", sans-serif;
-}
->>>>>>> Stashed changes

@@ -9,11 +9,10 @@ import {
 // Function to fetch owner listing history
 async function getOwnerListingHistory(ownerId) {
   try {
-    const parkingRef = collection(db, "bookings");
+    const parkingRef = collection(db, "parking_spaces");
     const q = query(parkingRef, where("user_id", "==", ownerId));
 
-    const snapshot = await getDocs(parkingRef);
-      console.log(snapshot.data)
+    const snapshot = await getDocs(q);
     let listings = [];
 
     snapshot.forEach((doc) => {
@@ -29,3 +28,4 @@ async function getOwnerListingHistory(ownerId) {
 }
 
 export { getOwnerListingHistory };
+
