@@ -23,15 +23,13 @@ const elements = {
   filterContainer: document.querySelector(".filter-container"),
 };
 
-// Constants
 const defaultImageURL =
   "https://cdn.pixabay.com/photo/2014/10/25/19/23/multi-storey-car-park-502959_1280.jpg";
 
-// State
 let oldestFirst = false;
 let cachedListings = [];
 
-// Utility Functions
+// Format timestamp
 const formatTimestamp = (timestamp) => {
   if (!timestamp?.seconds)
     return { formattedDate: "N/A", formattedTime: "N/A" };
@@ -51,36 +49,104 @@ const formatTimestamp = (timestamp) => {
   };
 };
 
+// Calculate duration
 const calculateDuration = (start, end) => {
   if (!start?.seconds || !end?.seconds) return "N/A";
   const durationHrs = ((end.seconds - start.seconds) / 3600).toFixed(1);
   return `${durationHrs} Hours`;
 };
 
-// Modal Functions
-const showModal = () => (elements.modal.style.display = "block");
-const hideModal = () => (elements.modal.style.display = "none");
+// Copy address function
+const copyAddress = (address) => {
+  navigator.clipboard
+    .writeText(address)
+    .then(() => {
+      const copyBtn = document.getElementById("copyAddressBtn");
+      if (copyBtn) {
+        copyBtn.textContent = "Copied!";
+        copyBtn.classList.add("copied");
+        setTimeout(() => {
+          copyBtn.textContent = "Copy Address";
+          copyBtn.classList.remove("copied");
+        }, 2000);
+      }
+    })
+    .catch((err) => {
+      console.error("Failed to copy address:", err);
+      alert("Failed to copy address. Please try again.");
+    });
+};
 
+// Modal functions
+const showModal = () => {
+  elements.modal.style.display = "block";
+  document.body.style.overflow = "hidden";
+};
+
+const hideModal = () => {
+  elements.modal.style.display = "none";
+  document.body.style.overflow = "auto";
+};
+
+// Display booking details in modal
 const displayBookingDetails = (listing) => {
   const start = formatTimestamp(listing.start_time);
   const end = formatTimestamp(listing.end_time);
 
-  elements.modImage.src = listing.imgURL || defaultImageURL;
+  // Ensure price is properly formatted
+  const price =
+    listing.price !== undefined
+      ? listing.price.toFixed(2)
+      : listing.total_price !== undefined
+      ? listing.total_price.toFixed(2)
+      : "0.00";
+
+  elements.modalImage.src = listing.imgURL || defaultImageURL;
   elements.bookingDetails.innerHTML = `
-    <h3>${listing.name || "Parking Space"}</h3>
-    <p>📍 ${listing.address || "Address not available"}</p>
-    <p>📅 Date: ${start.formattedDate}</p>
-    <p>⏰ Time: ${start.formattedTime} - ${end.formattedTime}</p>
-    <p>⏳ Duration: ${calculateDuration(
-      listing.start_time,
-      listing.end_time
-    )}</p>
-    <p>💰 Total: $${listing.price?.toFixed(2) || "0.00"}</p>
+    <div class="booking-header">
+      <h3>${listing.name || "Parking Space"}</h3>
+      <p class="booking-address">📍 ${
+        listing.address || "Address not available"
+      }</p>
+    </div>
+    <div class="booking-meta">
+      <div class="meta-item">
+        <span class="meta-label">Date:</span>
+        <span class="meta-value">${start.formattedDate}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Time:</span>
+        <span class="meta-value">${start.formattedTime} - ${
+    end.formattedTime
+  }</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Duration:</span>
+        <span class="meta-value">${calculateDuration(
+          listing.start_time,
+          listing.end_time
+        )}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Total:</span>
+        <span class="meta-value">$${price}</span>
+      </div>
+    </div>
+    <button id="copyAddressBtn" class="copy-address-btn">
+      Copy Address
+    </button>
   `;
+
+  // Add click event for copy button
+  const copyBtn = document.getElementById("copyAddressBtn");
+  if (copyBtn && listing.address) {
+    copyBtn.addEventListener("click", () => copyAddress(listing.address));
+  }
+
   showModal();
 };
 
-// Search and Filter
+// Search functionality
 const performSearch = () => {
   const searchTerm = elements.searchInput.value.toLowerCase();
   document.querySelectorAll(".booking-item").forEach((item) => {
@@ -90,6 +156,7 @@ const performSearch = () => {
   });
 };
 
+// Toggle filter
 const toggleFilter = () => {
   oldestFirst = !oldestFirst;
   elements.filterButton.textContent = oldestFirst
@@ -98,7 +165,7 @@ const toggleFilter = () => {
   renderBookingList(cachedListings, oldestFirst);
 };
 
-// Render Functions
+// Render booking list
 const renderBookingList = (listings, reverse = false) => {
   if (!elements.bookingList) return;
 
@@ -130,7 +197,7 @@ const renderBookingList = (listings, reverse = false) => {
   });
 };
 
-// Data Fetching
+// Fetch user bookings
 const getUserBookingHistory = async () => {
   try {
     const userId = localStorage.getItem("userId");
@@ -150,9 +217,9 @@ const getUserBookingHistory = async () => {
   }
 };
 
-// Event Listeners
+// Setup event listeners
 const setupEventListeners = () => {
-  // Modal
+  // Modal controls
   elements.closeButton?.addEventListener("click", hideModal);
   elements.backButton?.addEventListener("click", hideModal);
   window.addEventListener(
@@ -180,11 +247,11 @@ const setupEventListeners = () => {
     });
   });
 
-  // Back arrow
+  // Navigation
   elements.backArrow?.addEventListener("click", () => window.history.back());
 };
 
-// Initialization
+// Initialize
 const init = async () => {
   setupEventListeners();
 
