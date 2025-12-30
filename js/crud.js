@@ -74,7 +74,11 @@ async function getParkingSpaces() {
   const dataObj = [];
   snapshot.forEach((doc) => {
     console.log(doc.id, "=>", doc.data());
-    dataObj.push(doc.data());
+    dataObj.push({
+      ...doc.data(),
+      imgURL:
+        "https://ugwkzwoggzoqaxlsfzir.supabase.co/storage/v1/object/public/photos/parkingSpot.jpg",
+    });
   });
 
   return dataObj;
@@ -120,7 +124,6 @@ async function addBooking(
   name = "",
   address = "",
   imgURL = ""
-
 ) {
   try {
     const bookingRef = doc(collection(db, "bookings"));
@@ -145,7 +148,7 @@ async function addBooking(
       created_at: Timestamp.now(),
       name,
       address,
-      imgURL
+      imgURL,
     });
 
     console.log("Booking added successfully:", bookingRef.id);
@@ -222,7 +225,11 @@ async function getParkingSpaceById(documentId) {
 
     if (docSnap.exists()) {
       // console.log("Document Data:", docSnap.data());
-      return docSnap.data(); // Return document data
+      return {
+        ...doc.data(),
+        imgURL:
+          "https://ugwkzwoggzoqaxlsfzir.supabase.co/storage/v1/object/public/photos/parkingSpot.jpg",
+      }; // Return document data
     } else {
       // console.log("No such document!");
       return null;

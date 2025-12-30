@@ -16,7 +16,8 @@ const renderData = (spaceData) => {
   // Create a div element for the background image
   const imgElement = document.createElement("img");
   imgElement.classList.add("slider-image");
-  imgElement.src = spaceData?.imgURL ?? "";
+  imgElement.src =
+    "https://ugwkzwoggzoqaxlsfzir.supabase.co/storage/v1/object/public/photos/parkingSpot.jpg";
 
   // Insert the image before the button
   const nextButton = imageSlider.querySelector(".next");
