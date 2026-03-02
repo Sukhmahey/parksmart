@@ -1,147 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Checkout | ParkSmart</title>
-  <link rel="icon" href="./Assets/fevicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="./checkout.css" />
-  <link rel="stylesheet" href="../../index-header.css" />
-  <script type="module" src="../../js/checkOutPage.js" defer></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout | ParkSmart</title>
+    <link rel="icon" href="/pages/userPages/Assets/fevicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/index-header.css" />
+    <link rel="stylesheet" href="/pages/userPages/checkout.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script type="module" src="/js/checkOutPage.js" defer></script>
   </head>
-
-<body>
-  <header class="main-header">
-    <div class="logoContainer" id="logo">
-      <img src="Assets/Logo-FullSize.svg" alt="ParkSmart Logo" class="logo-img" />
+  <body id="checkoutPage">
+    <header class="main-header">
+      <div class="logoContainer" id="logo">
+        <img src="/pages/userPages/Assets/Logo-FullSize.svg" alt="ParkSmart" class="logo-img" />
       </div>
-    <a href="userSettings.html" class="profile-link">
-      <img class="profileIcon" src="Assets/avatar-svg.svg" alt="Profile Icon" />
-    </a>
+      <a href="/pages/userPages/userSettings.html" class="profile-link">
+        <img class="profileIcon" src="/pages/userPages/Assets/avatar-svg.svg" alt="Profile" />
+      </a>
     </header>
-<main class="main-content">
-    <div class="container">
-      <h1 class="page-title">Checkout</h1>
-      
-      <section class="parking-info">
-        <img id="parkingImage" class="parking-image" alt="Parking spot image" />
-        <div class="parking-details">
-          <h2 id="parkingTitle" class="parking-title">Loading...</h2>
-          <p id="parkingAddress" class="parking-address">Loading...</p>
+
+    <main class="checkout-main">
+      <div class="checkout-container">
+        <h1 class="checkout-page-title">Checkout</h1>
+
+        <div class="checkout-layout">
+          <!-- Order summary: image + parking details -->
+          <aside class="order-summary">
+            <div class="summary-card">
+              <div class="summary-image-wrap">
+                <img id="parkingImage" class="summary-image" alt="Parking spot" />
+              </div>
+              <div class="summary-body">
+                <h2 id="parkingTitle" class="summary-title">Loading...</h2>
+                <p id="parkingAddress" class="summary-address">
+                  <i class="fa-solid fa-map-pin" aria-hidden="true"></i>
+                  <span>Loading...</span>
+                </p>
+                <p id="parkingDescription" class="summary-description"></p>
+                <div class="summary-features" id="summaryFeatures">
+                  <span class="feature-tag" id="featureEv">EV charging</span>
+                  <span class="feature-tag" id="featureCovered">Covered</span>
+                </div>
+                <div class="summary-price-row">
+                  <span class="summary-rate">$<span id="parkingPrice">0.00</span> <small>/hour</small></span>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Booking form -->
+          <section class="checkout-form-section">
+            <div class="form-card">
+              <h2 class="form-card-title">Booking details</h2>
+              <form id="checkoutForm" class="booking-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="license">License plate</label>
+                    <input type="text" id="license" required class="form-input" placeholder="e.g. ABC 1234" />
+                  </div>
+                  <div class="form-group">
+                    <label for="color">Car model</label>
+                    <input type="text" id="color" required class="form-input" placeholder="e.g. Toyota Camry" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="parkingDate">Date</label>
+                  <input type="date" id="parkingDate" required class="form-input" />
+                </div>
+                <div class="form-group">
+                  <label>Time</label>
+                  <div class="time-inputs">
+                    <input type="time" id="startTime" required class="form-input" />
+                    <span class="time-sep">to</span>
+                    <input type="time" id="endTime" required class="form-input" />
+                  </div>
+                </div>
+                <div class="form-summary-inline">
+                  <p class="duration-info">
+                    Duration: <strong id="duration">0</strong> hours
+                  </p>
+                  <p class="total-info">
+                    Total: <strong class="total-amount">$<span id="totalPrice">0.00</span></strong>
+                  </p>
+                </div>
+                <div class="form-actions">
+                  <button type="reset" class="btn btn-secondary">Reset</button>
+                  <button type="submit" class="btn btn-primary">Confirm booking</button>
+                </div>
+              </form>
+            </div>
+          </section>
         </div>
-        <div class="price">$<span id="parkingPrice">0.00</span> per hour</div>
-  </section>
-  <section class="form-container">
-    <h2 class="form-title">Car Information</h2>
-    <form id="checkoutForm" class="booking-form">
-      <div class="form-group">
-        <label for="license">License Plate:</label>
-        <input type="text" id="license" required class="form-input" />
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">ParkSmart</div>
+        <div class="footer-right">
+          <div class="footer-links">
+            <a href="mailto:parksmart@gmail.com">Contact</a>
+            <span class="footer-dot">·</span>
+            <a href="/pages/userPages/homepage.html">Find parking</a>
           </div>
-
-          <div class="form-group">
-            <label for="color">Car model:</label>
-            <input type="text" id="color" required class="form-input" />
-            </div>
-
-          <div class="form-group">
-            <label><Parking Date:</label>
-            <input type="date" id="parkingDate" required class="form-input" />
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><img src="/pages/userPages/Assets/vecteezy_facebook-logo-png-facebook-icon-transparent-png_18930698.png" alt="Facebook" /></a>
+            <a href="#" aria-label="Instagram"><img src="/pages/userPages/Assets/vecteezy_instagram-logo-png-instagram-icon-transparent_18930415.png" alt="Instagram" /></a>
+            <a href="#" aria-label="Twitter"><img src="/pages/userPages/Assets/vecteezy_twitter-new-logo-twitter-icons-new-twitter-logo-x-2023-x_31737215.png" alt="Twitter" /></a>
           </div>
-
-          <div class="form-group time-group">
-            <label>Parking Time:</label>
-            <div class="time-inputs">
-              <input type="time" id="startTime" required class="form-input" />
-              <span class="to-span">to</span>
-              <input type="time" id="endTime" required class="form-input" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <p class="duration-info">
-              Parking Duration:
-              <span id="duration">0</span> hours
-            </p>
-          </div>
-
-          <div class="form-group">
-            <p class="total-info">
-              Total: $<span id="totalPrice">0.00</span>
-            </p>
-          </div>
-
-          <div class="form-actions">
-            <button type="reset" class="btn btn-secondary">Reset</button>
-            <button type="submit" class="btn btn-primary">Confirm Booking</button>
-          </div>
-        </form>
-      </section>
-    </div>
-  </main>
-
-  <footer class="main-footer">
-    <h3 class="footer-title">Contact Us</h3>
-    <p class="footer-contact">Email: <a href="mailto:parksmart@gmail.com">parksmart@gmail.com</a></p>
-    <div class="social-media">
-      <img src="./Assets/vecteezy_facebook-logo-png-facebook-icon-transparent-png_18930698.png" alt="Facebook" />
-      <img src="./Assets/vecteezy_instagram-logo-png-instagram-icon-transparent_18930415.png" alt="Instagram" />
-      <img src="Assets/vecteezy_twitter-new-logo-twitter-icons-new-twitter-logo-x-2023-x_31737215.png" alt="Twitter/X" />
-    </div>
-    <p class="copyright">&copy; 2025 Team ParkSmart. All Rights Reserved.</p>
+          <span class="footer-copy">&copy; 2025 ParkSmart</span>
+        </div>
+      </div>
     </footer>
 
-<!-- Confirmation Popup -->
-<div id="confirmPopup" class="popup-overlay">
-  <div class="popup-container">
-    <div class="popup-header">
-      <h3>Confirm Your Booking</h3>
-      <button id="closePopup" class="popup-close">&times;</button>
-    </div>
-    <div class="popup-content">
-      <div class="popup-booking-details">
-        <img id="popupParkingImage" src="" alt="Parking Space" class="popup-image">
-        <div class="popup-details">
-          <h4 id="popupParkingTitle"></h4>
-          <p id="popupParkingAddress"></p>
-          <div class="popup-detail-row">
-            <span>Date:</span>
-            <span id="popupParkingDate"></span>
+    <!-- Confirmation popup -->
+    <div id="confirmPopup" class="popup-overlay" aria-hidden="true">
+      <div class="popup-container">
+        <div class="popup-header">
+          <h3>Confirm your booking</h3>
+          <button type="button" id="closePopup" class="popup-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="popup-content">
+          <div class="popup-booking-details">
+            <div class="popup-image-wrap">
+              <img id="popupParkingImage" src="https://images.pexels.com/photos/9800031/pexels-photo-9800031.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=400&amp;h=300&amp;fit=crop" alt="Parking spot" class="popup-image" />
+            </div>
+            <div class="popup-details">
+              <h4 id="popupParkingTitle"></h4>
+              <p id="popupParkingAddress" class="popup-address"></p>
+              <div class="popup-meta">
+                <div class="popup-detail-row">
+                  <span>Date</span>
+                  <span id="popupParkingDate"></span>
+                </div>
+                <div class="popup-detail-row">
+                  <span>Time</span>
+                  <span id="popupParkingTime"></span>
+                </div>
+                <div class="popup-detail-row">
+                  <span>Duration</span>
+                  <span id="popupDuration"></span> hours
+                </div>
+                <div class="popup-detail-row popup-total">
+                  <span>Total</span>
+                  <span id="popupTotalPrice"></span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="popup-detail-row">
-            <span>Time:</span>
-            <span id="popupParkingTime"></span>
+          <div class="popup-vehicle-info">
+            <p class="popup-vehicle-title">Vehicle</p>
+            <div class="popup-detail-row">
+              <span>License</span>
+              <span id="popupLicense"></span>
+            </div>
+            <div class="popup-detail-row">
+              <span>Model</span>
+              <span id="popupColor"></span>
+            </div>
           </div>
-          <div class="popup-detail-row">
-            <span>Duration:</span>
-            <span id="popupDuration"></span> hours
-          </div>
-          <div class="popup-detail-row total">
-            <span>Total:</span>
-            <span id="popupTotalPrice"></span>
-          </div>
+        </div>
+        <div class="popup-actions">
+          <button type="button" id="cancelBooking" class="btn btn-secondary">Cancel</button>
+          <button type="button" id="confirmBooking" class="btn btn-primary">Confirm booking</button>
         </div>
       </div>
-      <div class="popup-vehicle-info">
-        <p><strong>Vehicle Information</strong></p>
-        <div class="popup-detail-row">
-          <span>License:</span>
-          <span id="popupLicense"></span>
-        </div>
-        <div class="popup-detail-row">
-          <span>Car Model:</span>
-          <span id="popupColor"></span>
-        </div>
-      </div>
     </div>
-    <div class="popup-actions">
-      <button id="cancelBooking" class="btn btn-secondary">Cancel</button>
-      <button id="confirmBooking" class="btn btn-primary">Confirm Booking</button>
-    </div>
-  </div>
-</div>
-
-    </body>
-
+  </body>
 </html>

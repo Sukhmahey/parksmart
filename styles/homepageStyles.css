@@ -4,6 +4,12 @@
   box-sizing: border-box;
 }
 
+/* Homepage: full-width sections with same content width */
+:root {
+  --page-max-width: 1100px;
+  --page-padding: 1.5rem;
+}
+
 .searchInputContainer {
   position: relative;
   display: flex;
@@ -23,9 +29,23 @@
   padding-left: 30px; /* Add some padding to the left so the text doesn’t overlap the icon */
 }
 
-.mainSectionContainer {
-  max-width: 1100px;
-  margin: auto;
+/* Full-width sections with same inner content width */
+.page-section {
+  width: 100%;
+  padding-left: var(--page-padding);
+  padding-right: var(--page-padding);
+}
+
+.page-section-inner {
+  max-width: var(--page-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mainSectionContainer .page-section-inner {
+  display: flex;
+  margin-top: 5rem;
+  justify-content: space-between;
 }
 
 .mainSectionContainer h1{
@@ -75,17 +95,42 @@ h1 span {
   color: #38a9e2;
 }
 
-.mainSectionContainer {
-  display: flex;
-  margin-top: 5rem;
-  justify-content: space-between;
-}
 
 .searchBox form input {
   width: 450px; /* Same width for both inputs */
   height: 50px;
   padding: 0.5rem 2rem 0.5rem 1rem;
   box-sizing: border-box;
+}
+
+/* Date/time field – beautified */
+.searchBox input[type="datetime-local"],
+#datetime {
+  width: 100%;
+  max-width: 450px;
+  height: 50px;
+  padding: 0.6rem 1rem;
+  margin: 0.5rem;
+  font-size: 1rem;
+  font-family: "Poppins", sans-serif;
+  color: #1a1a1a;
+  background: #fff;
+  border: 1px solid rgba(56, 169, 226, 0.35);
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.searchBox input[type="datetime-local"]:hover,
+#datetime:hover {
+  border-color: #38a9e2;
+}
+
+.searchBox input[type="datetime-local"]:focus,
+#datetime:focus {
+  border-color: #38a9e2;
+  box-shadow: 0 0 0 3px rgba(56, 169, 226, 0.2);
 }
 
 .searchBox button {
@@ -116,56 +161,173 @@ h1 span {
 }
 
 .instructions {
-  max-width: 1050px;
-  margin: 7rem auto;
-  box-shadow: #38a9e2 0px 0px 10px 0px;
-  padding: 1rem 0;
-  border-radius: 30px;
-}
-.instructionsImage {
-  border-radius: 10px;
-  width: 200px;
+  margin: 7rem 0;
+  padding: 2.5rem 0;
 }
 
-h2,
-.instructions h3 {
+.instructions .page-section-inner {
+  padding: 2.5rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(56, 169, 226, 0.15);
+  border-radius: 24px;
+}
+
+.instructions h2 {
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2.5rem;
 }
 
 .instructionsContainer {
   display: flex;
-  gap: 10rem;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* Zigzag row: image and content aligned to start or end of container */
+.instructionsCard {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  min-height: 200px;
+}
+
+.instructionsCard--left {
+  flex-direction: row;
   justify-content: center;
+  text-align: left;
 }
 
-.instructions p {
-  text-align: center;
+.instructionsCard--right {
+  flex-direction: row-reverse;
+  justify-content: center;
+  text-align: left;
 }
 
+.instructionsCard-image {
+  flex: 0 0 auto;
+  width: 42%;
+  max-width: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.instructionsImage {
+  border-radius: 16px;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.instructionsCard-content {
+  flex: 1;
+  min-width: 0;
+  max-width: 52%;
+}
+
+.instructionsCard-content h3 {
+  margin-bottom: 0.75rem;
+  color: #38a9e2;
+  font-size: 1.35rem;
+}
+
+.instructionsCard-content p {
+  margin: 0;
+  color: #444;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Location suggestions dropdown */
 #suggestions {
-  max-height: 200px;
-  overflow-y: auto;
   position: absolute;
-  background-color: #42b97c;
-  width: 80%;
+  left: 0;
+  right: 0;
+  top: 100%;
+  margin-top: 6px;
+  min-width: 100%;
+  width: max-content;
+  max-width: 100%;
+  max-height: 320px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   z-index: 9999;
-  top: 55px;
-  left: 30px;
-  color: white;
+  padding: 6px 0;
+  display: none;
+}
+
+#suggestions.suggestions-visible {
+  display: block;
+}
+
+#suggestions::-webkit-scrollbar {
+  width: 8px;
+}
+
+#suggestions::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0 12px 12px 0;
+}
+
+#suggestions::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
 }
 
 .suggestion-item {
-  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
   cursor: pointer;
+  transition: background 0.15s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
 }
 
 .suggestion-item:hover {
-  background-color: #f0f0f0;
-  color: black;
+  background: rgba(56, 169, 226, 0.08);
+}
+
+.suggestion-item:active {
+  background: rgba(56, 169, 226, 0.12);
+}
+
+.suggestion-main {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.suggestion-sub {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.suggestion-loading,
+.suggestion-empty,
+.suggestion-error {
+  padding: 14px 16px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.suggestion-loading {
+  color: #38a9e2;
+}
+
+.suggestion-error {
+  color: #c0392b;
 }
 .headericon {
-  background-color: none;
+  background-color: transparent;
 }
 
 * {
@@ -189,12 +351,12 @@ button{
 
 /* Hide .image-container on mobile */
 @media (max-width: 768px) {
-  .mainSectionContainer {
+  .mainSectionContainer .page-section-inner {
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    justify-content: center; /* Center align vertically */
-    align-items: center; /* Center align horizontally */
-    text-align: center; /* Center text */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
  
 
@@ -202,28 +364,39 @@ button{
     display: none; /* Hide the container */
   }
 
-  /* Make instructions vertical on mobile */
+  /* Instructions: stack image + content vertically on mobile */
   .instructionsContainer {
-    display: flex;
-    flex-direction: column; /* Stack the cards vertically */
-    align-items: center; /* Center the cards horizontally */
-    justify-content: center; /* Center the content vertically */
-    text-align: center;
-    gap: 3rem;
+    gap: 2.5rem;
   }
 
-  /* .instructionsCard {
-    margin-bottom: 20px; /* Add spacing between cards */
-    .instructions{
-      max-width: 400px;
-    }
+  .instructionsCard,
+  .instructionsCard--left,
+  .instructionsCard--right {
+    flex-direction: column;
+    text-align: center;
+    min-height: auto;
+  }
+
+  .instructionsCard-image {
+    flex: none;
+    width: 100%;
+    max-width: none;
+  }
 
   .instructionsImage {
-    width:270px ; /* Make images responsive */
-    height: auto;
+    max-width: 280px;
   }
-  .instructionsCard p{
-    margin-top: 1rem;
+
+  .instructionsCard-content {
+    max-width: none;
+  }
+
+  .instructionsCard-content h3 {
+    margin-top: 0.5rem;
+  }
+
+  .instructionsCard-content p {
+    margin-top: 0.25rem;
   }
 
   .nav-links {

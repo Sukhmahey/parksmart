@@ -101,6 +101,38 @@ button.ghost {
   border-color: #ffffff;
 }
 
+.continue-as-guest {
+  display: block;
+  margin-top: 14px;
+  font-size: 13px;
+  color: #38a9e2;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+.continue-as-guest:hover {
+  text-decoration: underline;
+  color: #2d8bc7;
+}
+
+.ghost-link.guest-link-overlay {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 10px 28px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+.ghost-link.guest-link-overlay:hover {
+  background: rgba(255, 255, 255, 0.15);
+  text-decoration: none;
+}
+
 form {
   background-color: #ffffff;
   display: flex;

@@ -493,18 +493,19 @@ button {
 button:hover {
   background: #45a049;
 }
-footer {
+/* Footer – .app-footer styled in index-header.css (same as homepage) */
+footer:not(.app-footer) {
   background: linear-gradient(to right, #42b97c, #38a9e2);
   padding: 1rem;
   margin-top: 5rem;
   width: 100%;
-  /* text-align: center; */
 }
 
-footer p {
+footer:not(.app-footer) p {
   margin: 0.5rem 0;
 }
-.socialMediaContainer img {
+
+footer:not(.app-footer) .socialMediaContainer img {
   max-width: 50px;
   max-height: 50px;
 }

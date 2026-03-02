@@ -73,11 +73,10 @@ async function getParkingSpaces() {
   const snapshot = await getDocs(collection(db, "parking_spaces"));
   const dataObj = [];
   snapshot.forEach((doc) => {
-    console.log(doc.id, "=>", doc.data());
+    const data = doc.data();
     dataObj.push({
-      ...doc.data(),
-      imgURL:
-        "https://ugwkzwoggzoqaxlsfzir.supabase.co/storage/v1/object/public/photos/parkingSpot.jpg",
+      ...data,
+      imgURL: data.imgURL || null,
     });
   });
 
@@ -224,12 +223,13 @@ async function getParkingSpaceById(documentId) {
     const docSnap = await getDoc(docRef); // Fetch document
 
     if (docSnap.exists()) {
-      // console.log("Document Data:", docSnap.data());
+      const data = docSnap.data();
       return {
-        ...doc.data(),
+        ...data,
         imgURL:
+          data.imgURL ||
           "https://ugwkzwoggzoqaxlsfzir.supabase.co/storage/v1/object/public/photos/parkingSpot.jpg",
-      }; // Return document data
+      };
     } else {
       // console.log("No such document!");
       return null;
